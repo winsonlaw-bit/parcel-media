@@ -91,17 +91,17 @@
   </div>
   <div class="stats">
     <div class="stat"><div class="v" id="stParcels">0</div><div class="k">半年包裹总量（件）· 妥投(completed)96.75%</div></div>
-    <div class="stat"><div class="v" id="stRec">0</div><div class="k">收件人池 = 人群规模</div></div>
-    <div class="stat"><div class="v">76</div><div class="k">个人群包（区组）</div></div>
+    <div class="stat"><div class="v" id="stRec">0</div><div class="k">收件人池 = 去重收件人数</div></div>
+    <div class="stat"><div class="v">76</div><div class="k">个邮区（区组）</div></div>
     <div class="stat"><div class="v" id="stMo">0</div><div class="k">月均妥投（completed 口径）</div></div>
   </div>
   <div class="analogy">
     <b>流量类比：</b>线上投放买<b>屏幕曝光</b>（刷到才看见，要竞价）；这里卖<b>物理曝光</b>——
-    一个妥投包裹 = 一次 100% 到家曝光，76 个区 = 76 个自带品类画像的人群包，广告位 = 包裹物料位 + 妥投通知。线上流量人人能买，<b>物理流量只有握着包裹的人能卖</b>。
+    一个妥投包裹 = 一次 100% 到家曝光，76 个邮区，各有自己的品类画像与收件人数，广告位 = 包裹物料位 + 妥投通知。线上流量人人能买，<b>物理流量只有握着包裹的人能卖</b>。
   </div>
   <div class="layout">
     <div class="listp">
-      <div class="lh"><b>76 个人群包</b><div class="s">按收件人规模排序 · 点击飞至并展开</div>
+      <div class="lh"><b>76 个邮区</b><div class="s">按收件人数排序 · 点击飞至并展开</div>
         <input id="q" placeholder="搜索邮区 / 地名 / 6 位邮编…">
       </div>
       <div class="lbody" id="list"></div>
@@ -318,7 +318,7 @@ function popupHtml(z){
   let cats=z.cats.map(c=>'<div class="row"><span>'+c.cat+'</span><span>'+fmtQ(c.parcels)+'</span></div>').join('');
   let ships=z.top_shippers.map(s=>'<div class="row"><span>'+s.name+'</span><span>'+fmtN(s.parcels)+' 件</span></div>').join('');
   const mom=z.series.length>1?Math.round(100*(z.series[5]-z.series[4])/Math.max(z.series[4],1)):0;
-  return '<div class="pop"><b>'+z.code+' · '+z.label+'</b><div class="row"><span>收件人(人群包)</span><span>'+fmtQ(z.recipients)+'</span></div>'+
+  return '<div class="pop"><b>'+z.code+' · '+z.label+'</b><div class="row"><span>收件人数</span><span>'+fmtQ(z.recipients)+'</span></div>'+
     '<div class="row"><span>包裹量（全量）</span><span>'+fmtQ(z.parcels)+'</span></div>'+
     '<div class="row"><span>在铺货主</span><span>'+(z.shippers?fmtN(z.shippers):'—')+'</span></div>'+
     (cats?'<div class="cat">品类画像 Top5：</div>'+cats:'')+

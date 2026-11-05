@@ -36,6 +36,12 @@
   .frame-err code { background:#eef2ff; padding:2px 7px; border-radius:5px; color:#4338ca; word-break:break-all; }
   .frame-err a { color:var(--brand); text-decoration:none; font-weight:600; }
   .frame-err a:hover { text-decoration:underline; }
+  .mapswitch { margin-left:auto; display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .mapswitch button { font:inherit; font-size:12px; padding:5px 11px; border-radius:7px; border:1px solid var(--line); background:#fff; color:var(--sub); cursor:pointer; white-space:nowrap; }
+  .mapswitch button.on { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; }
+  .mapswitch .msnote { font-size:11.5px; color:var(--warn); }
+  .mapswitch .retry { display:none; }
+  @media (max-width:560px){ .mapswitch .msnote{ display:none; } .mapswitch button{ padding:4px 8px; font-size:11px; } .topbar{ gap:6px; } }
   .filebar { display:none; background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:13px; padding:10px 24px; line-height:1.6; }
   .dash { padding:28px 32px; }
   .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
@@ -142,17 +148,23 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand"><b>NJV · SG</b><small>需求情报工作台 Demo</small></div>
-    <nav class="nav"><a class="nav-item" data-key="chassis">数据底盘</a>
-<a class="nav-item" data-key="geo">需求地图</a>
-<a class="nav-item" data-key="demand">动态需求</a>
-<a class="nav-item" data-key="merchant">货主屏</a>
+    <nav class="nav"><a class="nav-item" data-key="guide">怎么用</a>
+<a class="nav-item" data-key="chassis">数据底盘</a>
 <a class="nav-item" data-key="panorama">品类全景</a>
+<a class="nav-item" data-key="geo">需求地图</a>
 <a class="nav-item" data-key="signal">信号层</a>
+<a class="nav-item" data-key="merchant">货主屏</a>
 </nav>
     <div class="side-foot">Substrait-ready：静态前端 + iframe 挂载真实产物；后端 /api 可后续挂载于 app.substrait.build。</div>
   </aside>
   <main class="main">
-    <div class="topbar"><h1 id="pageTitle">数据底盘</h1><span class="badge">DEMO</span></div>
+    <div class="topbar"><h1 id="pageTitle">怎么用 · 提案要点</h1><span class="badge">DEMO</span>
+      <span class="mapswitch" id="mapSwitch" style="display:none">
+        <button type="button" id="msFull" class="on">完整地图</button>
+        <button type="button" id="msSimple">简版地图</button>
+        <span class="msnote" id="msNote"></span>
+        <button type="button" class="retry" id="msRetry">重试完整地图</button>
+      </span></div>
     <div class="content">
       <div class="filebar" id="filebar">⚠️ 检测到你以本地文件（file://）方式打开，部分浏览器会拦截 iframe 导致页面显示 “Not Found”。建议在本目录运行一个静态服务器后访问，例如：<code>python -m http.server 8080</code>，再打开 <a href="http://127.0.0.1:8080/" target="_blank" style="color:#9a3412;text-decoration:underline">http://127.0.0.1:8080/</a>。</div>
       <div class="page" id="page-chassis">
@@ -160,22 +172,25 @@
           <div class="kpis" id="kpis"></div>
           <div class="sec-title">Top 10 货主（真实实名口径 · remote_id）</div>
           <div class="tbl-scroll"><table>
-            <thead><tr><th>#</th><th>货主</th><th>注册国</th><th>包裹量</th><th>主力品类（占该货主）</th></tr></thead>
+            <thead><tr><th>#</th><th>货主</th><th>注册国</th><th>包裹量</th><th>主力品类（占该货主 · 已剔除未细分）</th></tr></thead>
             <tbody id="shipperRows"></tbody>
           </table></div>
           <details class="fold"><summary>诚实边界</summary><div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、货主等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div></details>
         </div>
       </div>
-      <div class="page" id="page-geo" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="zone_geo_map.html" title="需求地图"></iframe><div class="frame-err"></div></div></div>
-<div class="page" id="page-demand" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="zone_demand_map.v4.html" title="动态需求"></iframe><div class="frame-err"></div></div></div>
-<div class="page" id="page-merchant" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="merchant_screen.v4.html" title="货主屏"></iframe><div class="frame-err"></div></div></div>
+      <div class="page" id="page-guide" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="guide.html" title="怎么用"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-panorama" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="h1_category_panorama.v4.html" title="品类全景"></iframe><div class="frame-err"></div></div></div>
+<div class="page" id="page-geo" style="display:none">
+        <div class="frame-wrap" id="wrapGeoFull"><iframe class="frame" data-file="zone_geo_map.html" title="需求地图"></iframe><div class="frame-err"></div></div>
+        <div class="frame-wrap" id="wrapGeoSimple" style="display:none"><iframe class="frame" data-file="zone_demand_map.v4.html" title="简版需求地图"></iframe><div class="frame-err"></div></div>
+      </div>
 <div class="page" id="page-signal" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="signal_layer_demo.v4.html" title="信号层"></iframe><div class="frame-err"></div></div></div>
+<div class="page" id="page-merchant" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="merchant_screen.v4.html" title="货主屏"></iframe><div class="frame-err"></div></div></div>
     </div>
   </main>
 </div>
 <script>
-const WB = {"parcels_total": 3266041, "distinct_shippers": 42041, "recipients": 983307, "zones": 76, "classify_pct": 72.78, "cross_buy": 261131, "cross_buy_pct": 26.56, "top10": [{"name": "Aliexpress(Hangzhou Hang Yu)", "country": "SG", "parcels": 232704, "cats": "工具五金(16.6%)、电子(15.3%)、其他/未细分(12.4%)"}, {"name": "iHerb SG", "country": "SG", "parcels": 208848, "cats": "食品保健(28.9%)、美妆香水(21.9%)、电子(18.3%)"}, {"name": "NV Malaysia MY-SG", "country": "SG", "parcels": 178184, "cats": "其他/未细分(28.8%)、美妆香水(20.3%)、食品保健(16.5%)"}, {"name": "FASHION CHOICE PTE. LTD(SHEIN)", "country": "SG", "parcels": 61708, "cats": "服饰(25.5%)、家居(14.5%)、美妆香水(11.1%)"}, {"name": "Hong Kong ECMS Express Co. Limited", "country": "SG", "parcels": 58416, "cats": "其他/未细分(18.8%)、鞋包配饰(13.8%)、玩具童品(13.5%)"}, {"name": "Sephora Digital", "country": "SG", "parcels": 35427, "cats": "美妆香水(品牌归因)(100.0%)"}, {"name": "adidas", "country": "SG", "parcels": 31129, "cats": "鞋包配饰(87.6%)、服饰(5.6%)、运动户外(3.6%)"}, {"name": "AUSTRALIA POST GLOBAL ECOMMERCE SOLUTIONS (USA) INC", "country": "SG", "parcels": 30933, "cats": "服饰(21.4%)、图书文具(19.7%)、美妆香水(14.8%)"}, {"name": "Love, Bonito", "country": "SG", "parcels": 28121, "cats": "服饰(品牌归因)(100.0%)"}, {"name": "Lazada Returns", "country": "SG", "parcels": 26671, "cats": "家居(14.7%)、服饰(11.9%)、运动户外(11.5%)"}]};
+const WB = {"parcels_total": 3266041, "distinct_shippers": 42041, "recipients": 983307, "zones": 76, "classify_pct": 72.78, "cross_buy": 261131, "cross_buy_pct": 26.56, "top10": [{"name": "Aliexpress(Hangzhou Hang Yu)", "country": "SG", "parcels": 232704, "cats": "工具五金(16.6%)、电子(15.3%)、鞋包配饰(10.0%)"}, {"name": "iHerb SG", "country": "SG", "parcels": 208848, "cats": "食品保健(28.9%)、美妆香水(21.9%)、电子(18.3%)"}, {"name": "NV Malaysia MY-SG", "country": "SG", "parcels": 178184, "cats": "美妆香水(20.3%)、食品保健(16.5%)、服饰(10.5%)"}, {"name": "FASHION CHOICE PTE. LTD(SHEIN)", "country": "SG", "parcels": 61708, "cats": "服饰(25.5%)、家居(14.5%)、美妆香水(11.1%)"}, {"name": "Hong Kong ECMS Express Co. Limited", "country": "SG", "parcels": 58416, "cats": "鞋包配饰(13.8%)、玩具童品(13.5%)、图书文具(11.5%)"}, {"name": "Sephora Digital", "country": "SG", "parcels": 35427, "cats": "美妆香水(品牌归因)(100.0%)"}, {"name": "adidas", "country": "SG", "parcels": 31129, "cats": "鞋包配饰(87.6%)、服饰(5.6%)、运动户外(3.6%)"}, {"name": "AUSTRALIA POST GLOBAL ECOMMERCE SOLUTIONS (USA) INC", "country": "SG", "parcels": 30933, "cats": "服饰(21.4%)、图书文具(19.7%)、美妆香水(14.8%)"}, {"name": "Love, Bonito", "country": "SG", "parcels": 28121, "cats": "服饰(品牌归因)(100.0%)"}, {"name": "Lazada Returns", "country": "SG", "parcels": 26671, "cats": "家居(14.7%)、服饰(11.9%)、运动户外(11.5%)"}]};
 function fmtQ(n){ if(n>=1e6) return (n/1e6).toFixed(2).replace(/[.]?0+$/,'')+'M'; if(n>=1e3){const k=n/1e3; return (k>=100?Math.round(k):+k.toFixed(1))+'K';} return String(Math.round(n)); }
 const fmt = n => fmtQ(n);
 const kpis = [
@@ -187,12 +202,11 @@ const kpis = [
   { n: fmt(WB.cross_buy), l: '跨品类复购收件人（占 ' + WB.cross_buy_pct + '%）' },
 ];
 document.getElementById('kpis').innerHTML = kpis.map(k => '<div class="kpi"><div class="n">' + k.n + '</div><div class="l">' + k.l + '</div></div>').join('');
-const cleanCats = s => s.cats.split('、').filter(x => !/其他\s*\/\s*未细分/.test(x)).join('、');
-document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><td>' + (i+1) + '</td><td>' + s.name + '</td><td>' + s.country + '</td><td class="num">' + fmt(s.parcels) + '</td><td>' + cleanCats(s) + '</td></tr>').join('');
+document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><td>' + (i+1) + '</td><td>' + s.name + '</td><td>' + s.country + '</td><td class="num">' + fmt(s.parcels) + '</td><td>' + s.cats + '</td></tr>').join('');
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261105j'; // iframe 缓存戳：子页面内容变更后升级
+const FRAME_VERSION = '20261105l'; // iframe 缓存戳：子页面内容变更后升级
 
 // ── 移动端 iframe 高度自适应 ──────────────────────────────────────────────
 // 桌面：iframe 铺满视口、内部滚动（保持原行为）。
@@ -200,6 +214,7 @@ const FRAME_VERSION = '20261105j'; // iframe 缓存戳：子页面内容变更�
 //       地址栏可正常收起，不会出现 iOS 上 iframe 内滚动被截断/卡住的问题。
 const MOBILE = window.matchMedia('(max-width: 900px)');
 function syncHeight(f) {
+  if (!f || !f.offsetParent) return;
   if (!MOBILE.matches) return;
   try {
     const d = f.contentDocument;
@@ -242,18 +257,17 @@ function showFrameError(wrap, url) {
   wrap.querySelector('.frame-err').style.display = 'flex';
 }
 
-function loadFrame(pg) {
-  const wrap = pg.querySelector('.frame-wrap');
+function loadWrap(wrap) {
   if (!wrap) return;
   const f = wrap.querySelector('.frame');
   const err = wrap.querySelector('.frame-err');
-  const url = frameUrl(f.dataset.file);
+  let url = frameUrl(f.dataset.file);
+  if (wrap.id === 'wrapGeoFull' && f.dataset.retry) url += '&r=' + f.dataset.retry;
   err.style.display = 'none';
   f.style.display = 'block';
   // 已加载过的页面直接复用：手机上切 tab 不再重复下载 4–7MB 的内联数据页
   if (f.dataset.loadedUrl === url) { syncHeight(f); return; }
   f.onload = function () {
-    // 同源时可读取 iframe 内容，识别 http.server 的 “Not Found” 或空页面，给出友好提示而非裸错误
     try {
       const doc = f.contentDocument;
       const txt = (doc && doc.body && (doc.body.innerText || '')) || '';
@@ -261,10 +275,55 @@ function loadFrame(pg) {
     } catch (e) { /* 跨域或无权读取，忽略 */ }
     syncHeight(f);
     [350, 1200].forEach(t => setTimeout(() => syncHeight(f), t));
+    // 完整地图做「渲染自检」：Leaflet 未加载时页面仍有标题文字，旧检测不会报警
+    if (wrap.id === 'wrapGeoFull') setTimeout(checkGeo, 900);
   };
   f.dataset.loadedUrl = url;
   f.src = url;
 }
+
+// ── 需求地图降级：主地图渲染失败自动切简版，并保留手动双入口 ──────────
+let currentMapMode = 'full';
+function geoHealthy() {
+  const f = document.querySelector('#wrapGeoFull .frame');
+  try {
+    const d = f.contentDocument, w = f.contentWindow;
+    if (!d || !w || typeof w.L === 'undefined') return false;
+    if (d.querySelectorAll('#map .leaflet-pane').length === 0) return false;
+    const lst = d.getElementById('list');
+    return !!lst && lst.children.length >= 50;
+  } catch (e) { return false; }
+}
+function setMapNote(txt, showRetry) {
+  document.getElementById('msNote').textContent = txt || '';
+  document.getElementById('msRetry').style.display = showRetry ? 'inline-block' : 'none';
+}
+function switchMap(mode, auto) {
+  currentMapMode = mode;
+  const full = document.getElementById('wrapGeoFull');
+  const simple = document.getElementById('wrapGeoSimple');
+  full.style.display = (mode === 'full') ? 'block' : 'none';
+  simple.style.display = (mode === 'simple') ? 'block' : 'none';
+  document.getElementById('msFull').classList.toggle('on', mode === 'full');
+  document.getElementById('msSimple').classList.toggle('on', mode === 'simple');
+  setMapNote(mode === 'simple' ? (auto ? '完整地图未加载，已切到简版（数据一致）' : '简版地图 · 数据一致') : '', mode === 'simple');
+  const wrap = (mode === 'full') ? full : simple;
+  loadWrap(wrap);
+  syncHeight(wrap.querySelector('.frame'));
+}
+function checkGeo() {
+  if (currentMapMode !== 'full') return;
+  if (geoHealthy()) { setMapNote('', false); return; }
+  switchMap('simple', true);
+}
+document.getElementById('msFull').addEventListener('click', () => switchMap('full', false));
+document.getElementById('msSimple').addEventListener('click', () => switchMap('simple', false));
+document.getElementById('msRetry').addEventListener('click', () => {
+  const f = document.querySelector('#wrapGeoFull .frame');
+  f.dataset.retry = Date.now();
+  f.dataset.loadedUrl = '';
+  switchMap('full', false);
+});
 
 function show(key, label) {
   document.getElementById('pageTitle').textContent = label || key;
@@ -272,14 +331,15 @@ function show(key, label) {
   document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
   const pg = document.getElementById('page-' + key);
   pg.style.display = 'block';
-  if (pg.querySelector('.frame-wrap')) loadFrame(pg);
+  document.getElementById('mapSwitch').style.display = (key === 'geo') ? 'inline-flex' : 'none';
+  pg.querySelectorAll('.frame-wrap').forEach(w => { if (w.style.display !== 'none') loadWrap(w); });
 }
 items.forEach(it => it.addEventListener('click', () => show(it.dataset.key, it.textContent)));
 
 // 本地文件方式打开时提示改用本地服务器
 if (location.protocol === 'file:') document.getElementById('filebar').style.display = 'block';
 
-show('chassis', '数据底盘');
+show('guide', '怎么用 · 提案要点');
 </script>
 </body>
 </html>

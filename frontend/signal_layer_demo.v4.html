@@ -76,7 +76,7 @@ footer{color:var(--sub);font-size:12.5px;text-align:center;padding:20px}
 
 <header class="hero">
   <h1>跨包裹市场篮 · 区域洞察看板</h1>
-  <p>基于 NJV 新加坡 2026 上半年真实包裹数据（3.27M 单），识别「同一收件人跨月购买不同品类」的复购信号，并落到邮编区域，为中小商家与末端配送员提供可执行的销售洞察。</p>
+  <p>基于 NJV 新加坡 2026 上半年真实包裹数据（3.27M 单），识别「同一收件人跨月购买不同品类」的复购信号，并落到邮编区域，为品类定向与区域下钻提供数据依据。</p>
 </header>
 
 <div class="kpis">
@@ -104,7 +104,7 @@ footer{color:var(--sub);font-size:12.5px;text-align:center;padding:20px}
 <!-- ============ A-2 区域热图（可下钻） ============ -->
 <section>
   <h2>② 区域热图（镇/大区 → 区内 → 楼栋） <span class="tag">三级下钻</span></h2>
-  <p class="lead">点击任意区域可逐级下钻：<b>镇/大区</b>（邮编前 2 位）→ <b>区内细分</b>（前 4 位）→ <b>单栋建筑</b>（前 6 位）。末端配送员可从「哪片区域热」一路钻到「哪栋楼值得跑」。</p>
+  <p class="lead">点击任意区域可逐级下钻：<b>镇/大区</b>（邮编前 2 位）→ <b>区内细分</b>（前 4 位）→ <b>单栋建筑</b>（前 6 位）。可从「哪片区域热」一路钻到「哪栋楼值得跑」。</p>
   <div class="tabs">
     <button id="s_vol" class="on" onclick="switchSort('vol')">按体量排序</button>
     <button id="s_den" onclick="switchSort('den')">按跨品类密度排序</button>
@@ -114,13 +114,6 @@ footer{color:var(--sub);font-size:12.5px;text-align:center;padding:20px}
     <tbody></tbody>
   </table>
   <div class="note" id="anomNote"></div>
-</section>
-
-<!-- ============ B 配送员端样例卡 ============ -->
-<section>
-  <h2>③ 配送员端样例卡 <span class="tag">B · 兀兰/73</span></h2>
-  <p class="lead">同一份数据，换一种呈现形态——末端配送员每天看到的「派送 + 带货建议」卡。下方以 <b>兀兰（73）</b> 为例，展示区内细分与单栋建筑的真实下钻。</p>
-  <div id="agentCard"></div>
 </section>
 
 <details class="fold"><summary>口径说明</summary>
@@ -217,26 +210,6 @@ function findL4(code){
 function switchSort(m){sortMode=m;document.getElementById('s_vol').classList.toggle('on',m==='vol');document.getElementById('s_den').classList.toggle('on',m==='den');renderRegions();}
 renderRegions();
 
-// ---------- 配送员端样例卡 (兀兰/73) ----------
-function renderAgent(){
-  const wl = drill.find(x=>x.code==='73'); if(!wl) return;
-  const l4 = wl.L4.slice(0,6);
-  const l4html = l4.map(z=>{
-    const top=findL4(z.code);
-    const blds=(top?top.L6:[]).slice(0,4).map(b=>`<div class="bld">📍 <b>${b.label.split('/').pop().trim()}</b> · 跨品类 ${b.cross_cat_recipients} 人</div>`).join('');
-    return `<div class="agent-box"><div class="t">区内 ${z.label.split('/')[1]?z.label.split('/')[1].trim():z.code}</div>
-      <div class="n">${fmtQ(z.cross_cat_recipients)}</div>
-      <div class="t">跨品类复购 · ${z.density}%</div>${blds}</div>`;
-  }).join('');
-  document.getElementById('agentCard').innerHTML = `
-    <div class="agent-card">
-      <h3>今日派送建议 · ${wl.label}</h3>
-      <p style="margin:0;opacity:.9;font-size:14px">该区 ${fmtQ(wl.recipients)} 名收件人，其中 <b>${fmtQ(wl.cross_cat_recipients)}</b> 人（${wl.density}%）跨月购买不同品类——优先向这些人推送「上次买的品类 × 相邻品类」组合。</p>
-      <div class="agent-grid">${l4html}</div>
-      <p style="margin:14px 0 0;opacity:.85;font-size:12.5px">说明：楼栋级清单为各区内跨品类密度最高的前几栋，可直达末端执行。完整清单由系统按周自动刷新。</p>
-    </div>`;
-}
-renderAgent();
 </script>
 </body>
 </html>

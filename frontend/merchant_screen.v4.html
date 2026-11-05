@@ -91,32 +91,20 @@ footer{color:var(--sub);font-size:12px;text-align:center;padding:18px}
 
 <header class="hero">
   <h1>货主零售媒体规划台 · 品类视角（NJV · SG）</h1>
-  <p>同一份 NJV 新加坡 2026 H1 真实包裹数据（3.27M 单），换成「货主」的视角：你按<b>品类</b>经营，NJV 用需求数据自动把你的带货物料位 / 物流消息，投到<b>你的买家最集中的邮区</b>。你选品类，我们选场子。</p>
-  <div class="four">
-    <span>① 收件人 / 消费者</span>
-    <span>② Shipper 货主（现有 + 潜在）</span>
-    <span>③ NJV 配送员（仅窄场景自愿带货）</span>
-    <span>④ NJV 网络（独占位子 + 通道 + 数据）</span>
-  </div>
-</header>
-
-<div class="note">
-  <b>为什么不用「选经营区域」？</b> 跨境 / 本地卖家（独立站、Shopee / Lazada / Amazon 商家）按<b>品类与客群</b>经营，不按邮区自居。所以本台的主视角是<b>品类</b>：你选你的主营品类，NJV 自动匹配高需求邮区并投放——邮区是 Ninja Van 的优化变量，不是你要操心的事。
-</div>
+  <p>同一份 NJV 新加坡 2026 H1 真实包裹数据（3.27M 单），换成「货主」的视角：你按<b>品类</b>经营，NJV 用需求数据自动把你的带货物料位 / 物流消息，投到<b>你的买家最集中的邮区</b>。你选品类，我们选流量池。</p>
+  </header>
 
 <div class="selbar">
   <label>① 你的主营品类</label>
   <select id="catSel"></select>
-  <label style="margin-left:8px">② 对标货主（可选）</label>
-  <select id="shipperSel"></select>
   <button class="btnh" onclick="pickTop()">跳到全 SG 最大需求品类</button>
 </div>
 
 <div class="kpis" id="kpis"></div>
 
-<!-- A 你的品类需求地理（NJV 自动选场子） -->
+<!-- A 你的品类需求地理（NJV 自动选流量池） -->
 <section>
-  <h2>① 你的品类需求地理 <span class="tag">NJV 自动选场子</span></h2>
+  <h2>① 你的品类需求地理 <span class="tag">NJV 自动选流量池</span></h2>
   <p class="lead">你选的品类，买家在 SG 哪些邮区最集中？下面按真实包裹量排出 <b>Top 邮区</b>——这是 Ninja Van 替你做的地理定向，你不用自己挑区域。需求越集中，你的物料位 / 物流消息越该往这些区的包裹上投。</p>
   <div class="zonelist" id="zoneList"></div>
 </section>
@@ -140,19 +128,11 @@ footer{color:var(--sub);font-size:12px;text-align:center;padding:18px}
   <div class="warnbox">说明：实名覆盖率约按行 100.0%（mapping 四源合并；Top50 大货主 100% 实名，含 Aliexpress/iHerb/NV Malaysia/Lazada/Amazon/Decathlon/adidas/UPS 等，正是需防压价对象）。无在营商铺数 / GMV，缺口为「品类需求强度」的相对代理，不编金额。</div>
 </section>
 
-<!-- D 带货位子投放（你选品类，NJV 选场子） -->
+<!-- D 带货位子投放（你选品类，NJV 选流量池） -->
 <section>
   <h2>④ 带货位子投放 <span class="tag">增值触达 · 对客价值</span></h2>
   <p class="lead">你每寄出一票 SG 包裹，就自带一个「开箱即看」的高关注广告位——买家正拆你货、注意力最集中。NJV 把履约里的 <b>包裹物料位</b> 与 <b>物流妥投消息</b> 做成你能直接用的精准触达渠道：<b>你选品类，NJV 按你买家所在的邮区自动投放</b>，比自建 push / 印传单更省，且基于真实需求（脱敏）投放。</p>
   <div class="value" id="mediaValue"></div>
-  <div class="bench"><b>行业通行参考（欧美成熟包裹媒体网络）</b>：插页成本约 $0.05–0.15/张（远低于直邮 $0.40–0.60）；开箱触达率近 100%、约 42% 收件人会读插页并访问落地页；归因靠专属优惠码 / 二维码 / 落地页。东南亚 COD 占比高，「妥投通知」更是必读通道——这正是 NJV 的本地优势。具体位子定价 / 分润比例 / ROI 待 NJV 商务设计，本屏不编造。</div>
-</section>
-
-<!-- E 四方价值总览 -->
-<section>
-  <h2>⑤ 四方价值总览 <span class="tag">意义闭环</span></h2>
-  <p class="lead">把上面几块数据翻译成「对每一方到底有什么用」，避免只做空报表。</p>
-  <div class="value" id="value"></div>
 </section>
 
 <details class="fold"><summary>口径说明</summary>
@@ -192,20 +172,7 @@ catRank.forEach(([cat,tot])=>{
 });
 catSel.onchange = ()=>loadCat(catSel.value, null);
 
-// 对标货主下拉
-const shSel = document.getElementById('shipperSel');
-const so = document.createElement('option'); so.value=''; so.textContent='— 不选 —'; shSel.appendChild(so);
-shipperOpts.forEach(s=>{
-  const o=document.createElement('option'); o.value=s.sid;
-  o.textContent=s.name+'（主营 '+s.cat+' '+s.cat_pct+'%）'; shSel.appendChild(o);
-});
-shSel.onchange = ()=>{
-  if(!shSel.value){ loadCat(catSel.value, null); return; }
-  const pf = DATA.profiles[shSel.value];
-  if(pf && pf.main_cat){ catSel.value = pf.main_cat; loadCat(pf.main_cat, shSel.value); }
-};
-
-function pickTop(){ catSel.selectedIndex = 0; shSel.value=''; loadCat(catRank[0][0], null); }
+function pickTop(){ catSel.selectedIndex = 0; loadCat(catRank[0][0], null); }
 
 function loadCat(cat, shipperId){
   curCat = cat;
@@ -214,7 +181,6 @@ function loadCat(cat, shipperId){
   renderCrossSell(cat);
   renderValueAdd(cat, shipperId);
   renderMediaSlot(cat, shipperId);
-  renderValue(cat);
 }
 
 function kpiHtml(cat, shipperId){
@@ -223,9 +189,7 @@ function kpiHtml(cat, shipperId){
   const topZones = zones.slice(0,5);
   const reach = topZones.reduce((a,z)=>a+z.recipients,0);
   const crossBase = Math.round((meta.cross_cat_rate/100) * (sgDemand||0));
-  const shTxt = shipperId && DATA.profiles[shipperId]
-    ? `<div class="kpi"><div class="v" style="color:var(--brand2)">${DATA.profiles[shipperId].name}</div><div class="l">你正对标这家货主</div></div>`
-    : `<div class="kpi"><div class="v">${zones.length}</div><div class="l">该品类有需求的邮区数</div></div>`;
+  const shTxt = `<div class="kpi"><div class="v">${zones.length}</div><div class="l">该品类有需求的邮区数</div></div>`;
   return `
     <div class="kpi"><div class="v">${fmtQ(sgDemand)}</div><div class="l">全 SG 该品类包裹需求</div></div>
     ${shTxt}
@@ -233,7 +197,7 @@ function kpiHtml(cat, shipperId){
     <div class="kpi"><div class="v">${fmtQ(crossBase)}</div><div class="l">跨品类连带基数（SG）</div></div>`;
 }
 
-// A 你的品类需求地理（NJV 自动选场子）
+// A 你的品类需求地理（NJV 自动选流量池）
 function renderZoneList(cat){
   const zones = (catZones[cat]||[]).slice(0,10);
   const max = zones.length? zones[0].parcels : 1;
@@ -273,7 +237,7 @@ function renderValueAdd(cat, shipperId){
     }).join('');
   document.getElementById('valueAdd').innerHTML = `
     <div class="hotcard" style="border-color:var(--brand)">
-      <div class="nm">该品类需求最集中的邮区（NJV 自动选场子）</div>
+      <div class="nm">该品类需求最集中的邮区（NJV 自动选流量池）</div>
       <div class="row"><span>优先投放区</span><b>${zoneTxt}</b></div>
     </div>
     <div class="hotcard" style="margin-top:12px">
@@ -298,32 +262,6 @@ function renderHotZones(){
   }).join('');
 }
 
-function renderValue(cat){
-  const zones = catZones[cat]||[];
-  const topZone = zones.length? zones[0] : null;
-  const reach = zones.slice(0,5).reduce((a,z)=>a+z.recipients,0);
-  document.getElementById('value').innerHTML = `
-    <div class="vcard"><div class="who">① 收件人 / 消费者</div>
-      <div class="num">${fmtQ(catTotal[cat]||0)} 单需求</div>
-      <div class="sub">你关心的品类</div>
-      <div class="body">货主按你的真实需求投物料位 → 你收到更贴需求的推荐，而非随机铺货。</div></div>
-    <div class="vcard two"><div class="who">② Shipper 货主</div>
-      <div class="num">${fmtQ(reach)} Top5 触达</div>
-      <div class="sub">你的增量单基数</div>
-      <div class="body">
-        <div class="lane"><b>现有货主</b>：用品类需求地理 + 连带选品，提升客单与复购，留住这批人。</div>
-        <div class="lane"><b>潜在未开发货主</b>：高需求品类是招商弹药——证明来这做生意有真实需求支撑。</div>
-      </div></div>
-    <div class="vcard"><div class="who">③ NJV 配送员（仅窄场景）</div>
-      <div class="num">COD/冷链/大件</div>
-      <div class="sub">真实接触点才带货</div>
-      <div class="body">只在交箱/签收等真实接触场景，自愿带货提成；主流零接触包裹不参与。</div></div>
-    <div class="vcard"><div class="who">④ NJV 网络</div>
-      <div class="num">${topZone? topZone.label : '—'}</div>
-      <div class="sub">你品类最集中邮区</div>
-      <div class="body">位子 + 通道 + 数据三位一体，货主租位分润、由 Ninja Van 统一运营，合作可量化可复盘；单量与网络黏性提升。</div></div>`;
-}
-
 function renderMediaSlot(cat, shipperId){
   const zones = catZones[cat]||[];
   const top5 = zones.slice(0,5);
@@ -331,20 +269,19 @@ function renderMediaSlot(cat, shipperId){
   const reach = top5.reduce((a,z)=>a+z.recipients,0);
   const zoneChips = top5.length ? top5.map(z=>z.label).join('、') : '（需求分散，按全域投放）';
   const pts = [
-    ['你选品类，NJV 选场子','你只管选主营品类，NJV 用需求数据自动把物料位投到你买家最集中的邮区，不用你研究区域。'],
+    ['你选品类，NJV 选流量池','你只管选主营品类，NJV 用需求数据自动把物料位投到你买家最集中的邮区，不用你研究区域。'],
     ['开箱即触达，零渠道成本','物料随履约自动附着，不用你另搭投放系统或养一个增长团队。'],
     ['信任转移','出现在 Ninja Van 妥投场景里，比一条陌生 push 更可信——买家刚收到你的货。'],
     ['按效果分润','用转化码 / 二维码归因，按带来单量结算，低风险试水、可量化。']
   ];
   let html = pts.map(p=>`<div class="vcard"><div class="who">${p[0]}</div><div class="body">${p[1]}</div></div>`).join('');
   html += `<div class="vcard" style="grid-column:1/-1;background:linear-gradient(135deg,#eef2ff,#f5f3ff)">
-      <div class="who">你的品类「${cat}」· NJV 自动选场子结果</div>
+      <div class="who">你的品类「${cat}」· NJV 自动选流量池结果</div>
       <div class="body">优先投放邮区：<b>${zoneChips}</b>；这 5 个邮区合计约 <b>${fmtQ(reach)}</b> 名收件人，开箱即触达。<br>
-      <b>本台逻辑</b>：跨境 / 本地卖家按品类经营，不挑邮区——NJV 替你把「场子」选好，你只管供货与转化。</div></div>`;
+      <b>本台逻辑</b>：跨境 / 本地卖家按品类经营，不挑邮区——NJV 替你把「流量池」选好，你只管供货与转化。</div></div>`;
   html += `<div class="script">
       <div class="sh">租位分润 · 对货主话术脚本（可直接用 · 已代入本品类数据）</div>
       <div class="step"><span class="k">开场·钩子</span>您每寄一票 SG 包裹，买家拆箱那一刻注意力最高——这个「开箱即看」的位置，您现在基本是免费浪费的。</div>
-      <div class="step"><span class="k">对标·成本</span>欧美成熟包裹媒体网络，插页成本约 $0.05–0.15/张（直邮 $0.40–0.60），开箱触达近 100%、约 42% 收件人会读并访问落地页；东南亚 COD 占比高，「妥投通知」更是必读通道——而 Ninja Van 把这个位子直接给您用，不用您另搭投放系统。</div>
       <div class="step"><span class="k">价值·精准</span>您主营 ${cat}，我们直接把物料位投到您买家最集中的邮区（${zoneChips}），基于真实需求（脱敏）投、不是盲投，且有信任转移，比陌生 push 更可信。</div>
       <div class="step"><span class="k">结算·分润</span>按效果分润：用专属转化码 / 二维码归因，带来多少单结算多少，零前置媒体采买风险，ROI 可量化。</div>
       <div class="step"><span class="k">行动·收尾</span>这 5 个邮区合计约 ${fmtQ(reach)} 名收件人——先小批量试一轮，跑出 ROI 再放量。</div>

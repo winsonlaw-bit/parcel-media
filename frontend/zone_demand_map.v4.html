@@ -124,14 +124,14 @@
 
     <div class="stats">
       <div class="stat"><div class="v"><em id="stParcels">0</em> 件</div><div class="k">半年包裹总量 · 妥投(completed)96.75%</div></div>
-      <div class="stat"><div class="v" id="stRec">0</div><div class="k">收件人池 = 人群规模</div></div>
-      <div class="stat"><div class="v" id="stZones">0</div><div class="k">个人群包（76 区组）</div></div>
+      <div class="stat"><div class="v" id="stRec">0</div><div class="k">收件人池 = 去重收件人数</div></div>
+      <div class="stat"><div class="v" id="stZones">0</div><div class="k">个邮区</div></div>
       <div class="stat"><div class="v" id="stMo">0</div><div class="k">月均妥投（completed 口径）</div></div>
     </div>
 
     <div class="analogy">
       <b>流量类比：</b>线上投放买的是<b>屏幕曝光</b>（刷到才看见，要竞价抢）；这里的流量是<b>物理曝光</b>——
-      <b>一个妥投包裹 = 一次 100% 到家的曝光</b>，<b>76 个区 = 76 个自带品类画像的人群包</b>，
+      <b>一个妥投包裹 = 一次 100% 到家的曝光</b>，<b>76 个邮区，各有自己的品类画像与收件人数</b>，
       广告位 = 包裹物料位 + 妥投通知。线上流量人人能买，<b>物理流量只有握着包裹的人能卖</b>。
     </div>
 
@@ -144,7 +144,7 @@
           </div>
         </div>
         <div class="legend">
-          <span>收件人少</span><div class="lg"></div><span>收件人多（颜色 = 人群包规模）</span>
+          <span>收件人少</span><div class="lg"></div><span>收件人多（颜色 = 收件人数）</span>
           <span style="margin-left:14px">◉ 涟漪 = Top10 热区</span>
         </div>
         <details class="fold"><summary>口径说明</summary>
@@ -157,7 +157,7 @@
         </details>
       </div>
       <div class="panel" id="panel">
-        <div class="empty">点击任意区查看：<br>人群包规模 · 曝光库存 · 品类画像 · 在铺货主 · 月度趋势<br><br>
+        <div class="empty">点击任意区查看：<br>收件人数 · 曝光库存 · 品类画像 · 在铺货主 · 月度趋势<br><br>
           <span style="color:var(--dim)">流动光点 = 从 NJV 中枢向高需求区的物理包裹流。</span></div>
       </div>
     </div>
@@ -331,7 +331,7 @@ function show(z){
     '<h2>'+z.code+' · '+z.label+'</h2>'+
     '<div class="codes">原始邮区：'+z.codes.join(' / ')+'</div>'+
     '<div class="pstats">'+
-      '<div class="pstat"><div class="v">'+fmtQ(z.recipients)+'</div><div class="k">收件人 = 人群包</div></div>'+
+      '<div class="pstat"><div class="v">'+fmtQ(z.recipients)+'</div><div class="k">收件人数</div></div>'+
       '<div class="pstat"><div class="v">'+fmtQ(z.parcels)+'</div><div class="k">包裹量（全量）/半年</div></div>'+
       '<div class="pstat"><div class="v">'+(z.shippers?fmtN(z.shippers):'—')+'</div><div class="k">在铺货主</div></div>'+
     '</div>'+
