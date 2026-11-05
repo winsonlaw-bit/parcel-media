@@ -26,3 +26,7 @@ __pycache__/
 Thumbs.db
 .workbuddy/
 serve_nocache.log
+
+# ===== 规格文档 / SQL（非网页，不纳入）=====
+*.md
+*.sql
