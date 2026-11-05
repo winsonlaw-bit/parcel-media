@@ -91,47 +91,47 @@ footer{color:var(--sub);font-size:12px;text-align:center;padding:18px}
 
 <header class="hero">
   <h1>货主零售媒体规划台 · 品类视角（NJV · SG）</h1>
-  <p>同一份 NJV 新加坡 2026 H1 真实包裹数据（3.27M 单），换成「货主」的视角：你按<b>品类</b>经营，NJV 用需求数据自动把你的带货物料位 / 物流消息，投到<b>你的买家最集中的邮区</b>。你选品类，我们选流量池。</p>
+  <p>同一份 NJV 新加坡 2026 H1 真实包裹数据（3.27M 单），换成「货主」的视角：货主按<b>品类</b>经营，NJV 用需求数据自动把带货物料位 / 物流消息，投到<b>货主买家最集中的邮区</b>。货主选品类，NJV 选流量池。</p>
   </header>
 
 <div class="selbar">
-  <label>① 你的主营品类</label>
+  <label>① 货主主营品类</label>
   <select id="catSel"></select>
   <button class="btnh" onclick="pickTop()">跳到全 SG 最大需求品类</button>
 </div>
 
 <div class="kpis" id="kpis"></div>
 
-<!-- A 你的品类需求地理（NJV 自动选流量池） -->
+<!-- A 货主品类需求地理（NJV 自动选流量池） -->
 <section>
-  <h2>① 你的品类需求地理 <span class="tag">NJV 自动选流量池</span></h2>
-  <p class="lead">你选的品类，买家在 SG 哪些邮区最集中？下面按真实包裹量排出 <b>Top 邮区</b>——这是 Ninja Van 替你做的地理定向，你不用自己挑区域。需求越集中，你的物料位 / 物流消息越该往这些区的包裹上投。</p>
+  <h2>① 货主品类需求地理 <span class="tag">NJV 自动选流量池</span></h2>
+  <p class="lead">货主所选品类，买家在 SG 哪些邮区最集中？下面按真实包裹量排出 <b>Top 邮区</b>——这是 Ninja Van 替货主做的地理定向，货主不用自己挑区域。需求越集中，物料位 / 物流消息越该往这些区的包裹上投。</p>
   <div class="zonelist" id="zoneList"></div>
 </section>
 
 <!-- B Cross-sell 机会 -->
 <section>
   <h2>② Cross-sell 连带机会 <span class="tag">客单提升</span></h2>
-  <p class="lead">基于全 SG 的品类亲和对（lift），给出你品类的 Top 连带品类。<b>现有货主</b>在购物车做连带推荐提升客单；<b>收件人</b>获得一站式购物；<b>NJV</b> 提升单笔价值。</p>
+  <p class="lead">基于全 SG 的品类亲和对（lift），给出货主品类的 Top 连带品类。<b>现有货主</b>在购物车做连带推荐提升客单；<b>收件人</b>获得一站式购物；<b>NJV</b> 提升单笔价值。</p>
   <div class="cslist" id="cslist"></div>
 </section>
 
 <!-- C 现有货主增值服务 + 潜在货主招商 -->
 <section>
   <h2>③ 现有货主增值 <span class="tag">留存 + 增量</span></h2>
-  <p class="lead">你不靠降价留客——用需求情报帮现有货主<b>多卖货、多发货</b>，他们自然选你物流。<b>防压价</b>：用「你的品类在哪些邮区需求最集中」的情报，替代单纯降价；<b>增量</b>：把高需求邮区情报推给货主，提升货量。</p>
+  <p class="lead">NJV 不靠降价留客——用需求情报帮现有货主<b>多卖货、多发货</b>，货主自然选 NJV 物流。<b>防压价</b>：用「货主的品类在哪些邮区需求最集中」的情报，替代单纯降价；<b>增量</b>：把高需求邮区情报推给货主，提升货量。</p>
   <div id="valueAdd"></div>
 
   <h2 style="margin-top:20px">③b 潜在未开发货主 <span class="tag">按品类招商弹药</span></h2>
-  <p class="lead"><b>高需求品类</b> = 招商弹药（需求侧代理；用全 SG 该品类包裹量衡量）。NJV 销售按品类去找对应品类的未开发货主，用「你的买家在哪、量有多大」去谈，比空谈覆盖更有说服力。</p>
+  <p class="lead"><b>高需求品类</b> = 招商弹药（需求侧代理；用全 SG 该品类包裹量衡量）。NJV 销售按品类去找对应品类的未开发货主，用「货主的买家在哪、量有多大」去谈，比空谈覆盖更有说服力。</p>
   <div class="hot" id="hot"></div>
   <div class="warnbox">说明：实名覆盖率约按行 100.0%（mapping 四源合并；Top50 大货主 100% 实名，含 Aliexpress/iHerb/NV Malaysia/Lazada/Amazon/Decathlon/adidas/UPS 等，正是需防压价对象）。无在营商铺数 / GMV，缺口为「品类需求强度」的相对代理，不编金额。</div>
 </section>
 
-<!-- D 带货位子投放（你选品类，NJV 选流量池） -->
+<!-- D 带货位子投放（货主选品类，NJV 选流量池） -->
 <section>
   <h2>④ 带货位子投放 <span class="tag">增值触达 · 对客价值</span></h2>
-  <p class="lead">你每寄出一票 SG 包裹，就自带一个「开箱即看」的高关注广告位——买家正拆你货、注意力最集中。NJV 把履约里的 <b>包裹物料位</b> 与 <b>物流妥投消息</b> 做成你能直接用的精准触达渠道：<b>你选品类，NJV 按你买家所在的邮区自动投放</b>，比自建 push / 印传单更省，且基于真实需求（脱敏）投放。</p>
+  <p class="lead">货主每寄出一票 SG 包裹，就自带一个「开箱即看」的高关注广告位——买家正拆货主包裹、注意力最集中。NJV 把履约里的 <b>包裹物料位</b> 与 <b>物流妥投消息</b> 做成货主可直接使用的精准触达渠道：<b>货主选品类，NJV 按买家所在邮区自动投放</b>，比自建 push / 印传单更省，且基于真实需求（脱敏）投放。</p>
   <div class="value" id="mediaValue"></div>
 </section>
 
@@ -197,7 +197,7 @@ function kpiHtml(cat, shipperId){
     <div class="kpi"><div class="v">${fmtQ(crossBase)}</div><div class="l">跨品类连带基数（SG）</div></div>`;
 }
 
-// A 你的品类需求地理（NJV 自动选流量池）
+// A 货主品类需求地理（NJV 自动选流量池）
 function renderZoneList(cat){
   const zones = (catZones[cat]||[]).slice(0,10);
   const max = zones.length? zones[0].parcels : 1;
@@ -233,7 +233,7 @@ function renderValueAdd(cat, shipperId){
     .slice(0,3).map(s=>{
       const liftPair = (bestB[cat]||{}).other;
       const liftTxt = liftPair ? ('买家连带买'+liftPair+'的倾向是均值'+bestB[cat].lift.toFixed(1)+'倍') : '需求结构见①模块';
-      return `<div class="row" style="align-items:flex-start"><span>📞 <b>${s.name}</b>：您主营 ${cat}（占您出货 ${s.cat_pct}%）。您在 ${zoneTxt} 需求最集中，我们帮您把物料位投到那——增量单涨，运力成本一起摊薄。本区买家${liftTxt}，建议搭配铺货。</span></div>`;
+      return `<div class="row" style="align-items:flex-start"><span>📞 <b>${s.name}</b>：您主营 ${cat}（占您出货 ${s.cat_pct}%）。您在 ${zoneTxt} 需求最集中，NJV 帮您把物料位投到那——增量单涨，运力成本一起摊薄。本区买家${liftTxt}，建议搭配铺货。</span></div>`;
     }).join('');
   document.getElementById('valueAdd').innerHTML = `
     <div class="hotcard" style="border-color:var(--brand)">
@@ -244,7 +244,7 @@ function renderValueAdd(cat, shipperId){
       <div class="nm">防压价 / 增值服务话术（模板+数据槽位自动生成，LLM 接入后可升级）</div>
       ${talks || '<div class="warnbox">该品类暂无足够实名大货主生成话术，可用品类级情报谈。</div>'}
     </div>
-    <div class="lead" style="margin-top:12px"><b>用法</b>：话术背后是事实——品类需求地理、连带倍数都来自真实数据。沟通时先给对方"我们懂你的生意在哪"，再用情报换增值服务合作，替代单纯降价。</div>`;
+    <div class="lead" style="margin-top:12px"><b>用法</b>：话术背后是事实——品类需求地理、连带倍数都来自真实数据。沟通时先给对方"NJV 懂货主的生意在哪"，再用情报换增值服务合作，替代单纯降价。</div>`;
 }
 
 function renderHotZones(){
@@ -269,20 +269,20 @@ function renderMediaSlot(cat, shipperId){
   const reach = top5.reduce((a,z)=>a+z.recipients,0);
   const zoneChips = top5.length ? top5.map(z=>z.label).join('、') : '（需求分散，按全域投放）';
   const pts = [
-    ['你选品类，NJV 选流量池','你只管选主营品类，NJV 用需求数据自动把物料位投到你买家最集中的邮区，不用你研究区域。'],
-    ['开箱即触达，零渠道成本','物料随履约自动附着，不用你另搭投放系统或养一个增长团队。'],
-    ['信任转移','出现在 Ninja Van 妥投场景里，比一条陌生 push 更可信——买家刚收到你的货。'],
+    ['货主选品类，NJV 选流量池','货主只需选主营品类，NJV 用需求数据自动把物料位投到买家最集中的邮区，不用货主研究区域。'],
+    ['开箱即触达，零渠道成本','物料随履约自动附着，货主无需另搭投放系统或养增长团队。'],
+    ['信任转移','出现在 Ninja Van 妥投场景里，比一条陌生 push 更可信——买家刚收到货主的货。'],
     ['按效果分润','用转化码 / 二维码归因，按带来单量结算，低风险试水、可量化。']
   ];
   let html = pts.map(p=>`<div class="vcard"><div class="who">${p[0]}</div><div class="body">${p[1]}</div></div>`).join('');
   html += `<div class="vcard" style="grid-column:1/-1;background:linear-gradient(135deg,#eef2ff,#f5f3ff)">
-      <div class="who">你的品类「${cat}」· NJV 自动选流量池结果</div>
+      <div class="who">货主品类「${cat}」· NJV 自动选流量池结果</div>
       <div class="body">优先投放邮区：<b>${zoneChips}</b>；这 5 个邮区合计约 <b>${fmtQ(reach)}</b> 名收件人，开箱即触达。<br>
-      <b>本台逻辑</b>：跨境 / 本地卖家按品类经营，不挑邮区——NJV 替你把「流量池」选好，你只管供货与转化。</div></div>`;
+      <b>本台逻辑</b>：跨境 / 本地卖家按品类经营，不挑邮区——NJV 替货主把「流量池」选好，货主只管供货与转化。</div></div>`;
   html += `<div class="script">
       <div class="sh">租位分润 · 对货主话术脚本（可直接用 · 已代入本品类数据）</div>
       <div class="step"><span class="k">开场·钩子</span>您每寄一票 SG 包裹，买家拆箱那一刻注意力最高——这个「开箱即看」的位置，您现在基本是免费浪费的。</div>
-      <div class="step"><span class="k">价值·精准</span>您主营 ${cat}，我们直接把物料位投到您买家最集中的邮区（${zoneChips}），基于真实需求（脱敏）投、不是盲投，且有信任转移，比陌生 push 更可信。</div>
+      <div class="step"><span class="k">价值·精准</span>您主营 ${cat}，NJV 直接把物料位投到您买家最集中的邮区（${zoneChips}），基于真实需求（脱敏）投、不是盲投，且有信任转移，比陌生 push 更可信。</div>
       <div class="step"><span class="k">结算·分润</span>按效果分润：用专属转化码 / 二维码归因，带来多少单结算多少，零前置媒体采买风险，ROI 可量化。</div>
       <div class="step"><span class="k">行动·收尾</span>这 5 个邮区合计约 ${fmtQ(reach)} 名收件人——先小批量试一轮，跑出 ROI 再放量。</div>
     </div>`;
