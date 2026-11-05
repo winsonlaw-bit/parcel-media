@@ -47,3 +47,5 @@ zone_heatmap.html
 njv_sg_proposal.html
 # Editor / session memory
 .workbuddy/
+# Windows reserved device-name artefact (git cannot index 'nul'); keep out of VCS
+nul
