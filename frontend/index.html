@@ -41,6 +41,16 @@
   .mapswitch button.on { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; }
   .mapswitch .msnote { font-size:11.5px; color:var(--warn); }
   .mapswitch .retry { display:none; }
+  .drillbar { font-size:12.5px; color:var(--sub); margin:30px 0 10px; padding-left:2px; }
+  .drill { background:#fff; border:1px solid var(--line); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+  .drill > summary { cursor:pointer; list-style:none; padding:14px 18px; font-size:14px; font-weight:650; display:flex; align-items:center; gap:9px; }
+  .drill > summary::-webkit-details-marker { display:none; }
+  .drill > summary::after { content:'展开 \25be'; margin-left:auto; font-size:12px; font-weight:500; color:var(--brand); }
+  .drill[open] > summary::after { content:'收起 \25b4'; }
+  .dnum { background:var(--brand); color:#fff; width:21px; height:21px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex:0 0 21px; }
+  .dhint { font-size:12px; font-weight:400; color:var(--sub); margin-left:4px; }
+  .drill .frame-wrap { height:78vh; min-height:560px; }
+  @media (max-width:900px){ .drill .frame-wrap { height:auto; min-height:0; } }
   @media (max-width:560px){ .mapswitch .msnote{ display:none; } .mapswitch button{ padding:4px 8px; font-size:11px; } .topbar{ gap:6px; } }
   .filebar { display:none; background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:13px; padding:10px 24px; line-height:1.6; }
   .dash { padding:28px 32px; }
@@ -150,9 +160,7 @@
     <div class="brand"><b>NJV · SG</b><small>需求情报工作台 Demo</small></div>
     <nav class="nav"><a class="nav-item" data-key="guide">怎么用</a>
 <a class="nav-item" data-key="chassis">数据底盘</a>
-<a class="nav-item" data-key="panorama">品类全景</a>
 <a class="nav-item" data-key="geo">需求地图</a>
-<a class="nav-item" data-key="signal">信号层</a>
 <a class="nav-item" data-key="merchant">货主屏</a>
 </nav>
     <div class="side-foot">Substrait-ready：静态前端 + iframe 挂载真实产物；后端 /api 可后续挂载于 app.substrait.build。</div>
@@ -175,16 +183,23 @@
             <thead><tr><th>#</th><th>货主</th><th>注册国</th><th>包裹量</th><th>主力品类（占该货主 · 已剔除未细分）</th></tr></thead>
             <tbody id="shipperRows"></tbody>
           </table></div>
+          <div class="drillbar">从总盘往下钻 · 两个细分视图（点开才加载）</div>
+          <details class="drill" id="drillPanorama">
+            <summary><span class="dnum">①</span>品类细分<span class="dhint">14 类分布 · 月度趋势</span></summary>
+            <div class="frame-wrap" data-lazy="1"><iframe class="frame" data-file="h1_category_panorama.v4.html" title="品类细分"></iframe><div class="frame-err"></div></div>
+          </details>
+          <details class="drill" id="drillSignal">
+            <summary><span class="dnum">②</span>需求细分<span class="dhint">品类亲和 lift · 区域三级下钻</span></summary>
+            <div class="frame-wrap" data-lazy="1"><iframe class="frame" data-file="signal_layer_demo.v4.html" title="需求细分"></iframe><div class="frame-err"></div></div>
+          </details>
           <details class="fold"><summary>诚实边界</summary><div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、货主等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div></details>
         </div>
       </div>
       <div class="page" id="page-guide" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="guide.html" title="怎么用"></iframe><div class="frame-err"></div></div></div>
-<div class="page" id="page-panorama" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="h1_category_panorama.v4.html" title="品类全景"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-geo" style="display:none">
         <div class="frame-wrap" id="wrapGeoFull"><iframe class="frame" data-file="zone_geo_map.html" title="需求地图"></iframe><div class="frame-err"></div></div>
         <div class="frame-wrap" id="wrapGeoSimple" style="display:none"><iframe class="frame" data-file="zone_demand_map.v4.html" title="简版需求地图"></iframe><div class="frame-err"></div></div>
       </div>
-<div class="page" id="page-signal" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="signal_layer_demo.v4.html" title="信号层"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-merchant" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="merchant_screen.v4.html" title="货主屏"></iframe><div class="frame-err"></div></div></div>
     </div>
   </main>
@@ -195,7 +210,7 @@ function fmtQ(n){ if(n>=1e6) return (n/1e6).toFixed(2).replace(/[.]?0+$/,'')+'M'
 const fmt = n => fmtQ(n);
 const kpis = [
   { n: fmt(WB.parcels_total), l: '包裹总量（H1 2026 全量·含未妥投 3.25%；妥投≈3.16M·completed 终态）' },
-  { n: fmt(WB.recipients), l: '全 SG 去重收件人（983K）' },
+  { n: fmt(WB.recipients), l: '全 SG 收件人（983K）' },
   { n: WB.zones, l: 'SG 合并真区（邮区前 2 位）' },
   { n: fmt(WB.distinct_shippers), l: '货主 distinct（实名 100%）' },
   { n: WB.classify_pct.toFixed(1) + '%', l: 'v7 规则分类覆盖（无描述 16.3%）' },
@@ -206,7 +221,7 @@ document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><t
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261105l'; // iframe 缓存戳：子页面内容变更后升级
+const FRAME_VERSION = '20261105m'; // iframe 缓存戳：子页面内容变更后升级
 
 // ── 移动端 iframe 高度自适应 ──────────────────────────────────────────────
 // 桌面：iframe 铺满视口、内部滚动（保持原行为）。
@@ -332,9 +347,23 @@ function show(key, label) {
   const pg = document.getElementById('page-' + key);
   pg.style.display = 'block';
   document.getElementById('mapSwitch').style.display = (key === 'geo') ? 'inline-flex' : 'none';
-  pg.querySelectorAll('.frame-wrap').forEach(w => { if (w.style.display !== 'none') loadWrap(w); });
+  pg.querySelectorAll('.frame-wrap').forEach(w => {
+    if (w.style.display !== 'none' && !w.dataset.lazy) loadWrap(w);
+  });
+  // 切回数据底盘时，已展开的细分 iframe 重新量一次高度（移动端）
+  if (key === 'chassis') document.querySelectorAll('details.drill[open] .frame').forEach(f => syncHeight(f));
 }
 items.forEach(it => it.addEventListener('click', () => show(it.dataset.key, it.textContent)));
+
+// 折叠细分：展开时才加载 iframe（信号层内联数据 4MB，避免拖慢首屏）
+document.querySelectorAll('details.drill').forEach(d => {
+  d.addEventListener('toggle', function () {
+    if (!d.open) return;
+    const w = d.querySelector('.frame-wrap');
+    loadWrap(w);
+    setTimeout(() => syncHeight(w.querySelector('.frame')), 150);
+  });
+});
 
 // 本地文件方式打开时提示改用本地服务器
 if (location.protocol === 'file:') document.getElementById('filebar').style.display = 'block';

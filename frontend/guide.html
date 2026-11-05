@@ -55,15 +55,23 @@
   details.fold ul{margin:0 0 14px;padding-left:20px;font-size:12.8px;color:#475569}
   details.fold li{margin-bottom:5px}
 
+  .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+  .scene{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px;overflow:hidden;margin:0}
+  .scene svg{width:100%;height:auto;display:block;border-radius:9px}
+  .scene figcaption{margin:11px 2px 2px;font-size:12.8px;color:#475569;line-height:1.65}
+  .scene figcaption b{color:var(--brand)}
+  .quote span{display:inline-block;margin-top:4px}
+  .boundary{font-size:12.5px;color:var(--sub);margin:12px 0 0;padding-left:12px;border-left:3px solid var(--line)}
+
   @media (max-width:900px){
-    .pillars{grid-template-columns:1fr 1fr}
+    .pillars,.scenes{grid-template-columns:1fr 1fr}
     .four{grid-template-columns:1fr 1fr}
     .hero{padding:26px 24px}
     .hero h1{font-size:23px}
     .wrap{padding:20px 16px 44px}
   }
   @media (max-width:560px){
-    .pillars,.four{grid-template-columns:1fr}
+    .pillars,.four,.scenes{grid-template-columns:1fr}
     .hero h1{font-size:20px}
     .hero .claim{font-size:15px}
     .when{margin-left:0;width:100%}
@@ -71,6 +79,8 @@
     .route:before{left:8px}
     .stop:before{left:-24px}
     .stop{padding:14px}
+    .scene{padding:10px}
+    .scene figcaption{font-size:12.2px}
   }
 </style>
 </head>
@@ -84,7 +94,7 @@
     <p class="sub">2026 H1 新加坡真实包裹数据 · 先看数据可信，再看需求在哪，最后看怎么变成生意</p>
     <div class="facts">
       <div class="fact"><b>3.27M</b> 半年包裹</div>
-      <div class="fact"><b>983K</b> 去重收件人</div>
+      <div class="fact"><b>983K</b> 收件人</div>
       <div class="fact"><b>76</b> 邮区</div>
       <div class="fact"><b>42K</b> 货主</div>
       <div class="fact"><b>72.8%</b> 品类覆盖</div>
@@ -92,64 +102,187 @@
     </div>
   </div>
 
-  <h2 class="sec">按什么顺序看 · 每个 tab 解决什么问题</h2>
-  <p class="sechint">从左到右是一条证据链：有数据 → 买什么 → 在哪买 → 还能买什么 → 于是我们能卖什么。</p>
-  <div class="route">
-
-    <div class="stop self">
-      <div class="stophd"><span class="no">00</span><span class="nm">怎么用 · 提案要点（本页）</span><span class="when">第一次打开 / 随时回来</span></div>
-      <p>先花两分钟知道每页该看什么、能得出什么结论；提案要点与四方价值也放在这里，不用在各页之间来回找。</p>
-    </div>
-
-    <div class="stop">
-      <div class="stophd"><span class="no">01</span><span class="nm">数据底盘</span><span class="when">先确认数据可信</span></div>
-      <p>回答「我们手里到底有什么」。看总量、去重收件人、邮区数、货主数与分类覆盖率，再看 Top10 实名货主的主力品类——后面所有页都建立在这组数字上。</p>
-      <div class="chips"><span class="chip">3.27M 件</span><span class="chip">主力品类已剔除未细分</span><span class="chip">remote_id 实名口径</span></div>
-    </div>
-
-    <div class="stop">
-      <div class="stophd"><span class="no">02</span><span class="nm">品类全景</span><span class="when">想知道 SG 人在买什么</span></div>
-      <p>回答「大家买什么、什么时候买」。看 14 类分布与 Top6 品类的月度趋势，确定哪类需求有体量、哪类在涨。</p>
-      <div class="chips"><span class="chip">14 类体系</span><span class="chip">月度趋势</span><span class="chip">覆盖率口径</span></div>
-    </div>
-
-    <div class="stop">
-      <div class="stophd"><span class="no">03</span><span class="nm">需求地图</span><span class="when">想知道需求落在哪</span></div>
-      <p>回答「买家在哪些邮区最集中」。看 76 个邮区的需求分布，点任意区看收件人数、品类画像、在铺货主与月度走势；可直接搜 2 位邮区码、6 位邮编或地名。地图若加载失败会自动切到简版，数据一致。</p>
-      <div class="chips"><span class="chip">76 邮区</span><span class="chip">地址搜索</span><span class="chip">完整 / 简版双入口</span></div>
-    </div>
-
-    <div class="stop">
-      <div class="stophd"><span class="no">04</span><span class="nm">信号层</span><span class="when">想知道谁还会买什么</span></div>
-      <p>回答「需求能不能预测」。看品类亲和信号（lift）与区域三级下钻，把「描述现状」升级成「找出连带机会」。</p>
-      <div class="chips"><span class="chip">品类亲和 lift</span><span class="chip">261K 跨品类复购人</span><span class="chip">区域下钻</span></div>
-    </div>
-
-    <div class="stop">
-      <div class="stophd"><span class="no">05</span><span class="nm">货主屏</span><span class="when">要把数据变成动作</span></div>
-      <p>回答「所以能怎么用」。你只选主营品类，NJV 自动选流量池——按真实需求匹配高需求邮区，输出连带选品、货主增值话术与投放位子方案。</p>
-      <div class="chips"><span class="chip">你选品类</span><span class="chip">NJV 自动选流量池</span><span class="chip">话术模板 + 数据槽位</span></div>
-    </div>
-
-  </div>
-
   <h2 class="sec">提案要点</h2>
-  <p class="sechint">这套能力从 Ninja Van 自己的妥投包裹里长出来，不是买来的流量。</p>
+  <p class="sechint">三层互不重叠：广告打在哪 → 凭什么定向 → 为什么绕不开。</p>
   <div class="pillars">
     <div class="pillar">
-      <div class="t">物理流量</div>
-      <p class="b">一个妥投包裹 = 一次 100% 到家的曝光。76 个邮区，各有自己的品类画像与收件人数；广告位是包裹物料位 + 妥投通知，转化归因靠扫码回流，由 NJV 持有。</p>
+      <div class="t">① 能触达什么</div>
+      <p class="b">两类触达位，都属于「由妥投带出的流量」：<b>物理位</b>（包裹包装上的选品卡 / 二维码）与<b>数字通道</b>（妥投消息里的推荐）。妥投消息由妥投这个物理事件触发，但它是数字消息、不是物理位。广告打在哪，就这两种。</p>
     </div>
     <div class="pillar">
-      <div class="t">链主独占</div>
-      <p class="b">物理位（包裹物料位）+ 数字通道（物流妥投消息）+ 数据资产（双端脱敏画像）三位一体。货主以租位分润参与，归因与结算在 NJV 体系内闭环——位子买不到，也绕不开。</p>
+      <div class="t">② 凭什么定向</div>
+      <p class="b">发货端货主关系 + 收货端真实需求，算出 76 个邮区各自的品类画像。它决定往哪个包裹贴什么、给哪些收件人推什么，也支撑测品与招商——<b>是情报底座，不是触点</b>。</p>
     </div>
     <div class="pillar">
-      <div class="t">配送员口径</div>
-      <p class="b">主流纯履约。仅在 COD、冷链、大件等有真实接触点的窄场景，自愿带货提成（affiliate 式、非 KPI），归因结算走 NJV 闭环，情报不外泄。</p>
+      <div class="t">③ 为什么绕不开</div>
+      <p class="b">位子、通道、归因全在 Ninja Van 控制侧：货主租位分润，扫码回流在体系内结算，情报不外泄。别人能买运力，买不到这两类位子和这套画像。</p>
     </div>
   </div>
-  <div class="quote">线上流量人人能买（竞价），物理流量只有握着包裹的人能卖（链主）。</div>
+  <div class="quote">线上流量人人能买（竞价），物理流量只有握着包裹的人能卖（链主）。<br><span style="font-size:12.5px;font-weight:500;opacity:.88">这里的「物理流量」= 由妥投带出的全部触达：包裹物料位（物理）＋ 妥投消息（数字通道）。</span></div>
+  <p class="boundary">配送员口径：主流纯履约（SG 放门口 / 柜为主、零接触）；仅 COD / 冷链 / 大件等窄接触场景，自愿带货提成（affiliate 式、非 KPI），归因结算走 NJV 闭环。</p>
+
+  <h2 class="sec">四个场景 · 一眼看懂广告打在哪</h2>
+  <p class="sechint">上面三层落到现实里长什么样。①② 是两类主流触达位，③ 是少数场景的可选增强，④ 是驱动投放的情报底座。</p>
+  <div class="scenes">
+        <figure class="scene">
+<svg viewBox="0 0 680 400" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+          <defs><marker id="arwP1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#4f46e5"></path></marker></defs>
+          <rect width="680" height="400" fill="#f1f5f9"/>
+          <rect y="300" width="680" height="100" fill="#e2e8f0"/>
+          <rect y="294" width="680" height="6" fill="#cbd5e1"/>
+          <rect x="0" y="0" width="680" height="46" fill="#0f172a"/>
+          <text x="24" y="30" font-size="17" font-weight="800" fill="#fff">场景 ① · 包裹包装的广告（物理位）</text>
+          <rect x="40" y="120" width="150" height="180" rx="10" fill="#cbd5e1"/>
+          <rect x="54" y="134" width="122" height="48" rx="6" fill="#94a3b8"/>
+          <rect x="54" y="190" width="122" height="48" rx="6" fill="#94a3b8"/>
+          <rect x="54" y="246" width="122" height="42" rx="6" fill="#64748b"/>
+          <text x="115" y="316" text-anchor="middle" font-size="11" fill="#475569">公寓信箱 / 柜</text>
+          <rect x="250" y="200" width="170" height="140" rx="10" fill="#f59e0b"/>
+          <rect x="250" y="200" width="170" height="140" rx="10" fill="none" stroke="#d97706" stroke-width="2"/>
+          <rect x="328" y="200" width="14" height="140" fill="#fcd34d"/>
+          <rect x="250" y="258" width="170" height="14" fill="#fcd34d"/>
+          <rect x="268" y="216" width="134" height="40" rx="6" fill="#4f46e5"/>
+          <text x="278" y="232" font-size="12" font-weight="800" fill="#fff">Ninja Van 精选</text>
+          <text x="278" y="248" font-size="9.5" fill="#c7d2fe">宠物用品 8 折 →</text>
+          <rect x="300" y="270" width="46" height="46" rx="4" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+          <rect x="306" y="276" width="11" height="11" fill="#0f172a"/>
+          <rect x="321" y="276" width="11" height="11" fill="#0f172a"/>
+          <rect x="336" y="276" width="8" height="8" fill="#0f172a"/>
+          <rect x="306" y="291" width="11" height="11" fill="#0f172a"/>
+          <rect x="323" y="289" width="11" height="11" fill="#0f172a"/>
+          <rect x="336" y="304" width="8" height="8" fill="#0f172a"/>
+          <text x="335" y="336" text-anchor="middle" font-size="10" fill="#475569">扫码进 Ninja Van 落地页</text>
+          <rect x="500" y="150" width="120" height="200" rx="16" fill="#0f172a"/>
+          <rect x="510" y="166" width="100" height="168" rx="8" fill="#fff"/>
+          <rect x="510" y="166" width="100" height="24" rx="8" fill="#4f46e5"/>
+          <text x="560" y="183" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Ninja Van 落地页</text>
+          <rect x="518" y="198" width="84" height="40" rx="5" fill="#eef2ff"/>
+          <text x="524" y="214" font-size="9" fill="#4338ca">宠物用品</text>
+          <text x="524" y="228" font-size="9" fill="#4338ca">8 折券已领</text>
+          <rect x="518" y="246" width="84" height="30" rx="5" fill="#dcfce7"/>
+          <text x="524" y="265" font-size="9" fill="#15803d">租位分润中</text>
+          <text x="560" y="300" text-anchor="middle" font-size="9" fill="#94a3b8">货主：租位</text>
+          <path d="M420,292 C455,262 470,232 500,232" fill="none" stroke="#4f46e5" stroke-width="2.5" marker-end="url(#arwP1)"/>
+          <text x="452" y="262" text-anchor="middle" font-size="10" fill="#4338ca">零接触</text>
+          <rect x="40" y="352" width="600" height="34" rx="8" fill="#eef2ff"/>
+          <text x="56" y="374" font-size="13" font-weight="700" fill="#4338ca">Ninja Van 统一附着物料位 · 商家租位变现，拿不走我们的位子与归因</text>
+        </svg>
+        <figcaption><b>① 物理位 · 包裹包装广告</b>：Ninja Van 在履约环节统一附着选品卡 + 二维码。SG 以放门口 / 柜为主，<b>零接触也能完成一次到家曝光</b>。货主租位投放，位子与扫码归因都在 NJV 侧。</figcaption>
+      </figure>
+        <figure class="scene">
+<svg viewBox="0 0 680 400" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+          <defs><marker id="arwB2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#0ea5e9"></path></marker></defs>
+          <rect width="680" height="400" fill="#e0f2fe"/>
+          <rect x="0" y="0" width="680" height="46" fill="#0f172a"/>
+          <text x="24" y="30" font-size="17" font-weight="800" fill="#fff">场景 ② · 妥投信息的广告（数字通道）</text>
+          <rect x="230" y="70" width="220" height="290" rx="22" fill="#0f172a"/>
+          <rect x="242" y="86" width="196" height="258" rx="12" fill="#fff"/>
+          <rect x="242" y="86" width="196" height="26" rx="12" fill="#4f46e5"/>
+          <text x="340" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Ninja Van 物流 · 通知</text>
+          <rect x="254" y="124" width="172" height="46" rx="8" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+          <text x="264" y="142" font-size="11" font-weight="700" fill="#ea580c">📦 您的包裹已送达</text>
+          <text x="264" y="158" font-size="9.5" fill="#9a3412">后港区 · 妥投完成</text>
+          <rect x="254" y="180" width="172" height="92" rx="8" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+          <text x="264" y="198" font-size="10" font-weight="800" fill="#4338ca">基于本区偏好推荐</text>
+          <text x="264" y="214" font-size="9.5" fill="#475569">宠物用品 · 8 折券</text>
+          <rect x="264" y="224" width="80" height="22" rx="6" fill="#4f46e5"/>
+          <text x="304" y="239" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">查看优惠</text>
+          <text x="264" y="264" font-size="8.5" fill="#94a3b8">收件人已脱敏 · 画像由 Ninja Van 计算</text>
+          <rect x="70" y="180" width="64" height="64" rx="14" fill="#0ea5e9"/>
+          <text x="102" y="222" text-anchor="middle" font-size="28" fill="#fff">✉</text>
+          <text x="102" y="272" text-anchor="middle" font-size="10" fill="#0369a1">Ninja Van 推送</text>
+          <path d="M140,212 C185,212 205,212 242,212" fill="none" stroke="#0ea5e9" stroke-width="2.5" marker-end="url(#arwB2)"/>
+          <rect x="40" y="372" width="600" height="20" rx="6" fill="#e0f2fe"/>
+          <text x="56" y="386" font-size="12" font-weight="700" fill="#0369a1">独占通道 + 脱敏画像，商家自建通道与画像都抄不走</text>
+        </svg>
+        <figcaption><b>② 数字通道 · 妥投信息广告</b>：妥投通知是用户必看的高打开率通道，由「妥投」这个物理事件触发——<b>它是数字消息，不是物理位</b>，但同属妥投带出的触达。叠加脱敏画像做推荐，点进去导流回货主成交。</figcaption>
+      </figure>
+        <figure class="scene">
+<svg viewBox="0 0 680 400" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+          <defs>
+            <marker id="arwD4" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#4f46e5"></path></marker>
+            <marker id="arwD4g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#16a34a"></path></marker>
+          </defs>
+          <rect width="680" height="400" fill="#f1f5f9"/>
+          <rect y="300" width="680" height="100" fill="#e2e8f0"/>
+          <rect y="294" width="680" height="6" fill="#cbd5e1"/>
+          <rect x="0" y="0" width="680" height="46" fill="#0f172a"/>
+          <text x="24" y="30" font-size="17" font-weight="800" fill="#fff">场景 ③ · COD / 冷链 / 大件的窄接触带货（可选增强）</text>
+
+          <!-- ① 接触点 -->
+          <text x="150" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#16a34a">① 真实接触点</text>
+          <circle cx="110" cy="155" r="17" fill="#16a34a"/>
+          <rect x="94" y="173" width="32" height="74" rx="14" fill="#16a34a"/>
+          <text x="110" y="266" text-anchor="middle" font-size="12" fill="#15803d">配送员</text>
+          <rect x="146" y="208" width="44" height="40" rx="4" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+          <rect x="146" y="224" width="44" height="4" fill="#d97706"/>
+          <circle cx="232" cy="155" r="17" fill="#ea580c"/>
+          <rect x="216" y="173" width="32" height="74" rx="14" fill="#ea580c"/>
+          <text x="232" y="266" text-anchor="middle" font-size="12" fill="#9a3412">收件人</text>
+          <text x="186" y="200" text-anchor="middle" font-size="9" fill="#64748b">COD/冷链/大件</text>
+          <path d="M266,200 C285,196 292,190 300,186" fill="none" stroke="#4f46e5" stroke-width="2.5" marker-end="url(#arwD4)"/>
+
+          <!-- ② Ninja Van 情报卡 -->
+          <text x="362" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#4338ca">② Ninja Van 情报驱动</text>
+          <rect x="302" y="128" width="120" height="160" rx="12" fill="#fff" stroke="#4f46e5" stroke-width="2"/>
+          <rect x="302" y="128" width="120" height="24" rx="12" fill="#4f46e5"/>
+          <text x="362" y="145" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Ninja Van 带货建议</text>
+          <rect x="314" y="160" width="96" height="42" rx="5" fill="#eef2ff"/>
+          <text x="320" y="178" font-size="9" fill="#4338ca">本区偏好画像</text>
+          <text x="320" y="193" font-size="9" fill="#4338ca">宠物用品 8 折</text>
+          <rect x="314" y="212" width="96" height="30" rx="5" fill="#dcfce7"/>
+          <text x="362" y="231" text-anchor="middle" font-size="9" fill="#15803d">转化归因 → Ninja Van</text>
+          <text x="362" y="266" text-anchor="middle" font-size="9" fill="#94a3b8">建议来自 Ninja Van，不外流</text>
+          <path d="M422,200 C440,196 452,188 472,176" fill="none" stroke="#4f46e5" stroke-width="2.5" marker-end="url(#arwD4)"/>
+
+          <!-- ③ 提成结算 -->
+          <text x="558" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#15803d">③ 提成回流</text>
+          <rect x="478" y="128" width="160" height="64" rx="10" fill="#0f172a"/>
+          <text x="558" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Ninja Van 归因结算</text>
+          <text x="558" y="172" text-anchor="middle" font-size="9" fill="#94a3b8">转化归属 Ninja Van 闭环</text>
+          <rect x="498" y="208" width="120" height="34" rx="8" fill="#16a34a"/>
+          <text x="558" y="230" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">配送员 提成 +$</text>
+          <path d="M558,192 L558,206" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arwD4g)"/>
+          <path d="M498,225 C400,252 250,252 130,250" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arwD4g)"/>
+          <text x="300" y="246" text-anchor="middle" font-size="9.5" fill="#15803d">分润到账 → 自愿再参与</text>
+
+          <rect x="40" y="352" width="600" height="34" rx="8" fill="#dcfce7"/>
+          <text x="56" y="374" font-size="13" font-weight="700" fill="#15803d">自愿参与 · 非 KPI · 按转化提成 · 归因结算在 Ninja Van 闭环内，情报不外泄</text>
+        </svg>
+        <figcaption><b>③ 窄接触带货 · 可选增强</b>：只在 COD / 冷链 / 大件等<b>真实接触场景</b>，配送员自愿带货、按转化提成（affiliate 式、非 KPI）。SG 主流放门口 / 柜、零接触，这是少数场景，不是常态；情报与结算仍在 NJV 闭环内。</figcaption>
+      </figure>
+        <figure class="scene">
+<svg viewBox="0 0 680 400" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+          <rect width="680" height="400" fill="#f8fafc"/>
+          <rect x="0" y="0" width="680" height="46" fill="#0f172a"/>
+          <text x="24" y="30" font-size="17" font-weight="800" fill="#fff">场景 ④ · 高需求邮区情报（决定往哪投）</text>
+          <ellipse cx="300" cy="225" rx="190" ry="125" fill="#e2e8f0"/>
+          <circle cx="240" cy="185" r="20" fill="#a5b4fc"/>
+          <circle cx="345" cy="165" r="16" fill="#c7d2fe"/>
+          <circle cx="385" cy="245" r="14" fill="#c7d2fe"/>
+          <circle cx="255" cy="265" r="12" fill="#c7d2fe"/>
+          <circle cx="325" cy="285" r="10" fill="#c7d2fe"/>
+          <circle cx="300" cy="225" r="48" fill="#4f46e5"/>
+          <text x="300" y="221" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">后港</text>
+          <text x="300" y="239" text-anchor="middle" font-size="11" fill="#c7d2fe">106K</text>
+          <rect x="372" y="118" width="120" height="26" rx="13" fill="#fff" stroke="#4f46e5" stroke-width="1.5"/>
+          <text x="432" y="135" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">鞋包 88%</text>
+          <rect x="382" y="156" width="120" height="26" rx="13" fill="#fff" stroke="#4f46e5" stroke-width="1.5"/>
+          <text x="442" y="173" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">食品 29%</text>
+          <rect x="372" y="194" width="120" height="26" rx="13" fill="#fff" stroke="#4f46e5" stroke-width="1.5"/>
+          <text x="432" y="211" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">服饰 25%</text>
+          <path d="M342,205 C360,180 366,158 372,146" stroke="#4f46e5" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+          <path d="M344,220 C365,198 372,180 382,172" stroke="#4f46e5" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+          <path d="M342,245 C362,225 366,212 372,210" stroke="#4f46e5" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+          <text x="540" y="185" font-size="11" font-weight="700" fill="#475569">76 区 × 983K</text>
+          <text x="540" y="203" font-size="11" fill="#64748b">收件人真实需求</text>
+          <text x="540" y="221" font-size="10" fill="#94a3b8">别人没有的资产</text>
+          <rect x="40" y="352" width="600" height="34" rx="8" fill="#eef2ff"/>
+          <text x="56" y="374" font-size="13" font-weight="700" fill="#4338ca">「流量池」= Ninja Van 用双端数据算出的高需求邮区，招商与投放的弹药</text>
+        </svg>
+        <figcaption><b>④ 情报底座 · 高需求邮区</b>：双端数据算出 76 个邮区各自的品类需求，决定往哪些包裹贴什么、给谁推什么，也支撑测品与招商。<b>它是弹药，不是触点</b>——不直接触达消费者。</figcaption>
+      </figure>
+  </div>
 
   <h2 class="sec">四方价值</h2>
   <p class="sechint">同一套数据，对每一方分别意味着什么。</p>
@@ -158,6 +291,35 @@
     <div class="vcard"><div class="who">② Shipper 货主</div><div class="body">现有货主用品类需求地理 + 连带选品提升客单与复购；潜在货主按高需求品类招商，用「你的买家在哪、量有多大」谈。</div></div>
     <div class="vcard"><div class="who">③ NJV 配送员</div><div class="body">主流零接触包裹不参与带货；只在交箱 / 签收等真实接触场景自愿带货提成，归因由 NJV 结算。</div></div>
     <div class="vcard"><div class="who">④ NJV 网络</div><div class="body">位子 + 通道 + 数据三位一体，货主租位分润、由 Ninja Van 统一运营；单量与网络黏性提升，合作可量化可复盘。</div></div>
+  </div>
+
+  <h2 class="sec">按什么顺序看 · 每个 tab 解决什么问题</h2>
+  <p class="sechint">从左到右四步：这套能力是什么 → 手里有什么（含两个细分）→ 需求落在哪 → 于是怎么卖。</p>
+  <div class="route">
+
+    <div class="stop self">
+      <div class="stophd"><span class="no">00</span><span class="nm">怎么用 · 提案要点（本页）</span><span class="when">第一次打开 / 随时回来</span></div>
+      <p>先看三层提案要点与四张场景图建立整体画面，再看四方价值，最后扫一眼每页该看什么。</p>
+    </div>
+
+    <div class="stop">
+      <div class="stophd"><span class="no">01</span><span class="nm">数据底盘</span><span class="when">先确认数据可信</span></div>
+      <p>回答「我们手里有什么」。看总量、收件人、邮区数、货主数与分类覆盖率，再看 Top10 实名货主的主力品类。下方两个<b>折叠细分</b>点开才加载：「品类细分」看 14 类分布与月度趋势，「需求细分」看品类亲和 lift 与区域三级下钻。</p>
+      <div class="chips"><span class="chip">3.27M 件</span><span class="chip">主力品类已剔除未细分</span><span class="chip">2 个折叠细分</span><span class="chip">remote_id 实名口径</span></div>
+    </div>
+
+    <div class="stop">
+      <div class="stophd"><span class="no">02</span><span class="nm">需求地图</span><span class="when">想知道需求落在哪</span></div>
+      <p>回答「买家在哪些邮区最集中」。看 76 个邮区的需求分布，点任意区看收件人数、品类画像、在铺货主与月度走势；可直接搜 2 位邮区码、6 位邮编或地名。地图若加载失败会自动切到简版，数据一致。</p>
+      <div class="chips"><span class="chip">76 邮区</span><span class="chip">地址搜索</span><span class="chip">完整 / 简版双入口</span></div>
+    </div>
+
+    <div class="stop">
+      <div class="stophd"><span class="no">03</span><span class="nm">货主屏</span><span class="when">要把数据变成动作</span></div>
+      <p>回答「所以能怎么用」。你只选主营品类，NJV 自动选流量池——按真实需求匹配高需求邮区，输出连带选品、货主增值话术与投放位子方案。</p>
+      <div class="chips"><span class="chip">你选品类</span><span class="chip">NJV 自动选流量池</span><span class="chip">话术模板 + 数据槽位</span></div>
+    </div>
+
   </div>
 
   <details class="fold"><summary>诚实边界</summary>
