@@ -24,6 +24,14 @@ ul.kv{font-size:13px;line-height:1.9;padding-left:18px} ul.kv b{color:#1f3a5f}
 .arrow{font-size:22px;color:#bbb} .mt{margin-top:18px;font-size:13px;color:#555}
 table.mini{font-size:12px;border-collapse:collapse;margin-top:8px} table.mini td,table.mini th{border:1px solid #eee;padding:4px 10px}
 footer{font-size:12px;color:#999;text-align:center;margin-top:24px;line-height:1.7}
+
+  /* 折叠式口径说明：默认收起 */
+  .fold{margin-top:14px;border-top:1px solid var(--line);padding-top:9px;font-size:12px;color:var(--muted)}
+  .fold summary{cursor:pointer;font-weight:700;color:var(--ink);list-style:none;outline:none}
+  .fold summary::-webkit-details-marker{display:none}
+  .fold summary::before{content:'▸ ';color:var(--brand)}
+  .fold[open] summary::before{content:'▾ '}
+  .fold>div,.fold>p,.fold>ul,.fold>footer{margin-top:8px;line-height:1.8}
 </style><link rel="stylesheet" href="responsive.css?v=20261105i">
 <script src="responsive.js?v=20261105i" defer></script>
 </head><body><div class="wrap">
@@ -81,7 +89,7 @@ footer{font-size:12px;color:#999;text-align:center;margin-top:24px;line-height:1
 <rect x="150" y="436" width="8.8" height="18" rx="3" fill="#9d7660"/>
 <text x="164.80866685862367" y="453" font-size="12" fill="#555">8,158 (0.2%)</text>
 </svg>
-<div class="other-tile">其他 / 未细分：888,895（27.2%）= 无描述 533,703（回流源数据） + 纯代码死块 355,192（需商品主数据）</div>
+<div class="other-tile">其他 / 未细分 889K（27.2%）：无描述 534K + 纯代码 355K，需回流源数据 / 商品主数据补全</div>
 <div class="note">前 5 大品类（美妆香水 / 食品保健 / 鞋包配饰 / 服饰 / 电子）约占 42.9% 包裹，是洞察引擎服务的商家基本盘。</div>
 </div>
 
@@ -161,36 +169,21 @@ footer{font-size:12px;color:#999;text-align:center;margin-top:24px;line-height:1
 <div class="mt">大盘月度量级：</div>
 <table class="mini"><tr><th>月份</th><th>2026-01</th><th>2026-02</th><th>2026-03</th><th>2026-04</th><th>2026-05</th><th>2026-06</th></tr>
 <tr><td>总量</td><td>583,906</td><td>505,326</td><td>615,184</td><td>629,424</td><td>568,758</td><td>363,437</td></tr></table>
-<div class="note"><b>诚实标注：</b>6 月总量 363,437，环比 5 月 -36.1%。已做日级验证——6 月 30 天量级均匀、无截尾形态，属<b>全月真实回落</b>；原因是业务回落还是导出口径差异，<b>待业务确认后更新本页</b>。趋势类洞察（达人建议等）已改用「近 3 月 vs 前 3 月」因子以抗单月异动。</div>
+<div class="note"><b>诚实标注：</b>6 月总量 363K，环比 5 月 -36.1%。已做日级验证——6 月 30 天量级均匀、无截尾形态，属<b>全月真实回落</b>；原因是业务回落还是导出口径差异，<b>待业务确认后更新本页</b>。趋势类洞察（达人建议等）已改用「近 3 月 vs 前 3 月」因子以抗单月异动。</div>
 </div>
 
 <div class="card"><h2>③ 覆盖率进展与信号（同口径演进）</h2>
 
 <div class="residual"><div class="stage"><div class="num">51.8%</div><div class="lab">6 类规则法<br>(v1 基线)</div></div><div class="arrow">→</div><div class="stage"><div class="num">72.8%</div><div class="lab">v7 规则引擎<br>词边界+多语言+14 类</div></div><div class="arrow">→</div><div class="stage hl"><div class="num">LLM 预留</div><div class="lab">归一层可插拔<br>公司平台接入即升级</div></div></div>
-<div class="note">口径：v7 分类率 72.8% 为纯规则引擎达成（词边界修复 + 印尼语等扩展 + 14 类体系），<b>未用任何 LLM</b>。跨品类复购 = 同收件人跨月购买 ≥2 真实品类，当前 261,131 人 / 983,307 收件人（26.56%）。同名邮区已合并为真实行政区（103 邮区 → 76 区）。</div>
+<div class="note">口径：v7 分类率 72.8% 为纯规则引擎达成（词边界修复 + 印尼语等扩展 + 14 类体系），<b>未用任何 LLM</b>。跨品类复购 = 同收件人跨月购买 ≥2 真实品类，当前 261K 人 / 983K 收件人（26.56%）。同名邮区已合并为真实行政区（103 邮区 → 76 区）。</div>
 </div>
 
-<div class="card"><h2>④ LLM 预留与成本测算</h2>
 
-<p>v7 后 LLM 的目标池已经收窄、口径要讲清楚：</p>
-<ul class="kv">
-  <li>「其他/未细分」888,895 包裹（27.2%）拆成两块：<b>无描述 533,703（16.3%，LLM 救不了，需源数据回流 AF Ops）</b>；<b>纯代码死块 355,192（10.9%，需商品主数据，LLM 仅辅助）</b></li>
-  <li>结论：<b>v7 时代 LLM 不再是覆盖率主力</b>——主力是源数据质量；LLM 定位回归"归一层可插拔的升级项"</li>
-</ul>
-<p>成本测算口径（沿用 11-02 基于当时「其他」描述池的实测：去重率 19.8%、均长 44 字符、每批 50 条）：</p>
-<table class="cost">
-<tr><th>模型档位</th><th>输入 Token</th><th>输出 Token</th><th>一次性全量成本</th><th>说明</th></tr>
-<tr><td>轻量档<br>(GPT-4o-mini 级)</td><td>7.0M</td><td>1.31M</td><td class="hot">≈ $1.8</td><td>日常仅增量，边际趋近 0</td></tr>
-<tr><td>标准档<br>(GPT-4o / Claude 级)</td><td>7.0M</td><td>1.31M</td><td>≈ $30</td><td>若用旗舰模型</td></tr>
-<tr><td>超轻档<br>(Haiku 级)</td><td>7.0M</td><td>1.31M</td><td>≈ $3.4</td><td>分类任务足够</td></tr>
-</table>
-<p class="note">结论不变：token 不贵，瓶颈在数据源。LLM 接入路径 = 公司平台统一调用（当前无外部 key，归一层词典优先、LLM 预留）。</p>
-
-</div>
-
+<details class="fold"><summary>口径说明</summary>
 <footer>
 数据源：parcels_flat_v7_2026_full.summary.json · signal_pairs.json · trend_by_zone.json · shipper_match_stats.json<br>
 方法：跨品类复购 = 同收件人跨月 ≥2 真实品类；实名匹配仅 remote_id（id/legacy 已弃用，宁缺毋错配）。<br>
 生成于 2026-11-03 · 仅供内部汇报 / 提案使用。
 </footer>
+</details>
 </div></body></html>

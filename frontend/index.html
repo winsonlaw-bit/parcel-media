@@ -83,6 +83,7 @@
   /* 表格统一由 responsive.js 包一层可横滚容器，保持 table 原生布局 */
   .tbl-scroll { display:block; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
   .tbl-scroll > table { width:100%; min-width:560px; margin:0; }
+  .tbl-scroll > table th, .tbl-scroll > table td { white-space:nowrap; }
   /* ===== RWD：≤900px 侧栏收成顶部横向 tab，页面改为内容自适应高度 ===== */
   @media (max-width:900px){
     .app { flex-direction:column; height:100vh; height:100dvh; }
@@ -126,6 +127,14 @@
     .topbar h1 { font-size:14px; }
     .brand { display:none; }
   }
+
+  /* 折叠式口径说明：默认收起，正文保持干净 */
+  .fold{margin-top:14px;border-top:1px solid var(--line);padding-top:9px;font-size:12px;color:var(--muted)}
+  .fold summary{cursor:pointer;font-weight:700;color:var(--ink);list-style:none;outline:none}
+  .fold summary::-webkit-details-marker{display:none}
+  .fold summary::before{content:'▸ ';color:var(--brand)}
+  .fold[open] summary::before{content:'▾ '}
+  .fold>div,.fold>p,.fold>ul{margin-top:8px;line-height:1.8}
 </style>
 <script src="responsive.js?v=20261105i" defer></script>
 </head>
@@ -133,12 +142,10 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand"><b>NJV · SG</b><small>需求情报工作台 Demo</small></div>
-    <nav class="nav"><a class="nav-item" data-key="pitch">演说版</a>
-<a class="nav-item" data-key="chassis">数据底盘</a>
+    <nav class="nav"><a class="nav-item" data-key="chassis">数据底盘</a>
 <a class="nav-item" data-key="geo">需求地图</a>
 <a class="nav-item" data-key="demand">动态需求</a>
 <a class="nav-item" data-key="merchant">货主屏</a>
-<a class="nav-item" data-key="driver">配送员屏</a>
 <a class="nav-item" data-key="panorama">品类全景</a>
 <a class="nav-item" data-key="signal">信号层</a>
 </nav>
@@ -152,75 +159,25 @@
         <div class="dash">
           <div class="kpis" id="kpis"></div>
           <div class="sec-title">Top 10 货主（真实实名口径 · remote_id）</div>
-          <table>
+          <div class="tbl-scroll"><table>
             <thead><tr><th>#</th><th>货主</th><th>注册国</th><th>包裹量</th><th>主力品类（占该货主）</th></tr></thead>
             <tbody id="shipperRows"></tbody>
-          </table>
-          <div class="sec-title">诚实边界</div>
-          <div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、货主等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div>
+          </table></div>
+          <details class="fold"><summary>诚实边界</summary><div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、货主等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div></details>
         </div>
       </div>
       <div class="page" id="page-geo" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="zone_geo_map.html" title="需求地图"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-demand" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="zone_demand_map.v4.html" title="动态需求"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-merchant" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="merchant_screen.v4.html" title="货主屏"></iframe><div class="frame-err"></div></div></div>
-<div class="page" id="page-driver" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="driver_screen.v4.html" title="配送员屏"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-panorama" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="h1_category_panorama.v4.html" title="品类全景"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-signal" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="signal_layer_demo.v4.html" title="信号层"></iframe><div class="frame-err"></div></div></div>
-      <div class="page" id="page-pitch" style="display:none">
-        <div class="dash">
-          <div class="pitch-hero">
-            <h2>把末端网络变成「物理流量网络」</h2>
-            <div class="one">一句话：运力人人能买，两端数据只有链主才有。</div>
-            <p>NJV 在 H1 2026 共 3.26M 件真实包裹（约 96.75% 妥投完成·completed 终态），每个包裹 = 一次 100% 到家的物理曝光，背后是一个真实收件人 + 真实品类需求——这不是平台猜的兴趣标签，而是 260K 名跨品类复购人验证过的<b>第一手真实用户行为</b>。线上流量靠竞价抢曝光；<b>物理流量只有握着包裹的人能卖</b>。我们把 76 个邮区变成 76 个自带品类画像的人群包，货主以「租位分润」接入，归因与结算在 NJV 闭环内——不可白嫖、不可绕开。</p>
-          </div>
-
-          <div class="note">口径：包裹总量 = H1 2026 全量 3.26M 件（含未妥投 3.25%，即 <b>妥投≈3.16M / 96.75%</b>，以系统 completed 终态计）；库存 = 曝光库存 = 妥投件数（一个妥投=一次到家曝光，即广告位，非仓库现货）。<b>包裹总量 ≠ 妥投总量</b>——前者含约 3.25% 未妥投（cancelled / returned / transit）。</div>
-
-          <div class="sec-title">① 每个 tab 的 usecase</div>
-          <div class="uc-grid">
-            <div class="uc"><b>数据底盘</b><p>一眼看全盘：3.26M 包裹（全量，妥投≈3.16M / 96.75%·completed 终态）/ 983K 收件人 / 76 区 / 42K 货主 / 72.8% 已分类 / 260K 跨品类复购（用户行为资产）；Top10 货主实名口径。</p></div>
-            <div class="uc"><b>需求地图</b><p>真实地理的物理流量底图：各邮区需求密度与品类结构，定位高价值 zones。</p></div>
-            <div class="uc"><b>动态需求</b><p>需求随时间的脉动：捕捉峰谷与品类迁移，指导排班与补货节奏。</p></div>
-            <div class="uc"><b>货主屏</b><p>货主零售媒体规划台：选品类看 SG 哪些邮区最集中，按 lift 推 Top 连带品类。</p></div>
-            <div class="uc"><b>配送员屏</b><p>末端带货助手：zone 优先级 + 楼栋下钻 + 窄场景（COD/冷链/大件）自愿带货提成。</p></div>
-            <div class="uc"><b>品类全景</b><p>全 SG 品类结构 + 其他/未细分拆解（无描述 16.3% / 纯代码 10.9%）。</p></div>
-            <div class="uc"><b>信号层</b><p>跨包裹市场篮看板：哪些品类组合真实出现在一个收件人不同月份（lift 2.5–3.8），可逐级下钻区域。</p></div>
-          </div>
-
-          <div class="sec-title">② 如何开始（pilot）</div>
-          <div class="steps">
-            <div class="step"><div class="no">1</div><div><b>选邮区</b><p>挑 1–2 个高价值邮区做 pilot，如后港 53/54（已分类 203K 件）。</p></div></div>
-            <div class="step"><div class="no">2</div><div><b>内部先用</b><p>信号层 + 货主屏，先让货主看需求画像——不碰归因、不碰结算。</p></div></div>
-            <div class="step"><div class="no">3</div><div><b>租位试点</b><p>包裹物料位 + 妥投消息接入，扫码回流归因，闭环在 NJV 内。</p></div></div>
-            <div class="step"><div class="no">4</div><div><b>验证 ROI</b><p>按转化分润，确认「需求画像 → 带货转化」，再扩区。</p></div></div>
-          </div>
-          <div class="note">诚实边界：试点尚未跑通，属设计态；6 月回落原因待业务侧确认。本页不编 GMV/铺数。</div>
-
-          <div class="imagine">
-            <h3>③ 想象力与可复制性</h3>
-            <div class="one">一套 SG pilot，六国有末端网络就能复制。</div>
-            <ul>
-              <li><b>可复制：</b>SG 一个邮区跑通后，框架即插即用到其他有末端派送网络的地方，复制的是「物理流量网络」方法论而非重新堆人；货主主数据池已跨六国，直接复用。</li>
-            </ul>
-            <div class="future"><b>后续一句话：</b>一个妥投包裹 = 一个可扫码的物理会员。未来 NJV 不只是物流链主，而是东南亚最大的「到家数据 + 物理触点」双资产网络——今天卖运费，明天卖确定性。</div>
-          </div>
-
-          <div class="sec-title">④ 给商务 head 的 30 秒（背景 / 痛点 / 内容）</div>
-          <div class="hook">
-            <h3>为什么是现在、为什么是 NJV</h3>
-            <p><b>背景：</b>跨境末端运力已商品化，谁都能买；但 SG 在 H1 2026 共 3.26M 件真实包裹（约 96.75% 妥投完成·completed 终态）背后的「真实收件人 + 第一手真实用户行为」，目前只在 NJV 手里（不靠猜、不可买），且只被当运费卖。<br/>
-            <b>痛点：</b>货主在平台竞价抢线上曝光，却买不到「100% 到家、带真实品类画像」的物理触点；NJV 握着触点却没变现。<br/>
-            <b>内容：</b>建议把末端网络升级为「物理流量网络」——76 个邮区 = 76 个自带画像的人群包，货主租位分润接入，归因结算在 NJV 闭环内。不编 GMV，先用 1–2 个邮区 pilot 验证。</p>
-            <div class="ask">是否愿意一起定 pilot 邮区？我可以提供需求画像样例与测算框架。</div>
-          </div>
-        </div>
-      </div>
     </div>
   </main>
 </div>
 <script>
 const WB = {"parcels_total": 3266041, "distinct_shippers": 42041, "recipients": 983307, "zones": 76, "classify_pct": 72.78, "cross_buy": 261131, "cross_buy_pct": 26.56, "top10": [{"name": "Aliexpress(Hangzhou Hang Yu)", "country": "SG", "parcels": 232704, "cats": "工具五金(16.6%)、电子(15.3%)、其他/未细分(12.4%)"}, {"name": "iHerb SG", "country": "SG", "parcels": 208848, "cats": "食品保健(28.9%)、美妆香水(21.9%)、电子(18.3%)"}, {"name": "NV Malaysia MY-SG", "country": "SG", "parcels": 178184, "cats": "其他/未细分(28.8%)、美妆香水(20.3%)、食品保健(16.5%)"}, {"name": "FASHION CHOICE PTE. LTD(SHEIN)", "country": "SG", "parcels": 61708, "cats": "服饰(25.5%)、家居(14.5%)、美妆香水(11.1%)"}, {"name": "Hong Kong ECMS Express Co. Limited", "country": "SG", "parcels": 58416, "cats": "其他/未细分(18.8%)、鞋包配饰(13.8%)、玩具童品(13.5%)"}, {"name": "Sephora Digital", "country": "SG", "parcels": 35427, "cats": "美妆香水(品牌归因)(100.0%)"}, {"name": "adidas", "country": "SG", "parcels": 31129, "cats": "鞋包配饰(87.6%)、服饰(5.6%)、运动户外(3.6%)"}, {"name": "AUSTRALIA POST GLOBAL ECOMMERCE SOLUTIONS (USA) INC", "country": "SG", "parcels": 30933, "cats": "服饰(21.4%)、图书文具(19.7%)、美妆香水(14.8%)"}, {"name": "Love, Bonito", "country": "SG", "parcels": 28121, "cats": "服饰(品牌归因)(100.0%)"}, {"name": "Lazada Returns", "country": "SG", "parcels": 26671, "cats": "家居(14.7%)、服饰(11.9%)、运动户外(11.5%)"}]};
-const fmt = n => n.toLocaleString('en-US');
+function fmtQ(n){ if(n>=1e6) return (n/1e6).toFixed(2).replace(/[.]?0+$/,'')+'M'; if(n>=1e3){const k=n/1e3; return (k>=100?Math.round(k):+k.toFixed(1))+'K';} return String(Math.round(n)); }
+const fmt = n => fmtQ(n);
 const kpis = [
   { n: fmt(WB.parcels_total), l: '包裹总量（H1 2026 全量·含未妥投 3.25%；妥投≈3.16M·completed 终态）' },
   { n: fmt(WB.recipients), l: '全 SG 去重收件人（983K）' },
@@ -230,11 +187,12 @@ const kpis = [
   { n: fmt(WB.cross_buy), l: '跨品类复购收件人（占 ' + WB.cross_buy_pct + '%）' },
 ];
 document.getElementById('kpis').innerHTML = kpis.map(k => '<div class="kpi"><div class="n">' + k.n + '</div><div class="l">' + k.l + '</div></div>').join('');
-document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><td>' + (i+1) + '</td><td>' + s.name + '</td><td>' + s.country + '</td><td class="num">' + fmt(s.parcels) + '</td><td>' + s.cats + '</td></tr>').join('');
+const cleanCats = s => s.cats.split('、').filter(x => !/其他\s*\/\s*未细分/.test(x)).join('、');
+document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><td>' + (i+1) + '</td><td>' + s.name + '</td><td>' + s.country + '</td><td class="num">' + fmt(s.parcels) + '</td><td>' + cleanCats(s) + '</td></tr>').join('');
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261105i'; // iframe / 共享响应式资产缓存戳；BUILD 指纹见需求地图左上角徽章
+const FRAME_VERSION = '20261105j'; // iframe 缓存戳：子页面内容变更后升级
 
 // ── 移动端 iframe 高度自适应 ──────────────────────────────────────────────
 // 桌面：iframe 铺满视口、内部滚动（保持原行为）。
@@ -321,7 +279,7 @@ items.forEach(it => it.addEventListener('click', () => show(it.dataset.key, it.t
 // 本地文件方式打开时提示改用本地服务器
 if (location.protocol === 'file:') document.getElementById('filebar').style.display = 'block';
 
-show('pitch', '演说版');
+show('chassis', '数据底盘');
 </script>
 </body>
 </html>

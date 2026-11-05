@@ -73,16 +73,25 @@ h2 .tag{font-size:11px;background:var(--chip);color:var(--brand);padding:2px 9px
 .script .k{display:inline-block;font-size:11px;font-weight:700;color:#3730a3;background:#eef2ff;border-radius:6px;padding:1px 7px;margin-right:7px}
 footer{color:var(--sub);font-size:12px;text-align:center;padding:18px}
 @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.value{grid-template-columns:1fr}}
+
+  /* 折叠式口径说明：默认收起 */
+  .fold{margin-top:14px;border-top:1px solid var(--line);padding-top:9px;font-size:12px;color:var(--muted)}
+  .fold summary{cursor:pointer;font-weight:700;color:var(--ink);list-style:none;outline:none}
+  .fold summary::-webkit-details-marker{display:none}
+  .fold summary::before{content:'▸ ';color:var(--brand)}
+  .fold[open] summary::before{content:'▾ '}
+  .fold>div,.fold>p,.fold>ul,.fold>footer{margin-top:8px;line-height:1.8}
 </style>
 <link rel="stylesheet" href="responsive.css?v=20261105i">
 <script src="responsive.js?v=20261105i" defer></script>
+<script>function fmtQ(n){ if(n>=1e6) return (n/1e6).toFixed(2).replace(/[.]?0+$/,'')+'M'; if(n>=1e3){const k=n/1e3; return (k>=100?Math.round(k):+k.toFixed(1))+'K';} return String(Math.round(n)); }</script>
 </head>
 <body>
 <div class="wrap">
 
 <header class="hero">
   <h1>货主零售媒体规划台 · 品类视角（NJV · SG）</h1>
-  <p>同一份 NJV 新加坡 2026 H1 真实包裹数据（326 万单），换成「货主」的视角：你按<b>品类</b>经营，NJV 用需求数据自动把你的带货物料位 / 物流消息，投到<b>你的买家最集中的邮区</b>。你选品类，我们选场子。</p>
+  <p>同一份 NJV 新加坡 2026 H1 真实包裹数据（3.27M 单），换成「货主」的视角：你按<b>品类</b>经营，NJV 用需求数据自动把你的带货物料位 / 物流消息，投到<b>你的买家最集中的邮区</b>。你选品类，我们选场子。</p>
   <div class="four">
     <span>① 收件人 / 消费者</span>
     <span>② Shipper 货主（现有 + 潜在）</span>
@@ -146,11 +155,13 @@ footer{color:var(--sub);font-size:12px;text-align:center;padding:18px}
   <div class="value" id="value"></div>
 </section>
 
+<details class="fold"><summary>口径说明</summary>
 <footer>
-  数据：NJV 新加坡 2026 H1 包裹（326 万单，已脱敏，to_name 哈希）。邮区名按 SingPost 邮区→规划区近似映射，仅供展示。<br/>
+  数据：NJV 新加坡 2026 H1 包裹（3.27M 单，已脱敏，to_name 哈希）。邮区名按 SingPost 邮区→规划区近似映射，仅供展示。<br/>
   方法：跨品类复购 = 同一收件人跨月购买 ≥2 个真实品类。当前包裹级品类覆盖 72.8%（其余为无描述 16.3% / 纯代码死块 10.9%，回流源数据质量或需商品主数据）。<br/>
   数据约束：seller_id 填充率仅 14.5%，本台为「品类群体级」洞察（面向按品类经营的跨境 / 本地卖家），非单店铺专属。全 AI 自学习，无外部账本。
 </footer>
+</details>
 
 </div>
 
@@ -177,7 +188,7 @@ pairs.forEach(p=>{
 const catSel = document.getElementById('catSel');
 catRank.forEach(([cat,tot])=>{
   const o=document.createElement('option'); o.value=cat;
-  o.textContent=cat+'（全 SG '+tot.toLocaleString()+' 单）'; catSel.appendChild(o);
+  o.textContent=cat+'（全 SG '+fmtQ(tot)+' 单）'; catSel.appendChild(o);
 });
 catSel.onchange = ()=>loadCat(catSel.value, null);
 
@@ -216,10 +227,10 @@ function kpiHtml(cat, shipperId){
     ? `<div class="kpi"><div class="v" style="color:var(--brand2)">${DATA.profiles[shipperId].name}</div><div class="l">你正对标这家货主</div></div>`
     : `<div class="kpi"><div class="v">${zones.length}</div><div class="l">该品类有需求的邮区数</div></div>`;
   return `
-    <div class="kpi"><div class="v">${sgDemand.toLocaleString()}</div><div class="l">全 SG 该品类包裹需求</div></div>
+    <div class="kpi"><div class="v">${fmtQ(sgDemand)}</div><div class="l">全 SG 该品类包裹需求</div></div>
     ${shTxt}
-    <div class="kpi"><div class="v" style="color:var(--good)">${topZones.length? reach.toLocaleString():'0'}</div><div class="l">Top5 邮区预估触达</div></div>
-    <div class="kpi"><div class="v">${crossBase.toLocaleString()}</div><div class="l">跨品类连带基数（SG）</div></div>`;
+    <div class="kpi"><div class="v" style="color:var(--good)">${topZones.length? fmtQ(reach):'0'}</div><div class="l">Top5 邮区预估触达</div></div>
+    <div class="kpi"><div class="v">${fmtQ(crossBase)}</div><div class="l">跨品类连带基数（SG）</div></div>`;
 }
 
 // A 你的品类需求地理（NJV 自动选场子）
@@ -230,8 +241,8 @@ function renderZoneList(cat){
     const w = Math.round(100*z.parcels/max);
     const pin = i<5 ? '<span class="pin">优先投放</span>' : '';
     return `<div class="zonecard"><div class="nm">${z.label}${pin}</div>
-      <div class="row"><span>该品类包裹</span><b>${z.parcels.toLocaleString()}</b></div>
-      <div class="row"><span>该区收件人</span><b>${z.recipients.toLocaleString()}</b></div>
+      <div class="row"><span>该品类包裹</span><b>${fmtQ(z.parcels)}</b></div>
+      <div class="row"><span>该区收件人</span><b>${fmtQ(z.recipients)}</b></div>
       <div style="margin-top:6px"><span class="bar" style="width:${w}%"></span></div></div>`;
   }).join('') : '<div class="warnbox">该品类需求过散，无明显集中邮区。</div>';
 }
@@ -244,7 +255,7 @@ function renderCrossSell(cat){
     <div class="cscard"><div class="t">买 <b>${cat}</b> 的人，连带买</div>
       <div class="c">→ ${r.other}</div>
       <div class="lift">lift ${r.lift.toFixed(2)}×</div>
-      <div class="t">覆盖 ${r.rec.toLocaleString()} 名收件人（共现）</div></div>`).join('')
+      <div class="t">覆盖 ${fmtQ(r.rec)} 名收件人（共现）</div></div>`).join('')
     : '<div class="warnbox">该品类暂无稳定连带信号。</div>';
 }
 
@@ -281,7 +292,7 @@ function renderHotZones(){
     const me = curCat===cat ? ' me':'';
     const tag = curCat===cat ? '<span class="pin">当前品类</span>':'';
     return `<div class="hotcard${me}"><div class="nm">${cat}${tag}</div>
-      <div class="row"><span>全 SG 需求</span><b>${tot.toLocaleString()}</b></div>
+      <div class="row"><span>全 SG 需求</span><b>${fmtQ(tot)}</b></div>
       <div class="row"><span>最集中邮区</span><b>${topZone}</b></div>
       <div class="row"><span>有需求邮区</span><b>${zones.length}</b></div></div>`;
   }).join('');
@@ -293,11 +304,11 @@ function renderValue(cat){
   const reach = zones.slice(0,5).reduce((a,z)=>a+z.recipients,0);
   document.getElementById('value').innerHTML = `
     <div class="vcard"><div class="who">① 收件人 / 消费者</div>
-      <div class="num">${(catTotal[cat]||0).toLocaleString()} 单需求</div>
+      <div class="num">${fmtQ(catTotal[cat]||0)} 单需求</div>
       <div class="sub">你关心的品类</div>
       <div class="body">货主按你的真实需求投物料位 → 你收到更贴需求的推荐，而非随机铺货。</div></div>
     <div class="vcard two"><div class="who">② Shipper 货主</div>
-      <div class="num">${reach.toLocaleString()} Top5 触达</div>
+      <div class="num">${fmtQ(reach)} Top5 触达</div>
       <div class="sub">你的增量单基数</div>
       <div class="body">
         <div class="lane"><b>现有货主</b>：用品类需求地理 + 连带选品，提升客单与复购，留住这批人。</div>
@@ -328,7 +339,7 @@ function renderMediaSlot(cat, shipperId){
   let html = pts.map(p=>`<div class="vcard"><div class="who">${p[0]}</div><div class="body">${p[1]}</div></div>`).join('');
   html += `<div class="vcard" style="grid-column:1/-1;background:linear-gradient(135deg,#eef2ff,#f5f3ff)">
       <div class="who">你的品类「${cat}」· NJV 自动选场子结果</div>
-      <div class="body">优先投放邮区：<b>${zoneChips}</b>；这 5 个邮区合计约 <b>${reach.toLocaleString()}</b> 名收件人，开箱即触达。<br>
+      <div class="body">优先投放邮区：<b>${zoneChips}</b>；这 5 个邮区合计约 <b>${fmtQ(reach)}</b> 名收件人，开箱即触达。<br>
       <b>本台逻辑</b>：跨境 / 本地卖家按品类经营，不挑邮区——NJV 替你把「场子」选好，你只管供货与转化。</div></div>`;
   html += `<div class="script">
       <div class="sh">租位分润 · 对货主话术脚本（可直接用 · 已代入本品类数据）</div>
@@ -336,7 +347,7 @@ function renderMediaSlot(cat, shipperId){
       <div class="step"><span class="k">对标·成本</span>欧美成熟包裹媒体网络，插页成本约 $0.05–0.15/张（直邮 $0.40–0.60），开箱触达近 100%、约 42% 收件人会读并访问落地页；东南亚 COD 占比高，「妥投通知」更是必读通道——而 Ninja Van 把这个位子直接给您用，不用您另搭投放系统。</div>
       <div class="step"><span class="k">价值·精准</span>您主营 ${cat}，我们直接把物料位投到您买家最集中的邮区（${zoneChips}），基于真实需求（脱敏）投、不是盲投，且有信任转移，比陌生 push 更可信。</div>
       <div class="step"><span class="k">结算·分润</span>按效果分润：用专属转化码 / 二维码归因，带来多少单结算多少，零前置媒体采买风险，ROI 可量化。</div>
-      <div class="step"><span class="k">行动·收尾</span>这 5 个邮区合计约 ${reach.toLocaleString()} 名收件人——先小批量试一轮，跑出 ROI 再放量。</div>
+      <div class="step"><span class="k">行动·收尾</span>这 5 个邮区合计约 ${fmtQ(reach)} 名收件人——先小批量试一轮，跑出 ROI 再放量。</div>
     </div>`;
   document.getElementById('mediaValue').innerHTML = html;
 }

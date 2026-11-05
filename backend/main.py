@@ -26,5 +26,5 @@ def info():
     return {
         "app": "NJV SG 需求情报工作台",
         "mode": "static-frontend",
-        "data": "H1 2026 · 3.26M parcels (≈96.75% completed)",
+        "data": "H1 2026 · 3.27M parcels (≈96.75% completed)",
     }

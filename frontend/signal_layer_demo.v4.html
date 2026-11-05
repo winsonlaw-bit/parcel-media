@@ -58,16 +58,25 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .bld b{color:#fde68a}
 footer{color:var(--sub);font-size:12.5px;text-align:center;padding:20px}
 @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.agent-grid{grid-template-columns:1fr}}
+
+  /* 折叠式口径说明：默认收起 */
+  .fold{margin-top:14px;border-top:1px solid var(--line);padding-top:9px;font-size:12px;color:var(--muted)}
+  .fold summary{cursor:pointer;font-weight:700;color:var(--ink);list-style:none;outline:none}
+  .fold summary::-webkit-details-marker{display:none}
+  .fold summary::before{content:'▸ ';color:var(--brand)}
+  .fold[open] summary::before{content:'▾ '}
+  .fold>div,.fold>p,.fold>ul,.fold>footer{margin-top:8px;line-height:1.8}
 </style>
 <link rel="stylesheet" href="responsive.css?v=20261105i">
 <script src="responsive.js?v=20261105i" defer></script>
+<script>function fmtQ(n){ if(n>=1e6) return (n/1e6).toFixed(2).replace(/[.]?0+$/,'')+'M'; if(n>=1e3){const k=n/1e3; return (k>=100?Math.round(k):+k.toFixed(1))+'K';} return String(Math.round(n)); }</script>
 </head>
 <body>
 <div class="wrap">
 
 <header class="hero">
   <h1>跨包裹市场篮 · 区域洞察看板</h1>
-  <p>基于 NJV 新加坡 2026 上半年真实包裹数据（326 万单），识别「同一收件人跨月购买不同品类」的复购信号，并落到邮编区域，为中小商家与末端配送员提供可执行的销售洞察。</p>
+  <p>基于 NJV 新加坡 2026 上半年真实包裹数据（3.27M 单），识别「同一收件人跨月购买不同品类」的复购信号，并落到邮编区域，为中小商家与末端配送员提供可执行的销售洞察。</p>
 </header>
 
 <div class="kpis">
@@ -114,10 +123,12 @@ footer{color:var(--sub);font-size:12.5px;text-align:center;padding:20px}
   <div id="agentCard"></div>
 </section>
 
+<details class="fold"><summary>口径说明</summary>
 <footer>
-  数据：NJV 新加坡 2026 H1 包裹（326 万单，已脱敏，to_name 哈希）。区域名按 SingPost 邮区→规划区近似映射，仅供展示。<br/>
+  数据：NJV 新加坡 2026 H1 包裹（3.27M 单，已脱敏，to_name 哈希）。区域名按 SingPost 邮区→规划区近似映射，仅供展示。<br/>
   方法：跨品类复购 = 同一收件人跨月购买 ≥2 个真实品类。当前品类覆盖 72.8%（其余为无描述/纯代码，需源数据补全或商品主数据）。全 AI 自学习，无外部账本。
 </footer>
+</details>
 
 </div>
 
@@ -137,7 +148,7 @@ function renderPairs(mode){
   tbody.innerHTML = arr.map(x=>{
     const w = mode==='lift' ? Math.round(100*x.lift/maxL) : Math.round(100*x.recipients/maxR);
     return `<tr><td>${x.cat_a} × ${x.cat_b}</td>
-      <td class="num">${x.recipients.toLocaleString()}</td>
+      <td class="num">${fmtQ(x.recipients)}</td>
       <td class="num rlift">${x.lift.toFixed(2)}×</td>
       <td><span class="bar" style="width:${w}%"></span></td></tr>`;
   }).join('');
@@ -152,9 +163,9 @@ function buildRow(it, lvl){
   const tr=document.createElement('tr');
   const indent = lvl===0?'':(lvl===1?'padding-left:18px':'padding-left:34px');
   tr.innerHTML=`<td style="${indent}">${lvl===0?'<span class="caret">▶</span> ':''}<b>${it.label}</b></td>
-    <td class="num">${it.parcels.toLocaleString()}</td>
-    <td class="num">${it.recipients.toLocaleString()}</td>
-    <td class="num">${it.cross_cat_recipients.toLocaleString()}</td>
+    <td class="num">${fmtQ(it.parcels)}</td>
+    <td class="num">${fmtQ(it.recipients)}</td>
+    <td class="num">${fmtQ(it.cross_cat_recipients)}</td>
     <td class="num">${it.density}%</td>
     <td>${topCats(it)}</td>`;
   return tr;
@@ -167,9 +178,9 @@ function renderRegions(){
   arr.forEach(it=>{
     const tr=document.createElement('tr'); tr.className='row2';
     tr.innerHTML=`<td><span class="caret">▶</span> <b>${it.label}</b></td>
-      <td class="num">${it.parcels.toLocaleString()}</td>
-      <td class="num">${it.recipients.toLocaleString()}</td>
-      <td class="num">${it.cross_cat_recipients.toLocaleString()}</td>
+      <td class="num">${fmtQ(it.parcels)}</td>
+      <td class="num">${fmtQ(it.recipients)}</td>
+      <td class="num">${fmtQ(it.cross_cat_recipients)}</td>
       <td class="num">${it.density}%</td>
       <td>${topCats(it)}</td>`;
     const child=document.createElement('tr'); child.innerHTML=`<td colspan="6" style="padding:0"><div class="children" id="c_${it.code}"></div></td>`;
@@ -187,7 +198,7 @@ function renderRegions(){
 function fillL4(box, it){
   box.innerHTML = it.L4.slice(0,40).map(l4=>{
     return `<div class="l4row" onclick="toggleL6('${l4.code}',this)"><span><span class="caret">▶</span> ${l4.label}</span>
-      <span style="color:var(--sub)">跨品类 ${l4.cross_cat_recipients.toLocaleString()} · ${l4.density}%</span></div>
+      <span style="color:var(--sub)">跨品类 ${fmtQ(l4.cross_cat_recipients)} · ${l4.density}%</span></div>
       <div class="l6" id="l6_${l4.code}"></div>`;
   }).join('');
 }
@@ -196,7 +207,7 @@ function toggleL6(code, el){
   const box=document.getElementById('l6_'+code); box.classList.toggle('open');
   if(box.dataset.filled!=='1'){
     const l4=findL4(code);
-    box.innerHTML=(l4?l4.L6:[]).map(b=>`<div>📍 ${b.label} — 收件人 ${b.recipients.toLocaleString()} · 跨品类 ${b.cross_cat_recipients}</div>`).join('');
+    box.innerHTML=(l4?l4.L6:[]).map(b=>`<div>📍 ${b.label} — 收件人 ${fmtQ(b.recipients)} · 跨品类 ${b.cross_cat_recipients}</div>`).join('');
     box.dataset.filled='1';
   }
 }
@@ -214,13 +225,13 @@ function renderAgent(){
     const top=findL4(z.code);
     const blds=(top?top.L6:[]).slice(0,4).map(b=>`<div class="bld">📍 <b>${b.label.split('/').pop().trim()}</b> · 跨品类 ${b.cross_cat_recipients} 人</div>`).join('');
     return `<div class="agent-box"><div class="t">区内 ${z.label.split('/')[1]?z.label.split('/')[1].trim():z.code}</div>
-      <div class="n">${z.cross_cat_recipients.toLocaleString()}</div>
+      <div class="n">${fmtQ(z.cross_cat_recipients)}</div>
       <div class="t">跨品类复购 · ${z.density}%</div>${blds}</div>`;
   }).join('');
   document.getElementById('agentCard').innerHTML = `
     <div class="agent-card">
       <h3>今日派送建议 · ${wl.label}</h3>
-      <p style="margin:0;opacity:.9;font-size:14px">该区 ${wl.recipients.toLocaleString()} 名收件人，其中 <b>${wl.cross_cat_recipients.toLocaleString()}</b> 人（${wl.density}%）跨月购买不同品类——优先向这些人推送「上次买的品类 × 相邻品类」组合。</p>
+      <p style="margin:0;opacity:.9;font-size:14px">该区 ${fmtQ(wl.recipients)} 名收件人，其中 <b>${fmtQ(wl.cross_cat_recipients)}</b> 人（${wl.density}%）跨月购买不同品类——优先向这些人推送「上次买的品类 × 相邻品类」组合。</p>
       <div class="agent-grid">${l4html}</div>
       <p style="margin:14px 0 0;opacity:.85;font-size:12.5px">说明：楼栋级清单为各区内跨品类密度最高的前几栋，可直达末端执行。完整清单由系统按周自动刷新。</p>
     </div>`;
