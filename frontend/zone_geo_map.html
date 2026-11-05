@@ -81,6 +81,7 @@
     </div>
     <div class="mapwrap">
       <div id="map"></div>
+      <div id="tileHint" style="display:none;position:absolute;left:12px;bottom:12px;z-index:1200;max-width:344px;background:#0f172a;color:#fff;font-size:12px;line-height:1.65;padding:10px 12px;border-radius:10px;box-shadow:0 6px 20px rgba(15,23,42,.28)">🛰️ 底图街道图需<b>登录 Substrait 预览</b>后才会加载；当前被预览的 SSO 登录网关拦截（403/302）。<br>数据图层（SG 轮廓 + 各区色块圆点）始终可见，分析不受影响。</div>
       <div class="legend">
         <span>收件人少</span><span class="lg"></span><span>收件人多</span><br>
         <span style="margin-top:4px;display:inline-block">◎ 涟漪 = Top10 热区 · 中心点 = NJV 中枢</span>
@@ -108,7 +109,15 @@ countUp(document.getElementById('stMo'),avg,fmtWan);
 
 const map=L.map('map',{zoomControl:true}).setView([1.34,103.82],11);
 // 本地离线街道瓦片：已预下载到 leaflet/tiles/（运行时零外部依赖，不再 403）
-L.tileLayer('leaflet/tiles/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap contributors'}).addTo(map);
+const TILE_ERR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+const baseLayer = L.tileLayer('leaflet/tiles/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap contributors', errorTileUrl: TILE_ERR});
+baseLayer.addTo(map);
+// 底图被 Substrait 预览 SSO 网关拦截（返回 403/302 登录）时，给出明确提示而非破图；数据图层始终可见
+let _tileWarned = false;
+baseLayer.on('tileerror', function(){
+  if (_tileWarned) return; _tileWarned = true;
+  const b = document.getElementById('tileHint'); if (b) b.style.display = 'block';
+});
 // 离线兜底轮廓（瓦片缺失时仍可见地理形状）
 L.geoJSON(SG_OUTLINE,{stroke:true,color:'#9DB2D6',weight:1.5,fillColor:'#DCE7FB',fillOpacity:.4}).addTo(map);
 // —— 修复 flex 布局下地图初始化尺寸为 0 导致瓦片错位/标记不可见 ——
