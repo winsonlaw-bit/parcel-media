@@ -1,32 +1,49 @@
-# ===== 原始数据 / 大数据（不入库、不上线）=====
+# ===== Substrait tooling (gitignored per starter contract) =====
+.substrait/
+token.txt
+setup-check.txt
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+dist/
+build/
+.env
+.env.*
+!frontend/.env.production
+.DS_Store
+# OneDrive / Windows sync artefacts — never commit these
+*conflicted copy*
+*-DESKTOP-*
+Zone.Identifier
+
+# ===== Non-deploy project files (workbench-only deploy) =====
+# Python pipeline source (NOT deployed) — but keep backend/ for the Substrait contract
+*.py
+!backend/main.py
+# Raw data & intermediates
 数据/
 *.csv
 *.pkl
-
-# ===== 构建中间产物（HTML 已内联构建，部署不需要）=====
+# JSON data outputs (keep only the API spec)
 *.json
-
-# ===== Python 管线源码（本次只上线工作台网页，不含管线）=====
-*.py
-
-# ===== 未纳入工作台的独立 HTML =====
+!openapi.json
+# Build logs / local dev server
+*.log
+# Specs / SQL / reports (not part of the deployed app)
+*.sql
+data-pull-requirements-spec.md
+market-basket-insight-engine-spec.md
+# Local-only workbench copies (superseded by frontend/)
+NJV_workbench_demo/
+njv_web/
+# Proposal / PPTX downloads (explicitly excluded by user)
+NJV_5分钟汇报/
 demo_b_report.html
 launch.html
 llm_proof_report.html
 zone_heatmap.html
 njv_sg_proposal.html
-
-# ===== 文件下载内容（用户明确不需要）=====
-NJV_5分钟汇报/
-
-# ===== 日志 / 缓存 / 系统 / 工具 =====
-*.log
-__pycache__/
-.DS_Store
-Thumbs.db
+# Editor / session memory
 .workbuddy/
-serve_nocache.log
-
-# ===== 规格文档 / SQL（非网页，不纳入）=====
-*.md
-*.sql

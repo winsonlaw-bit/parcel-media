@@ -91,13 +91,13 @@
 <a class="nav-item" data-key="driver">配送员屏</a>
 <a class="nav-item" data-key="panorama">品类全景</a>
 <a class="nav-item" data-key="signal">信号层</a>
-<a class="nav-item" data-key="files">文件下载</a></nav>
+</nav>
     <div class="side-foot">Substrait-ready：静态前端 + iframe 挂载真实产物；后端 /api 可后续挂载于 app.substrait.build。</div>
   </aside>
   <main class="main">
     <div class="topbar"><h1 id="pageTitle">数据底盘</h1><span class="badge">DEMO</span></div>
     <div class="content">
-      <div class="filebar" id="filebar">⚠️ 检测到你以本地文件（file://）方式打开，部分浏览器会拦截 iframe 导致页面显示 “Not Found”。建议改用本地服务器：在项目根目录运行 <code>python serve_nocache.py</code>，再访问 <a href="http://127.0.0.1:8080/NJV_workbench_demo/index.html" target="_blank" style="color:#9a3412;text-decoration:underline">http://127.0.0.1:8080/NJV_workbench_demo/index.html</a>。</div>
+      <div class="filebar" id="filebar">⚠️ 检测到你以本地文件（file://）方式打开，部分浏览器会拦截 iframe 导致页面显示 “Not Found”。建议在本目录运行一个静态服务器后访问，例如：<code>python -m http.server 8080</code>，再打开 <a href="http://127.0.0.1:8080/" target="_blank" style="color:#9a3412;text-decoration:underline">http://127.0.0.1:8080/</a>。</div>
       <div class="page" id="page-chassis">
         <div class="dash">
           <div class="kpis" id="kpis"></div>
@@ -165,13 +165,6 @@
           </div>
         </div>
       </div>
-      <div class="page" id="page-files">
-        <div class="dash">
-          <div class="sec-title">文件下载</div>
-          <div class="files"><ul><li><a href="../NJV_5分钟汇报/NJV_5分钟汇报_7页版.pptx" target="_blank" rel="noopener">NJV 5分钟汇报（7页最终稿）</a></li><li><a href="../njv_sg_proposal.html" target="_blank" rel="noopener">NJV SG 提案（完整版）</a></li><li><a href="../zone_geo_map.html" target="_blank" rel="noopener">需求地图（真实底图）</a></li><li><a href="../zone_demand_map.html" target="_blank" rel="noopener">动态需求地图</a></li><li><a href="../merchant_screen.html" target="_blank" rel="noopener">货主屏 merchant_screen</a></li><li><a href="../driver_screen.html" target="_blank" rel="noopener">配送员屏 driver_screen</a></li><li><a href="../h1_category_panorama.html" target="_blank" rel="noopener">品类全景</a></li><li><a href="../signal_layer_demo.html" target="_blank" rel="noopener">信号层 demo</a></li></ul></div>
-          <div class="note">提示：本地双击 index.html 即可浏览；若 iframe 被浏览器 file:// 限制，可在本目录运行 <code>python -m http.server 8080</code> 后访问 http://localhost:8080 。</div>
-        </div>
-      </div>
     </div>
   </main>
 </div>
@@ -193,13 +186,9 @@ const items = document.querySelectorAll('.nav-item');
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
 const FRAME_VERSION = '20261105b'; // 改此值即可强制浏览器重新拉取各 iframe 页面（绕过陈旧缓存，避免旧版 OSM 地图 403）
 function frameUrl(file) {
-  const p = location.pathname;            // 例：/NJV_workbench_demo/index.html 或 /D:/.../NJV_workbench_demo/index.html
-  const marker = '/NJV_workbench_demo/';
-  let root;
-  const i = p.lastIndexOf(marker);
-  if (i >= 0) root = p.slice(0, i);       // 取 /NJV_workbench_demo/ 之前的部分（项目根）
-  else root = p.slice(0, p.lastIndexOf('/')); // 兜底：index.html 所在目录
-  return location.origin + root + '/' + file + '?v=' + FRAME_VERSION;
+  // 工作台所有页面与 index.html 同目录（Substrait 由 nginx 在站点根目录提供），
+  // 直接用相对路径即可，挂载到任意子路径也能正确解析，无需再拼 /NJV_workbench_demo/。
+  return file + '?v=' + FRAME_VERSION;
 }
 
 function showFrameError(wrap, url) {
@@ -208,10 +197,10 @@ function showFrameError(wrap, url) {
     '<div class="card"><h3>⚠️ 该页面未能正确加载</h3>'
     + '<p>目标地址：<code>' + url + '</code></p>'
     + (isFile
-        ? '<p>你正以 <b>本地文件（file://）</b> 方式打开，部分浏览器会拦截 iframe。请改用本地服务器：</p>'
-          + '<p><code>cd 项目根目录 &amp;&amp; python serve_nocache.py</code><br/>再访问 '
-          + '<a href="http://127.0.0.1:8080/NJV_workbench_demo/index.html" target="_blank">http://127.0.0.1:8080/NJV_workbench_demo/index.html</a></p>'
-        : '<p>请确认本地服务 <code>serve_nocache.py</code> 正在运行（项目根目录，端口 8080）。</p>')
+        ? '<p>你正以 <b>本地文件（file://）</b> 方式打开，部分浏览器会拦截 iframe。请改用本地静态服务器：</p>'
+          + '<p><code>cd 本目录 &amp;&amp; python -m http.server 8080</code><br/>再访问 '
+          + '<a href="http://127.0.0.1:8080/" target="_blank">http://127.0.0.1:8080/</a></p>'
+        : '<p>请确认本地静态服务器正在运行（本目录，端口 8080）。</p>')
     + '<p><a href="' + url + '" target="_blank" rel="noopener">↗ 在新标签打开该页面</a></p></div>';
   wrap.querySelector('.frame-err').style.display = 'flex';
 }
