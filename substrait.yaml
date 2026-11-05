@@ -23,3 +23,7 @@ description: >
 
 # scaffold_version (optional) — the skill/plugin version this app was built with.
 # /substrait:deploy stamps and refreshes it automatically; don't edit it by hand.
+
+# Skill/plugin version this app was last deployed with — stamped by
+# /substrait:deploy; do not edit by hand.
+scaffold_version: 2026.09.22.075110

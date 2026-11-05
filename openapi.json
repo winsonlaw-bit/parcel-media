@@ -1,20 +1,18 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "My First Substrait App",
-    "description": "A starter internal tool. Serves one web page and a small JSON API.",
-    "version": "0.1.0"
+    "title": "NJV SG 需求情报工作台 (backend)",
+    "version": "0.1.0",
+    "description": "Minimal conforming backend for the NJV SG workbench (Substrait contract). The workbench is a static frontend; this backend only satisfies the platform's hard requirements (port 8000, GET /health, /api under ingress)."
   },
   "paths": {
     "/health": {
       "get": {
-        "tags": ["system"],
-        "summary": "Health",
-        "description": "Substrait calls this to decide whether the app started correctly.",
-        "operationId": "health_health_get",
+        "summary": "Health check",
+        "operationId": "health",
         "responses": {
           "200": {
-            "description": "Service is up",
+            "description": "Service is healthy",
             "content": {
               "application/json": {
                 "schema": {
@@ -30,21 +28,20 @@
     },
     "/api/info": {
       "get": {
-        "summary": "Info",
-        "description": "Returns the app name and current server time, so the page can prove the backend is running.",
-        "operationId": "info_api_info_get",
+        "summary": "App info",
+        "operationId": "info",
         "responses": {
           "200": {
-            "description": "Application information",
+            "description": "Static app metadata",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "app": { "type": "string", "example": "My First Substrait App" },
-                    "server_time": { "type": "string", "example": "2026-08-20 06:15:48 UTC" }
-                  },
-                  "required": ["app", "server_time"]
+                    "app": { "type": "string" },
+                    "mode": { "type": "string" },
+                    "data": { "type": "string" }
+                  }
                 }
               }
             }
@@ -52,5 +49,6 @@
         }
       }
     }
-  }
+  },
+  "components": { "schemas": {} }
 }
