@@ -113,7 +113,7 @@
           <div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、货主等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div>
         </div>
       </div>
-      <div class="page" id="page-geo" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="zone_geo_map.v5.html" title="需求地图"></iframe><div class="frame-err"></div></div></div>
+      <div class="page" id="page-geo" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="zone_geo_map.v6.html" title="需求地图"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-demand" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="zone_demand_map.v4.html" title="动态需求"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-merchant" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="merchant_screen.v4.html" title="货主屏"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-driver" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="driver_screen.v4.html" title="配送员屏"></iframe><div class="frame-err"></div></div></div>
@@ -187,7 +187,7 @@ document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><t
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261105e'; // 改此值即可强制浏览器重新拉取各 iframe 页面（绕过边缘/浏览器陈旧缓存）
+const FRAME_VERSION = '20261105f'; // 改此值即可强制浏览器重新拉取各 iframe 页面（配合 nginx no-store 绕过边缘/浏览器陈旧缓存）
 function frameUrl(file) {
   // 工作台所有页面与 index.html 同目录（Substrait 由 nginx 在站点根目录提供），
   // 直接用相对路径即可，挂载到任意子路径也能正确解析，无需再拼 /NJV_workbench_demo/。
