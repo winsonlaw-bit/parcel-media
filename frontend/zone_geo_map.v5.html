@@ -89,7 +89,7 @@
     <div class="mapwrap">
       <div id="map"></div>
       <button id="tileBtn" class="tilebtn" onclick="toggleTiles()">街道底图：关</button>
-      <div id="tileHint" style="display:none;position:absolute;left:12px;bottom:12px;z-index:1200;max-width:344px;background:#0f172a;color:#fff;font-size:12px;line-height:1.65;padding:10px 12px;border-radius:10px;box-shadow:0 6px 20px rgba(15,23,42,.28)">🛰️ 默认展示<b>矢量底图</b>（SG 轮廓 + 各区气泡，零瓦片请求，永不 403）。点击右上「街道底图」可叠加<b>本地离线瓦片</b>（零外部依赖，不连 OSM）。若仍看到 “Access blocked / 403” 的 OSM 破图，是浏览器缓存了<b>早期引用 OSM 的旧版页面</b>——请硬刷新（Ctrl/Cmd+Shift+R）或清缓存后重开。</div>
+      <div id="tileHint" style="display:none;position:absolute;left:12px;bottom:12px;z-index:1200;max-width:344px;background:#0f172a;color:#fff;font-size:12px;line-height:1.65;padding:10px 12px;border-radius:10px;box-shadow:0 6px 20px rgba(15,23,42,.28)">🛰️ 默认展示<b>矢量底图</b>（SG 轮廓 + 各区气泡，零瓦片请求，永不 403）。点击右上「街道底图」叠加的是<b>本地离线瓦片</b>（同源部署、零外部依赖，绝不连接 OpenStreetMap）。本页已从独立新路径（zone_geo_map.v5.html）发布，任何边缘/浏览器都不会再返回旧版 OSM 破图。</div>
       <div class="legend">
         <span>收件人少</span><span class="lg"></span><span>收件人多</span><br>
         <span style="margin-top:4px;display:inline-block">◎ 涟漪 = Top10 热区 · 中心点 = NJV 中枢</span>
