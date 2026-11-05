@@ -1,0 +1,73 @@
+/* NJV · SG 需求情报工作台 —— 统一响应式层 (RWD)
+ * 单一维护点：所有 iframe 子页面在 </head> 前引入本文件。
+ * 断点 900px（平板/手机）/ 480px（小屏手机）。桌面端零改动。
+ * 主框架 index.html 的侧栏结构特殊，其断点规则内联在自身 <style> 中。
+ */
+html { -webkit-text-size-adjust: 100%; }
+
+@media (max-width: 900px) {
+  /* ---- 通用排版 ---- */
+  body { padding: 14px 12px 36px !important; }
+  .wrap, .wrap-all { padding: 0 !important; }
+  h1 { font-size: 19px !important; line-height: 1.35 !important; letter-spacing: 0 !important; }
+  .kicker { font-size: 10px !important; letter-spacing: 1.4px !important; }
+  .sub { font-size: 12px !important; }
+  .hd { gap: 6px !important; }
+  .analogy { font-size: 12.5px !important; line-height: 1.7 !important; padding: 10px 12px !important; }
+  .ft { font-size: 11px !important; line-height: 1.7 !important; }
+  header.hero p { font-size: 13px !important; }
+
+  /* ---- 统计卡片：4 列 / 3 列 → 2 列 ---- */
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+  .kpi { min-width: 0 !important; flex: 1 1 calc(50% - 10px) !important; padding: 13px 14px !important; }
+  .kpi .n { font-size: 21px !important; }
+  .kpi .l { font-size: 11.5px !important; }
+  .stats { gap: 10px !important; }
+  .stat { min-width: 0 !important; flex: 1 1 calc(50% - 10px) !important; padding: 10px 12px !important; }
+  .stat .v { font-size: 17px !important; }
+
+  /* ---- 双栏 → 单栏 ---- */
+  .main, .layout { flex-direction: column !important; gap: 12px !important; align-items: stretch !important; }
+  .main > *, .layout > * { min-width: 0 !important; width: 100% !important; }
+  .mapcol, .mapwrap, .map { min-width: 0 !important; width: 100% !important; }
+  .panel { width: 100% !important; flex: 1 1 auto !important; position: static !important; top: auto !important; }
+  .listp { flex: 1 1 auto !important; width: 100% !important; }
+  .lbody { max-height: 220px !important; }
+  .agent-grid, .value, .uc-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .cslist, .zonelist, .hot, .suggest { gap: 8px !important; }
+
+  /* ---- 地图：高度跟随视口，角标让位 ---- */
+  #map { height: min(58vh, 400px) !important; min-height: 300px !important; }
+  .buildbadge, .basetag { font-size: 10px !important; padding: 5px 8px !important; min-width: 0 !important; max-width: 46% !important; line-height: 1.45 !important; }
+  .buildbadge { top: 8px !important; right: 8px !important; }
+  .basetag { top: 8px !important; left: 8px !important; }
+  .basetag span { display: none !important; }
+  .legend { font-size: 10px !important; right: 8px !important; bottom: 8px !important; left: 8px !important; max-width: none !important; padding: 6px 9px !important; }
+  .lg { width: 70px !important; }
+  .compass { left: 10px !important; bottom: 66px !important; width: 28px !important; height: 28px !important; }
+  .map { overflow: hidden !important; }
+
+  /* ---- 控件 / 图表 / 表格 ---- */
+  .selbar { gap: 8px !important; }
+  .selbar select, .selbar input, .listp input { min-width: 0 !important; width: 100% !important; flex: 1 1 100% !important; }
+  .slider input { width: 100% !important; max-width: 100% !important; }
+  .stage { min-width: 0 !important; }
+  .residual { gap: 8px !important; }
+  .tbl-scroll { display: block; width: 100%; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tbl-scroll > table { width: 100%; min-width: 560px; margin: 0; }
+  svg { max-width: 100%; }
+  #ambient { display: none !important; }
+  .spark { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .kpis { grid-template-columns: minmax(0, 1fr) !important; }
+  .stat, .kpi { flex: 1 1 100% !important; }
+  h1 { font-size: 17px !important; }
+  .hd .sub { display: none !important; }
+  .legend br { display: none !important; }
+  .legend span[style] { display: none !important; }
+  .pstat .v { font-size: 15px !important; }
+  .bar .n { width: 66px !important; }
+  .bar .m { width: 46px !important; }
+}

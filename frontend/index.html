@@ -80,7 +80,54 @@
   .hook h3 { font-size:15px; color:#9a3412; margin-bottom:8px; }
   .hook p { font-size:14px; line-height:1.9; color:#7c2d12; }
   .hook .ask { margin-top:12px; font-weight:700; color:#9a3412; }
+  /* 表格统一由 responsive.js 包一层可横滚容器，保持 table 原生布局 */
+  .tbl-scroll { display:block; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .tbl-scroll > table { width:100%; min-width:560px; margin:0; }
+  /* ===== RWD：≤900px 侧栏收成顶部横向 tab，页面改为内容自适应高度 ===== */
+  @media (max-width:900px){
+    .app { flex-direction:column; height:100vh; height:100dvh; }
+    .sidebar { width:100%; flex:0 0 auto; flex-direction:row; align-items:center;
+      padding:0; border-right:0; border-bottom:1px solid var(--line); }
+    .brand { flex:0 0 auto; padding:8px 12px; border-bottom:0; border-right:1px solid var(--line); }
+    .brand b { font-size:13px; }
+    .brand small, .side-foot { display:none; }
+    .nav { flex:1 1 auto; display:flex; flex-direction:row; gap:6px; padding:7px 8px;
+      overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
+      scrollbar-width:none; white-space:nowrap; }
+    .nav::-webkit-scrollbar { display:none; }
+    .nav-item { flex:0 0 auto; margin:0; padding:8px 12px; font-size:13px; border-radius:8px; }
+    .topbar { height:46px; flex:0 0 46px; padding:0 14px; gap:8px; }
+    .topbar h1 { font-size:15px; }
+    .badge { font-size:10px; padding:2px 7px; }
+    /* min-height:0 让 flex 子项可收缩 —— 顶部 tab 固定，仅内容区滚动 */
+    .main, .content { min-height:0; }
+    .content { overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .page, .frame-wrap { height:auto; }
+    .frame { display:block; width:100%; height:auto; min-height:62vh; }
+    .dash { padding:16px 14px 32px; }
+    .kpis { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .kpi { padding:13px 14px; }
+    .kpi .n { font-size:21px; }
+    .kpi .l { font-size:11.5px; }
+    .uc-grid { grid-template-columns:minmax(0,1fr); }
+    .sec-title { margin:22px 0 10px; }
+    table { min-width:560px; }
+    .pitch-hero { padding:16px; }
+    .pitch-hero h2 { font-size:17px; }
+    .pitch-hero .one { font-size:13.5px; }
+    .pitch-hero p { font-size:13px; }
+    .hook, .imagine, .honesty, .files { padding:14px 16px; }
+    .step { padding:11px 12px; }
+    .frame-err { padding:16px; }
+    .frame-err .card { padding:18px; }
+  }
+  @media (max-width:480px){
+    .kpis { grid-template-columns:minmax(0,1fr); }
+    .topbar h1 { font-size:14px; }
+    .brand { display:none; }
+  }
 </style>
+<script src="responsive.js?v=20261105i" defer></script>
 </head>
 <body>
 <div class="app">
@@ -187,7 +234,36 @@ document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><t
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261105h'; // iframe 缓存戳；页面自身的 BUILD 指纹见各页左上角徽章
+const FRAME_VERSION = '20261105i'; // iframe / 共享响应式资产缓存戳；BUILD 指纹见需求地图左上角徽章
+
+// ── 移动端 iframe 高度自适应 ──────────────────────────────────────────────
+// 桌面：iframe 铺满视口、内部滚动（保持原行为）。
+// 手机：iframe 高度跟随子页面内容，由外层 .content 统一滚动 —— 只有一条滚动条，
+//       地址栏可正常收起，不会出现 iOS 上 iframe 内滚动被截断/卡住的问题。
+const MOBILE = window.matchMedia('(max-width: 900px)');
+function syncHeight(f) {
+  if (!MOBILE.matches) return;
+  try {
+    const d = f.contentDocument;
+    if (!d) return;
+    const h = Math.max(d.documentElement.scrollHeight, d.body ? d.body.scrollHeight : 0);
+    if (h > 200) f.style.height = (h + 16) + 'px';
+  } catch (e) { /* 跨域或尚未加载，忽略 */ }
+}
+window.addEventListener('message', function (e) {
+  const h = e && e.data && e.data.__njvFrameHeight;
+  if (typeof h !== 'number' || h <= 200 || !MOBILE.matches) return;
+  document.querySelectorAll('iframe.frame').forEach(f => {
+    try { if (f.contentWindow === e.source) f.style.height = (h + 16) + 'px'; } catch (_) {}
+  });
+});
+function onModeChange() {
+  document.querySelectorAll('iframe.frame').forEach(f => {
+    if (MOBILE.matches) syncHeight(f); else f.style.height = '';
+  });
+}
+if (MOBILE.addEventListener) MOBILE.addEventListener('change', onModeChange);
+else if (MOBILE.addListener) MOBILE.addListener(onModeChange);
 function frameUrl(file) {
   // 工作台所有页面与 index.html 同目录（Substrait 由 nginx 在站点根目录提供），
   // 直接用相对路径即可，挂载到任意子路径也能正确解析，无需再拼 /NJV_workbench_demo/。
@@ -216,6 +292,8 @@ function loadFrame(pg) {
   const url = frameUrl(f.dataset.file);
   err.style.display = 'none';
   f.style.display = 'block';
+  // 已加载过的页面直接复用：手机上切 tab 不再重复下载 4–7MB 的内联数据页
+  if (f.dataset.loadedUrl === url) { syncHeight(f); return; }
   f.onload = function () {
     // 同源时可读取 iframe 内容，识别 http.server 的 “Not Found” 或空页面，给出友好提示而非裸错误
     try {
@@ -223,7 +301,10 @@ function loadFrame(pg) {
       const txt = (doc && doc.body && (doc.body.innerText || '')) || '';
       if (/not\s*found/i.test(txt) || txt.replace(/\s/g, '').length < 8) showFrameError(wrap, url);
     } catch (e) { /* 跨域或无权读取，忽略 */ }
+    syncHeight(f);
+    [350, 1200].forEach(t => setTimeout(() => syncHeight(f), t));
   };
+  f.dataset.loadedUrl = url;
   f.src = url;
 }
 

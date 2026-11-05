@@ -51,7 +51,9 @@
   .mapcol{flex:1;position:relative}
   .map{position:relative;border-radius:18px;background:rgba(255,255,255,.5);border:1px solid var(--line);
     box-shadow:0 10px 40px rgba(30,42,68,.07);padding:14px;overflow:hidden}
-  #flow{position:absolute;left:14px;top:14px;pointer-events:none;z-index:3;overflow:visible}
+  #flow{position:absolute;left:0;top:0;pointer-events:none;z-index:3;overflow:visible}
+  /* 像素画布统一挂在一个可缩放的内层：桌面 scale=1，手机由 responsive.js 等比缩小 */
+  .mapfit{position:relative;width:max-content;height:max-content;transform-origin:0 0}
   .grid{position:relative;z-index:2}
   .tile{position:absolute;border-radius:13px;cursor:pointer;display:flex;flex-direction:column;
     align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.65);
@@ -100,6 +102,8 @@
   .spark{width:100%;height:46px;margin-top:4px}
   .empty{color:var(--muted);font-size:13px;line-height:1.9;padding:10px 2px}
 </style>
+<link rel="stylesheet" href="responsive.css?v=20261105i">
+<script src="responsive.js?v=20261105i" defer></script>
 </head>
 <body>
   <div id="ambient"></div>
@@ -126,8 +130,10 @@
     <div class="main">
       <div class="mapcol">
         <div class="map">
-          <svg id="flow"></svg>
-          <div class="grid" id="grid"></div>
+          <div class="mapfit" id="mapfit">
+            <svg id="flow"></svg>
+            <div class="grid" id="grid"></div>
+          </div>
         </div>
         <div class="legend">
           <span>收件人少</span><div class="lg"></div><span>收件人多（颜色 = 人群包规模）</span>
