@@ -81,7 +81,7 @@
     </div>
     <div class="mapwrap">
       <div id="map"></div>
-      <div id="tileHint" style="display:none;position:absolute;left:12px;bottom:12px;z-index:1200;max-width:344px;background:#0f172a;color:#fff;font-size:12px;line-height:1.65;padding:10px 12px;border-radius:10px;box-shadow:0 6px 20px rgba(15,23,42,.28)">🛰️ 底图街道图需<b>登录 Substrait 预览</b>后才会加载；当前被预览的 SSO 登录网关拦截（403/302）。<br>数据图层（SG 轮廓 + 各区色块圆点）始终可见，分析不受影响。</div>
+      <div id="tileHint" style="display:none;position:absolute;left:12px;bottom:12px;z-index:1200;max-width:344px;background:#0f172a;color:#fff;font-size:12px;line-height:1.65;padding:10px 12px;border-radius:10px;box-shadow:0 6px 20px rgba(15,23,42,.28)">🛰️ 街道底图为<b>本地离线瓦片</b>（零外部依赖，不连 OSM）。若仍看到 “Access blocked / 403” 的 OSM 破图，是浏览器缓存了<b>早期引用 OSM 的旧版页面</b>——请硬刷新（Ctrl/Cmd+Shift+R）或清缓存后重开。<br>数据图层（SG 轮廓 + 各区色块圆点）始终可见，分析不受影响。</div>
       <div class="legend">
         <span>收件人少</span><span class="lg"></span><span>收件人多</span><br>
         <span style="margin-top:4px;display:inline-block">◎ 涟漪 = Top10 热区 · 中心点 = NJV 中枢</span>
@@ -109,8 +109,10 @@ countUp(document.getElementById('stMo'),avg,fmtWan);
 
 const map=L.map('map',{zoomControl:true}).setView([1.34,103.82],11);
 // 本地离线街道瓦片：已预下载到 leaflet/tiles/（运行时零外部依赖，不再 403）
+// TILE_VERSION 用于给瓦片 URL 加查询串，强制浏览器丢弃任何陈旧的 OSM 缓存瓦片
+const TILE_VERSION = '20261105c';
 const TILE_ERR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
-const baseLayer = L.tileLayer('leaflet/tiles/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap contributors', errorTileUrl: TILE_ERR});
+const baseLayer = L.tileLayer('leaflet/tiles/{z}/{x}/{y}.png?v='+TILE_VERSION,{maxZoom:18, attribution:'© OpenStreetMap contributors', errorTileUrl: TILE_ERR});
 baseLayer.addTo(map);
 // 底图被 Substrait 预览 SSO 网关拦截（返回 403/302 登录）时，给出明确提示而非破图；数据图层始终可见
 let _tileWarned = false;
