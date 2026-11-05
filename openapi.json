@@ -40,7 +40,7 @@
                   "properties": {
                     "app": { "type": "string" },
                     "mode": { "type": "string" },
-                    "data": { "type": "string" }
+                    "data": { "type": "string", "example": "H1 2026 · 3.27M parcels (≈96.75% completed)" }
                   }
                 }
               }
