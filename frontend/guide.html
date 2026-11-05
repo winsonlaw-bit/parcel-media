@@ -63,15 +63,35 @@
   .quote span{display:inline-block;margin-top:4px}
   .boundary{font-size:12.5px;color:var(--sub);margin:12px 0 0;padding-left:12px;border-left:3px solid var(--line)}
 
+  /* 飞轮：汇报主视觉 */
+  .fly{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:14px;box-shadow:0 10px 30px rgba(30,27,75,.07)}
+  .fly svg{width:100%;height:auto;display:block;border-radius:10px}
+  .services{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-top:14px}
+  .svc{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px 18px;position:relative;overflow:hidden}
+  .svc:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--brand)}
+  .svc.b:before{background:#f59e0b}
+  .svc .n{font-size:11px;font-weight:800;color:var(--brand);letter-spacing:.08em}
+  .svc.b .n{color:#b45309}
+  .svc .t{font-size:16px;font-weight:720;margin:3px 0 7px}
+  .svc .d{font-size:13px;color:#475569;margin:0}
+  .svc .why{font-size:12.2px;color:var(--sub);margin:10px 0 0;padding-top:9px;border-top:1px dashed var(--line)}
+  .entry{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:14px}
+  .entry .e{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px 14px;font-size:12.7px;color:#475569;line-height:1.7}
+  .entry .e b{color:var(--ink)}
+  .entry .e.core{border-color:#c7d2fe;background:#f8f9ff}
+  .entry .e.narrow{border-color:#fde68a;background:#fffbeb}
+  .flymobile{display:none}
+
   @media (max-width:900px){
     .pillars,.scenes{grid-template-columns:1fr 1fr}
     .four{grid-template-columns:1fr 1fr}
     .hero{padding:26px 24px}
     .hero h1{font-size:23px}
     .wrap{padding:20px 16px 44px}
+    .entry{grid-template-columns:1fr 1fr}
   }
   @media (max-width:560px){
-    .pillars,.four,.scenes{grid-template-columns:1fr}
+    .pillars,.four,.scenes,.services,.entry{grid-template-columns:1fr}
     .hero h1{font-size:20px}
     .hero .claim{font-size:15px}
     .when{margin-left:0;width:100%}
@@ -81,6 +101,12 @@
     .stop{padding:14px}
     .scene{padding:10px}
     .scene figcaption{font-size:12.2px}
+    .fly{padding:8px}
+    .flymobile{display:block;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+    .flymobile .h{font-size:13.5px;font-weight:700;margin-bottom:8px}
+    .flymobile ol{margin:0;padding-left:20px;font-size:12.8px;color:#475569;line-height:1.75}
+    .flymobile li{margin-bottom:7px}
+    .flymobile .axis{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--brand);font-weight:650}
   }
 </style>
 </head>
@@ -90,8 +116,8 @@
   <div class="hero">
     <div class="kicker">NINJA VAN (NJV) · SG 需求情报引擎 · 导览</div>
     <h1>怎么用这套工作台</h1>
-    <p class="claim">运力人人能买，两端数据只有链主才有。</p>
-    <p class="sub">2026 H1 新加坡真实包裹数据 · 先看数据可信，再看需求在哪，最后看怎么变成生意</p>
+    <p class="claim">把包裹变成货主的增量，而不是把运价压到更低。</p>
+    <p class="sub">一项新的增值服务 · 货主测品与增收 → 货量回流 → 物理流量更大 → 运力更厚，多方正向循环</p>
     <div class="facts">
       <div class="fact"><b>3.27M</b> 半年包裹</div>
       <div class="fact"><b>983K</b> 收件人</div>
@@ -102,8 +128,150 @@
     </div>
   </div>
 
-  <h2 class="sec">提案要点</h2>
-  <p class="sechint">三层互不重叠：广告打在哪 → 凭什么定向 → 为什么绕不开。</p>
+  <h2 class="sec">这台飞轮怎么转</h2>
+  <p class="sechint">先看全局：一项增值服务，如何把货主、配送员与 NJV 拉进同一个正向循环。汇报时这一页讲完整个提案。</p>
+  <div class="fly">
+<svg viewBox="0 0 680 600" role="img" aria-label="NJV 增值服务正向循环飞轮" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="fwA" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#4f46e5"/></marker>
+    <marker id="fwG" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#16a34a"/></marker>
+    <linearGradient id="fwCore" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b4b"/><stop offset="1" stop-color="#4f46e5"/></linearGradient>
+  </defs>
+  <rect width="680" height="600" fill="#f8fafc"/>
+  <rect width="680" height="44" fill="#0f172a"/>
+  <text x="24" y="29" font-size="16" font-weight="800" fill="#fff">NJV 增值服务 · 正向循环飞轮</text>
+  <text x="656" y="29" text-anchor="end" font-size="11" fill="#a5b4fc">每转一圈，底盘更大</text>
+
+  <!-- 顺时针闭环箭头 -->
+  <g fill="none" stroke="#4f46e5" stroke-width="2.6" opacity=".9">
+    <path d="M246,146 C292,86 388,86 434,146" marker-end="url(#fwA)"/>
+    <path d="M644,208 C668,238 668,296 644,326" marker-end="url(#fwA)"/>
+    <path d="M434,404 C388,464 292,464 246,404" marker-end="url(#fwA)"/>
+    <path d="M36,326 C12,296 12,238 36,208" marker-end="url(#fwA)"/>
+  </g>
+  <g font-size="10.5" font-weight="700" fill="#4338ca" text-anchor="middle">
+    <text x="340" y="80">导流 → 测品 / 增收</text>
+    <text x="340" y="470">货量回流 → 流量池更大</text>
+  </g>
+  <g font-size="10.5" fill="#64748b" text-anchor="middle">
+    <text x="539" y="258" font-weight="700" fill="#15803d">货主选 NJV</text>
+    <text x="539" y="276">议价从运价切到增量</text>
+    <text x="141" y="258" font-weight="700" fill="#0369a1">更多妥投</text>
+    <text x="141" y="276">更大流量池</text>
+  </g>
+
+  <!-- ① 左上 -->
+  <g>
+    <rect x="36" y="112" width="210" height="96" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="36" y="112" width="4" height="96" fill="#4f46e5"/>
+    <circle cx="60" cy="136" r="11" fill="#4f46e5"/>
+    <text x="60" y="140" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
+    <text x="80" y="141" font-size="13.5" font-weight="750" fill="#0f172a">真实物理流量</text>
+    <text x="52" y="168" font-size="10.5" fill="#475569">3.27M 妥投 · 100% 到家曝光</text>
+    <text x="52" y="188" font-size="10.5" fill="#475569">包裹物料位 + 妥投消息</text>
+  </g>
+  <!-- ② 右上 -->
+  <g>
+    <rect x="434" y="112" width="210" height="96" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="434" y="112" width="4" height="96" fill="#f59e0b"/>
+    <circle cx="458" cy="136" r="11" fill="#f59e0b"/>
+    <text x="458" y="140" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">2</text>
+    <text x="478" y="141" font-size="13.5" font-weight="750" fill="#0f172a">货主拿到增量</text>
+    <text x="452" y="168" font-size="10.5" fill="#475569">新商品测品 + 转化增收</text>
+    <text x="452" y="188" font-size="10.5" fill="#475569">同一份流量，两种服务</text>
+  </g>
+  <!-- ③ 右下 -->
+  <g>
+    <rect x="434" y="326" width="210" height="96" rx="12" fill="#fff" stroke="#bbf7d0" stroke-width="1.5"/>
+    <rect x="434" y="326" width="4" height="96" fill="#16a34a"/>
+    <circle cx="458" cy="350" r="11" fill="#16a34a"/>
+    <text x="458" y="354" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">3</text>
+    <text x="478" y="355" font-size="13.5" font-weight="750" fill="#0f172a">货主选 NJV</text>
+    <text x="452" y="382" font-size="10.5" fill="#475569">不一味压价 · 货量回流</text>
+    <text x="452" y="402" font-size="10.5" fill="#475569">竞争维度不再是运价</text>
+  </g>
+  <!-- ④ 左下 -->
+  <g>
+    <rect x="36" y="326" width="210" height="96" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="36" y="326" width="4" height="96" fill="#0ea5e9"/>
+    <circle cx="60" cy="350" r="11" fill="#0ea5e9"/>
+    <text x="60" y="354" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">4</text>
+    <text x="80" y="355" font-size="13.5" font-weight="750" fill="#0f172a">流量池更大</text>
+    <text x="52" y="382" font-size="10.5" fill="#475569">更多包裹 → 更多到家曝光</text>
+    <text x="52" y="402" font-size="10.5" fill="#475569">76 邮区画像更厚</text>
+  </g>
+
+  <!-- 轴心 -->
+  <circle cx="340" cy="267" r="86" fill="url(#fwCore)"/>
+  <circle cx="340" cy="267" r="80" fill="none" stroke="#a5b4fc" stroke-width="1" stroke-dasharray="3 5" opacity=".55"/>
+  <text x="340" y="238" text-anchor="middle" font-size="10" font-weight="700" fill="#a5b4fc" letter-spacing="1.5">FLYWHEEL</text>
+  <text x="340" y="265" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">物理流量</text>
+  <text x="340" y="289" text-anchor="middle" font-size="14" font-weight="700" fill="#e0e7ff">→ 货主增量</text>
+  <text x="340" y="317" text-anchor="middle" font-size="10" fill="#a5b4fc">位子 · 通道 · 归因</text>
+  <text x="340" y="333" text-anchor="middle" font-size="10" fill="#a5b4fc">只有链主有</text>
+
+  <!-- 侧环：运力 -->
+  <rect x="24" y="490" width="632" height="66" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+  <text x="40" y="509" font-size="11.5" font-weight="750" fill="#15803d">侧环 · 运力也在被补齐（汇入 ④：承接更多包裹）</text>
+  <g font-size="10.5" font-weight="650" fill="#166534" text-anchor="middle">
+    <rect x="40" y="518" width="132" height="26" rx="13" fill="#fff" stroke="#bbf7d0"/>
+    <text x="106" y="535">带货转化有佣金</text>
+    <rect x="196" y="518" width="132" height="26" rx="13" fill="#fff" stroke="#bbf7d0"/>
+    <text x="262" y="535">配送员多赚一份</text>
+    <rect x="352" y="518" width="132" height="26" rx="13" fill="#fff" stroke="#bbf7d0"/>
+    <text x="418" y="535">吸引更多人加入</text>
+    <rect x="508" y="518" width="132" height="26" rx="13" fill="#dcfce7" stroke="#86efac"/>
+    <text x="574" y="535">NJV 运力更厚</text>
+  </g>
+  <g fill="none" stroke="#16a34a" stroke-width="2" opacity=".85">
+    <path d="M174,531 L193,531" marker-end="url(#fwG)"/>
+    <path d="M330,531 L349,531" marker-end="url(#fwG)"/>
+    <path d="M486,531 L505,531" marker-end="url(#fwG)"/>
+  </g>
+
+  <rect x="24" y="568" width="632" height="28" rx="7" fill="#0f172a"/>
+  <text x="40" y="587" font-size="12" font-weight="700" fill="#fff">别人能买运力，买不到位子、通道和归因——这台飞轮只有链主转得动。</text>
+</svg>
+  </div>
+  <div class="flymobile">
+    <div class="h">飞轮四步（文字版）</div>
+    <ol>
+      <li>每个妥投包裹 = 一次 100% 到家的曝光：包裹物料位（物理）+ 妥投消息（数字通道）。</li>
+      <li>货主用它做<b>新商品测品</b>与<b>转化增收</b>，拿到的是增量单，不是更低的运价。</li>
+      <li>货主因此把更多货交给 NJV，议价从运价切到增量；货量回流 → 包裹更多 → 流量池更大，回到第 1 步。</li>
+      <li>侧环：带货转化有佣金 → 配送员增收 → 吸引更多人加入 → 运力更厚，承接更多包裹。</li>
+    </ol>
+    <div class="axis">轴：位子、通道、归因都在 NJV，别人抄不走。</div>
+  </div>
+
+  <h2 class="sec">货主买的是哪两种服务</h2>
+  <p class="sechint">同一份由妥投带出的物理流量，卖给货主两件事——先试出来，再卖更多。</p>
+  <div class="services">
+    <div class="svc">
+      <div class="n">服务 01</div>
+      <div class="t">新商品测品</div>
+      <p class="d">把新品放进真实到家的流量里试：按 76 个邮区各自的品类画像挑样本区，往对应包裹贴选品卡 / 二维码，妥投消息挂商品网址，按邮区看反馈。</p>
+      <p class="why">凭什么值得做：曝光是 <b>100% 到家的确定性事件</b>，样本区可按邮区圈定；线上测品买的是竞价曝光，这里买的是确定性到家。扫码回流归因为方案态，待 pilot 验证。</p>
+    </div>
+    <div class="svc b">
+      <div class="n">服务 02</div>
+      <div class="t">转化增收 · 卖更多货</div>
+      <p class="d">把「高需求邮区 × 品类亲和 lift」变成投放动作：往对的包裹贴对的选品卡、推对的链接，把已有的收件人池转成连带与复购。</p>
+      <p class="why">货主拿到的是<b>增量单</b>而不是更低运价，因此更倾向把货量交给 NJV；结算可按效果分润（设计态）。<b>议价基础从运价切到增量，这是不内卷的关键。</b></p>
+    </div>
+  </div>
+
+  <h2 class="sec">三个入口，按可规模化程度分层</h2>
+  <p class="sechint">三种触达不是同一个量级：前两个覆盖全部妥投包裹，第三个只在有真实接触点时启用。</p>
+  <div class="entry">
+    <div class="e core"><b>入口 1 · 包裹物料位（物理）</b><br>包装上的选品卡 / 二维码。随每个妥投包裹到家，<b>100% 覆盖</b>，放门口 / 柜的零接触场景也成立。</div>
+    <div class="e core"><b>入口 2 · 妥投消息（数字通道）</b><br>妥投通知里放商品网址。由「妥投」这个物理事件触发，<b>100% 覆盖</b>、高打开率；它是数字消息，不是物理位。</div>
+    <div class="e narrow"><b>入口 3 · 面对面推销（窄场景增强）</b><br>仅 COD / 冷链 / 大件等真实接触点，全 SG 可实测 COD 占 <b>4.68%</b>。配送员自愿、按转化提成、非 KPI，<b>不是常态入口</b>。</div>
+  </div>
+  <p class="boundary">口径说明：规模化的投放测算与招商以前两个入口为基准；第三个作为高价值场景的补强，不按全量包裹外推。</p>
+
+  <h2 class="sec">为什么只有 NJV 转得动</h2>
+  <p class="sechint">飞轮的轴：三层互不重叠——广告打在哪 → 凭什么定向 → 为什么绕不开。</p>
   <div class="pillars">
     <div class="pillar">
       <div class="t">① 能触达什么</div>
@@ -119,10 +287,10 @@
     </div>
   </div>
   <div class="quote">线上流量人人能买（竞价），物理流量只有握着包裹的人能卖（链主）。<br><span style="font-size:12.5px;font-weight:500;opacity:.88">这里的「物理流量」= 由妥投带出的全部触达：包裹物料位（物理）＋ 妥投消息（数字通道）。</span></div>
-  <p class="boundary">配送员口径：主流纯履约（SG 放门口 / 柜为主、零接触）；仅 COD / 冷链 / 大件等窄接触场景，自愿带货提成（affiliate 式、非 KPI），归因结算走 NJV 闭环。</p>
+  <p class="boundary">落到飞轮上：① ② 是位子与通道，③ 是归因闭环——三者都在 NJV 控制侧，所以增量留在体系内，飞轮转起来也不会被白嫖。</p>
 
   <h2 class="sec">四个场景 · 一眼看懂广告打在哪</h2>
-  <p class="sechint">上面三层落到现实里长什么样。①② 是两类主流触达位，③ 是少数场景的可选增强，④ 是驱动投放的情报底座。</p>
+  <p class="sechint">三个触达入口与情报底座落到现实里长什么样。①② 是 100% 覆盖的主流入口，③ 是仅 COD 场景的可选增强，④ 是决定往哪投的情报底座。</p>
   <div class="scenes">
         <figure class="scene">
 <svg viewBox="0 0 680 400" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
@@ -284,22 +452,22 @@
       </figure>
   </div>
 
-  <h2 class="sec">四方价值</h2>
-  <p class="sechint">同一套数据，对每一方分别意味着什么。</p>
+  <h2 class="sec">四方价值 · 同一台飞轮，四方都受益</h2>
+  <p class="sechint">不是零和分蛋糕：货主的增量、配送员的收入、NJV 的货量与运力，由同一个循环一起做大。</p>
   <div class="four">
-    <div class="vcard"><div class="who">① 收件人 / 消费者</div><div class="body">货主按真实需求投物料位 → 收到更贴需求的推荐，而不是随机铺货。</div></div>
-    <div class="vcard"><div class="who">② Shipper 货主</div><div class="body">现有货主用品类需求地理 + 连带选品提升客单与复购；潜在货主按高需求品类招商，用「货主的买家在哪、量有多大」谈。</div></div>
-    <div class="vcard"><div class="who">③ NJV 配送员</div><div class="body">主流零接触包裹不参与带货；只在交箱 / 签收等真实接触场景自愿带货提成，归因由 NJV 结算。</div></div>
-    <div class="vcard"><div class="who">④ NJV 网络</div><div class="body">位子 + 通道 + 数据三位一体，货主租位分润、由 Ninja Van 统一运营；单量与网络黏性提升，合作可量化可复盘。</div></div>
+    <div class="vcard"><div class="who">① 收件人 / 消费者</div><div class="body">按真实需求收到推荐，新品先在合适邮区小范围试，减少随机铺货的打扰。</div></div>
+    <div class="vcard"><div class="who">② Shipper 货主</div><div class="body">拿到两种服务：<b>新商品测品</b>与<b>转化增收</b>。得到的是增量单而非更低运价，因此更倾向把货量交给 NJV，谈判不再只围绕降价。</div></div>
+    <div class="vcard"><div class="who">③ NJV 配送员</div><div class="body">主流零接触包裹不参与带货；仅在真实接触场景自愿推销、按转化拿佣金增收。<b>多一份收入机会，也吸引更多人加入网络。</b></div></div>
+    <div class="vcard"><div class="who">④ NJV 网络</div><div class="body">位子 + 通道 + 数据三位一体，货主租位分润；货量回流做大流量池，配送员加入<b>补充运力</b>，竞争维度从运价切到增量。</div></div>
   </div>
 
   <h2 class="sec">按什么顺序看 · 每个 tab 解决什么问题</h2>
-  <p class="sechint">从左到右五步：这套能力是什么 → 手里有什么（含两个细分）→ 需求落在哪 → 于是怎么卖 → 少数接触场景的可选增强。</p>
+  <p class="sechint">从左到右五步：这套能力怎么形成正向循环 → 手里有什么（含两个细分）→ 需求落在哪 → 于是怎么卖 → 少数接触场景的可选增强。</p>
   <div class="route">
 
     <div class="stop self">
       <div class="stophd"><span class="no">00</span><span class="nm">怎么用 · 提案要点（本页）</span><span class="when">第一次打开 / 随时回来</span></div>
-      <p>先看三层提案要点与四张场景图建立整体画面，再看四方价值，最后扫一眼每页该看什么。</p>
+      <p>先看飞轮建立全局，再看货主买哪两种服务、三个入口怎么分层；接着看为什么只有 NJV 转得动、四张场景图与四方价值，最后扫一眼每页该看什么。</p>
     </div>
 
     <div class="stop">
@@ -322,8 +490,8 @@
 
     <div class="stop">
       <div class="stophd"><span class="no">04</span><span class="nm">配送员屏</span><span class="when">少数接触场景的可选增强</span></div>
-      <p>回答「有真实接触点时推什么、怎么说、一单能提成多少」。只覆盖 COD 交箱（全 SG 4.68% 包裹），按配送区域给出 COD 品类结构、规则推荐的连带品类、模板话术与佣金模拟器。主流放门口 / 柜的零接触包裹不参与带货；佣金为假设值、待 pilot。</p>
-      <div class="chips"><span class="chip">仅 COD 4.68%</span><span class="chip">规则推荐 · 模板话术</span><span class="chip">佣金为假设值</span><span class="chip">自愿 · 非 KPI</span></div>
+      <p>回答「有真实接触点时推什么、怎么说」。只覆盖 COD 交箱（全 SG 4.68% 包裹），按配送区域给出 COD 品类结构、规则推荐的连带品类与模板话术；<b>佣金只做机制说明，不做收入测算</b>。主流放门口 / 柜的零接触包裹不参与带货。</p>
+      <div class="chips"><span class="chip">仅 COD 4.68%</span><span class="chip">规则推荐 · 模板话术</span><span class="chip">佣金仅机制说明</span><span class="chip">自愿 · 非 KPI</span></div>
     </div>
 
   </div>
@@ -332,6 +500,9 @@
     <ul>
       <li>金额 / GMV / 在营商铺数一律不编，只给包裹量、收件人、邮区、货主等可溯源物理量。</li>
       <li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li>
+      <li>「配送员面对面推销」只在 COD 等真实接触点成立，全 SG 可实测仅 4.68%；SG 主流放门口 / 柜为零接触，不得按全量包裹外推。</li>
+      <li>飞轮的增长箭头（货量回流、吸引加入、补充运力）是机制推演，不是已验证的增长数据；本页不提供任何金额或增幅预测。</li>
+      <li>「两种服务」均为提案设计，测品反馈与转化增收尚未跑过 pilot，页面不含成交额、转化率或分润比例实测值。</li>
       <li>6 月需求回落已确认，原因待业务侧确认。</li>
       <li>框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li>
       <li>邮区为 dest_postcode 前 2 位合并的 76 个真区，非精确行政边界；方位为示意排布。</li>
