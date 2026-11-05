@@ -8,6 +8,9 @@
 # `nginxinc/nginx-unprivileged` (rootless, no startup chown; keep `listen 8000`).
 FROM python:3.12-slim
 WORKDIR /app
+# Patch OS packages: resolves Trivy CVE-2026-109518 (apt / libapt-pkg7.0 3.0.3 -> 3.0.4).
+# Runs before pip so the slim base starts patched.
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 COPY backend/requirements.txt .
 # Wheels-only: never fall back to a source build. This slim image has no C compiler.
 RUN pip install --no-cache-dir --only-binary=:all: -r requirements.txt
