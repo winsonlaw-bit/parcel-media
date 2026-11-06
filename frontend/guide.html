@@ -79,7 +79,13 @@
   .entry .e{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px 14px;font-size:12.7px;color:#475569;line-height:1.7}
   .entry .e b{color:var(--ink)}
   .entry .e.core{border-color:#c7d2fe;background:#f8f9ff}
-  .entry .e.narrow{border-color:#fde68a;background:#fffbeb}
+  .example{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px 16px}
+  .exhd{font-size:13.5px;font-weight:700;margin-bottom:10px}
+  .exhd b{color:var(--brand)}
+  .exhd span{font-size:11px;font-weight:600;color:var(--warn);background:#fffbeb;border:1px solid #fde68a;border-radius:20px;padding:2px 9px;margin-left:8px;white-space:nowrap;display:inline-block}
+  .example svg{width:100%;height:auto;display:block;border-radius:9px}
+  .exfoot{font-size:12.5px;color:#475569;margin:11px 0 0;line-height:1.75}
+  .exfoot b{color:var(--ink)}
   .flymobile{display:none}
 
   @media (max-width:900px){
@@ -102,6 +108,8 @@
     .scene{padding:10px}
     .scene figcaption{font-size:12.2px}
     .fly{padding:8px}
+    .example{padding:12px}
+    .example svg{display:none}
     .flymobile{display:block;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
     .flymobile .h{font-size:13.5px;font-weight:700;margin-bottom:8px}
     .flymobile ol{margin:0;padding-left:20px;font-size:12.8px;color:#475569;line-height:1.75}
@@ -266,8 +274,70 @@
   <div class="entry">
     <div class="e core"><b>入口 1 · 包裹物料位（物理）</b><br>包装上的选品卡 / 二维码。随每个妥投包裹到家，<b>100% 覆盖</b>，放门口 / 柜的零接触场景也成立。</div>
     <div class="e core"><b>入口 2 · 妥投消息（数字通道）</b><br>妥投通知里放商品网址。由「妥投」这个物理事件触发，<b>100% 覆盖</b>、高打开率；它是数字消息，不是物理位。</div>
-    <div class="e narrow"><b>入口 3 · 面对面推销（窄场景增强）</b><br>仅 COD / 冷链 / 大件等真实接触点，全 SG 可实测 COD 占 <b>4.68%</b>。配送员自愿、按转化提成、非 KPI，<b>不是常态入口</b>。</div>
+    <div class="e core"><b>入口 3 · 面对面推销（窄场景增强）</b><br>仅 COD / 冷链 / 大件等真实接触点，全 SG 可实测 COD 占 <b>4.68%</b>。配送员自愿、按转化提成、非 KPI，<b>不是常态入口</b>。</div>
   </div>
+
+  <div class="example">
+    <div class="exhd"><b>落地形态示例</b> · 入口 1 的联名款包裹 <span>方案设计 · 非已合作</span></div>
+<svg viewBox="0 0 680 268" role="img" aria-label="联名款包裹按邮区投放的落地形态" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs><marker id="exA" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#4f46e5"/></marker></defs>
+  <rect width="680" height="268" fill="#f8fafc"/>
+  <rect width="680" height="38" fill="#0f172a"/>
+  <text x="20" y="25" font-size="14" font-weight="800" fill="#fff">联名款包裹 · 按邮区投放的一个具体形态</text>
+  <text x="660" y="25" text-anchor="end" font-size="10" fill="#a5b4fc">入口 1 的实物化</text>
+
+  <!-- ① 货主下单 -->
+  <rect x="20" y="56" width="140" height="152" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <circle cx="42" cy="80" r="11" fill="#4f46e5"/>
+  <text x="42" y="84" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
+  <text x="60" y="84" font-size="12.5" font-weight="750" fill="#0f172a">货主下单</text>
+  <text x="34" y="112" font-size="10.5" fill="#475569">购买增值服务</text>
+  <text x="34" y="132" font-size="10.5" fill="#475569">指定投放邮区</text>
+  <rect x="34" y="146" width="112" height="46" rx="8" fill="#eef2ff"/>
+  <text x="42" y="165" font-size="10" fill="#4338ca">例：泡泡玛特</text>
+  <text x="42" y="181" font-size="9" fill="#6366f1">（假设场景）</text>
+  <path d="M160,132 L188,132" stroke="#4f46e5" stroke-width="2.4" marker-end="url(#exA)"/>
+
+  <!-- ② 联名包裹 -->
+  <rect x="192" y="56" width="196" height="152" rx="12" fill="#fff" stroke="#c7d2fe" stroke-width="1.5"/>
+  <text x="290" y="78" text-anchor="middle" font-size="11.5" font-weight="750" fill="#4338ca">② 该区包裹换联名包装</text>
+  <rect x="232" y="92" width="116" height="92" rx="7" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="284" y="92" width="12" height="92" fill="#fcd34d"/>
+  <rect x="232" y="130" width="116" height="10" fill="#fcd34d"/>
+  <rect x="242" y="102" width="96" height="22" rx="5" fill="#fff"/>
+  <text x="290" y="117" text-anchor="middle" font-size="9.5" font-weight="800" fill="#4338ca">货主 × NJV 联名</text>
+  <rect x="254" y="148" width="34" height="28" rx="3" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
+  <g fill="#0f172a"><rect x="258" y="152" width="8" height="8"/><rect x="276" y="152" width="8" height="8"/><rect x="258" y="166" width="8" height="8"/><rect x="270" y="164" width="4" height="4"/><rect x="278" y="168" width="6" height="4"/></g>
+  <text x="322" y="166" font-size="9.5" fill="#78350f">扫码入口</text>
+  <text x="290" y="200" text-anchor="middle" font-size="9.5" fill="#64748b">仅指定邮区的派送包裹换装</text>
+
+  <!-- 分叉 -->
+  <path d="M388,132 L410,132" stroke="#4f46e5" stroke-width="2.4"/>
+  <path d="M410,132 L410,92 L428,92" fill="none" stroke="#4f46e5" stroke-width="2.4" marker-end="url(#exA)"/>
+  <path d="M410,132 L410,172 L428,172" fill="none" stroke="#4f46e5" stroke-width="2.4" marker-end="url(#exA)"/>
+
+  <!-- A -->
+  <rect x="436" y="56" width="224" height="72" rx="11" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="450" y="78" font-size="12" font-weight="750" fill="#0f172a">A · 单货主商品入口</text>
+  <text x="450" y="98" font-size="10" fill="#475569">二维码 → 该货主商品页</text>
+  <text x="450" y="116" font-size="9.5" fill="#4338ca">专属位 · 一家货主买断该邮区</text>
+  <rect x="608" y="70" width="36" height="36" rx="4" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
+  <g fill="#0f172a"><rect x="612" y="74" width="9" height="9"/><rect x="631" y="74" width="9" height="9"/><rect x="612" y="93" width="9" height="9"/><rect x="625" y="87" width="5" height="5"/><rect x="633" y="94" width="7" height="6"/></g>
+
+  <!-- B -->
+  <rect x="436" y="136" width="224" height="72" rx="11" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="450" y="158" font-size="12" font-weight="750" fill="#0f172a">B · NJV 聚合入口</text>
+  <text x="450" y="178" font-size="10" fill="#475569">二维码 → NJV 站点，多货主商品</text>
+  <text x="450" y="196" font-size="9.5" fill="#4338ca">平台位 · 多货主共用一个入口</text>
+  <rect x="608" y="150" width="36" height="36" rx="4" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
+  <g fill="#0f172a"><rect x="612" y="154" width="9" height="9"/><rect x="631" y="154" width="9" height="9"/><rect x="612" y="173" width="9" height="9"/><rect x="625" y="167" width="5" height="5"/><rect x="633" y="174" width="7" height="6"/></g>
+
+  <rect x="20" y="222" width="640" height="34" rx="8" fill="#eef2ff"/>
+  <text x="34" y="244" font-size="11.5" font-weight="700" fill="#4338ca">两种落点只是扫码去哪：包装位子与扫码归因始终在 NJV 侧，别人拿不走。</text>
+</svg>
+    <p class="exfoot"><b>举例（假设场景，非已合作）：</b>若泡泡玛特购买增值服务，NJV 用流量地图选定投放邮区，该区派送包裹换成「货主 × NJV」联名包装，包装上放商品入口二维码。<b>两种落点 = 两种卖法</b>：A 是专属位（单一货主买下某邮区物料位），B 是平台位（多货主共用 NJV 聚合页、分摊投放）。无论哪种，<b>位子与扫码归因都在 NJV 侧</b>——这正是「按邮区定向 + 租位分润」落到实物上的形态。</p>
+  </div>
+
   <p class="boundary">口径说明：规模化的投放测算与招商以前两个入口为基准；第三个作为高价值场景的补强，不按全量包裹外推。</p>
 
   <h2 class="sec">为什么只有 NJV 转得动</h2>
@@ -461,36 +531,36 @@
     <div class="vcard"><div class="who">④ NJV 网络</div><div class="body">位子 + 通道 + 数据三位一体，货主租位分润；货量回流做大流量池，配送员加入<b>补充运力</b>，竞争维度从运价切到增量。</div></div>
   </div>
 
-  <h2 class="sec">按什么顺序看 · 每个 tab 解决什么问题</h2>
-  <p class="sechint">从左到右五步：这套能力怎么形成正向循环 → 手里有什么（含两个细分）→ 需求落在哪 → 于是怎么卖 → 少数接触场景的可选增强。</p>
+  <h2 class="sec">按什么顺序用 · 每个 tab 的使用场景</h2>
+  <p class="sechint">从左到右对应五类真实场景：讲清这项服务 → 被问数据时核口径 → 要圈投放邮区 → 见货主出方案 → 手里这单确实有接触点。</p>
   <div class="route">
 
     <div class="stop self">
-      <div class="stophd"><span class="no">00</span><span class="nm">怎么用 · 提案要点（本页）</span><span class="when">第一次打开 / 随时回来</span></div>
-      <p>先看飞轮建立全局，再看货主买哪两种服务、三个入口怎么分层；接着看为什么只有 NJV 转得动、四张场景图与四方价值，最后扫一眼每页该看什么。</p>
+      <div class="stophd"><span class="no">00</span><span class="nm">怎么用 · 提案要点（本页）</span><span class="when">汇报开场 / 有人第一次接手</span></div>
+      <p>要给管理层、货主或新同事讲清「这是一项什么服务」时从本页开始：先按飞轮 ①→④ 讲增量怎么滚起来，再讲货主买的两种服务与三个入口，用「为什么只有 NJV 转得动」收口。四张场景图和联名款包裹示例可直接投屏，底部诚实边界用来答问。</p>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">01</span><span class="nm">数据底盘</span><span class="when">先确认数据可信</span></div>
-      <p>回答「NJV 手里有什么」。看总量、收件人、邮区数、货主数与分类覆盖率，再看 Top10 实名货主的主力品类。下方两个<b>折叠细分</b>点开才加载：「品类细分」看 14 类分布与月度趋势，「需求细分」看品类亲和 lift 与区域三级下钻。</p>
+      <div class="stophd"><span class="no">01</span><span class="nm">数据底盘</span><span class="when">被问「数据哪来的」/ 要核口径时</span></div>
+      <p>需要确认数字可信、或挑出要谈的品类时打开：先看总量、收件人、邮区数、货主数与分类覆盖率，再看 Top10 实名货主的主力品类。要更细就点开两个<b>折叠细分</b>——「品类细分」看 14 类分布与月度趋势，「需求细分」看品类亲和 lift 与区域三级下钻；点开才加载，不拖首屏。</p>
       <div class="chips"><span class="chip">3.27M 件</span><span class="chip">主力品类已剔除未细分</span><span class="chip">2 个折叠细分</span><span class="chip">remote_id 实名口径</span></div>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">02</span><span class="nm">流量地图</span><span class="when">想知道流量落在哪</span></div>
-      <p>回答「妥投曝光与需求落在哪些邮区」。看 76 个邮区的需求分布，点任意区看收件人数、品类画像、在铺货主与月度走势；可直接搜 2 位邮区码、6 位邮编或地名。地图若加载失败会自动切到简版，数据一致。</p>
+      <div class="stophd"><span class="no">02</span><span class="nm">流量地图</span><span class="when">要定投放邮区 / 谈某个区域时</span></div>
+      <p>谈某个区域、或要给联名款包裹圈投放范围时用：点任意邮区看收件人数、品类画像、在铺货主与月度走势，也可直接搜 2 位邮区码、6 位邮编或地名。完整图加载失败会自动切到简版，数据一致。</p>
       <div class="chips"><span class="chip">76 邮区</span><span class="chip">地址搜索</span><span class="chip">完整 / 简版双入口</span></div>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">03</span><span class="nm">货主屏</span><span class="when">要把数据变成动作</span></div>
-      <p>回答「所以能怎么用」。货主只选主营品类，NJV 自动选流量池——按真实需求匹配高需求邮区，输出连带选品、货主增值话术与投放位子方案。</p>
+      <div class="stophd"><span class="no">03</span><span class="nm">货主屏</span><span class="when">见货主之前 / 要出投放方案时</span></div>
+      <p>准备一次货主沟通时用：货主只选主营品类，NJV 自动选流量池，页面给出连带选品、货主增值话术与投放位子方案。话术可照着讲，背后的品类需求地理与连带倍数都来自真实数据——用来把话题从「运价」拉到「增量」。</p>
       <div class="chips"><span class="chip">货主选品类</span><span class="chip">NJV 自动选流量池</span><span class="chip">话术模板 + 数据槽位</span></div>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">04</span><span class="nm">配送员屏</span><span class="when">少数接触场景的可选增强</span></div>
-      <p>回答「有真实接触点时推什么、怎么说」。只覆盖 COD 交箱（全 SG 4.68% 包裹），按配送区域给出 COD 品类结构、规则推荐的连带品类与模板话术；<b>佣金只做机制说明，不做收入测算</b>。主流放门口 / 柜的零接触包裹不参与带货。</p>
+      <div class="stophd"><span class="no">04</span><span class="nm">配送员屏</span><span class="when">COD 交箱等有接触点的单</span></div>
+      <p>手里这单确实有真实接触点才打开：选配送区域，页面按该区 COD 品类结构给出规则推荐的连带品类与模板话术，供交箱时参考。<b>佣金只做机制说明，不做收入测算</b>；放门口 / 柜的零接触包裹不参与带货。</p>
       <div class="chips"><span class="chip">仅 COD 4.68%</span><span class="chip">规则推荐 · 模板话术</span><span class="chip">佣金仅机制说明</span><span class="chip">自愿 · 非 KPI</span></div>
     </div>
 
@@ -499,6 +569,7 @@
   <details class="fold"><summary>诚实边界</summary>
     <ul>
       <li>金额 / GMV / 在营商铺数一律不编，只给包裹量、收件人、邮区、货主等可溯源物理量。</li>
+      <li>「联名款包裹 / 泡泡玛特」只是举例说明投放形态的<b>假设场景</b>，非已合作客户、非已上线物料；A / B 两种二维码落点均为方案设计。</li>
       <li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li>
       <li>「配送员面对面推销」只在 COD 等真实接触点成立，全 SG 可实测仅 4.68%；SG 主流放门口 / 柜为零接触，不得按全量包裹外推。</li>
       <li>飞轮的增长箭头（货量回流、吸引加入、补充运力）是机制推演，不是已验证的增长数据；本页不提供任何金额或增幅预测。</li>
