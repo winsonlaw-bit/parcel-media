@@ -70,8 +70,25 @@ if [ -z "${SUBSTRAIT_GLOBAL_CONFIG:-}" ] && [ ! -f "$HOME/.substrait/config.json
   fi
 fi
 
-# Substrait ships no default portal URL; setting this means no subcommand needs --portal-url.
-export SUBSTRAIT_PORTAL_URL="${SUBSTRAIT_PORTAL_URL:-https://api.substrait.build}"
+# Substrait ships no default portal URL. Since plugin v2026.11.05 the saved login follows the
+# installation when its API address moves — but only when the URL comes from the saved login,
+# never from $SUBSTRAIT_PORTAL_URL. So read the saved address first and export the hosted
+# default ONLY when nothing is saved yet (a machine that has never linked). Logins get the
+# address passed explicitly (see `link` below).
+_SUBSTRAIT_DEFAULT_PORTAL="https://api.substrait.build"
+_saved_portal() {
+  local f gc="${SUBSTRAIT_GLOBAL_CONFIG:-$HOME/.substrait/config.json}" v
+  for f in .substrait/config.json "$gc" "$(dirname "$gc")"/profiles/*.json; do
+    [ -f "$f" ] || continue
+    v="$(sed -n 's/.*"portal_url"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$f" 2>/dev/null | head -1)"
+    [ -n "$v" ] && { printf '%s' "${v%/}"; return 0; }
+  done
+  return 1
+}
+SUBSTRAIT_LOGIN_PORTAL="${SUBSTRAIT_PORTAL_URL:-$(_saved_portal || printf '%s' "$_SUBSTRAIT_DEFAULT_PORTAL")}"
+if [ -z "${SUBSTRAIT_PORTAL_URL:-}" ] && ! _saved_portal >/dev/null; then
+  export SUBSTRAIT_PORTAL_URL="$_SUBSTRAIT_DEFAULT_PORTAL"
+fi
 # Linking appends the platform's own contract block to a memory file. Keep it out of
 # AGENTS.md — its text describes the zip-upload path and would contradict ours.
 export SUBSTRAIT_MEMO_FILE="${SUBSTRAIT_MEMO_FILE:-SUBSTRAIT-CONTRACT.md}"
@@ -126,30 +143,8 @@ fetch_tools() {
   fi
 }
 
-# ── Open a URL in the real browser ───────────────────────────────────────────────
-# explorer.exe first: a shell opening a URL is not an EDR signature, whereas
-# bash -> powershell -> Start-Process is a classic one and gets blocked silently.
-# MSYS_NO_PATHCONV is set for THIS command only — setting it globally breaks the path
-# conversion curl needs for its CA bundle, and every API call then fails.
-# ── Make the platform's own browser-opener work ──────────────────────────────────
-# substrait-link.sh calls substrait_open_url(), which on Windows runs `explorer.exe "$url"`.
-# Git Bash mangles the URL on the way, so Explorer gets something it can't parse and falls
-# back to opening the user's Documents folder. Exporting a shell function with that exact
-# name shadows the real binary inside the child script, so THEIR call lands here and we
-# open the browser properly. Fixing it at the source beats racing it with a second opener,
-# which is what produced a Documents window every time regardless.
-#
-# MSYS_NO_PATHCONV is scoped to this one command. Setting it globally breaks the path
-# conversion curl needs for its CA bundle, and every API call then fails with
-# "could not reach".
-explorer.exe() {
-  local url="${1:-}"
-  [ -n "$url" ] || return 1
-  MSYS_NO_PATHCONV=1 powershell.exe -NoProfile -NonInteractive \
-    -Command "Start-Process '"'"'$url'"'"'" >/dev/null 2>&1 && return 0
-  return 1
-}
-export -f explorer.exe 2>/dev/null || true
+# (Browser opening: the plugin's own opener has used rundll32 on Git Bash since v2026.11.05,
+# which fixed the "opens File Explorer / Documents" bug this wrapper used to patch around.)
 
 # ── doctor: one command that tells you whether anything here can work ────────────
 doctor() {
@@ -210,7 +205,7 @@ doctor() {
 
   local code
   code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
-          "$SUBSTRAIT_PORTAL_URL/api/link/start" 2>/dev/null)" || code=""
+          "$SUBSTRAIT_LOGIN_PORTAL/api/link/start" 2>/dev/null)" || code=""
   if [ -n "$code" ] && [ "$code" != "000" ]; then
     echo "substrait api   : reachable (HTTP $code)"
   else
@@ -351,6 +346,11 @@ case "$cmd" in
   check)  _guard_starter; fetch_tools; bash "$SCRIPTS/substrait-deploy.sh" check ;;
   link)   fetch_tools
           if [ $# -eq 0 ]; then set -- account; fi
+          # A login needs the portal address; pass the saved one (else the hosted default)
+          # unless the caller gave --portal-url.
+          case "$1" in account|save-account)
+            case " $* " in *" --portal-url"*) ;; *) set -- "$@" --portal-url "$SUBSTRAIT_LOGIN_PORTAL" ;; esac ;;
+          esac
           bash "$SCRIPTS/substrait-link.sh" "$@" ;;
   deploy) _guard_starter; fetch_tools; deploy_until_live "$@" ;;
   security) fetch_tools; bash "$SCRIPTS/substrait-security.sh" "$@" ;;

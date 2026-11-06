@@ -45,8 +45,8 @@ h2.sec:before{content:"";width:4px;height:18px;background:var(--brand);border-ra
 .rec .ttl{font-size:13.5px;font-weight:650;margin-bottom:3px}
 .rec .why{font-size:12.3px;color:var(--sub);line-height:1.6}
 .rec .lift{font-size:12px;color:#3730a3;background:#eef2ff;border-radius:7px;padding:3px 9px;white-space:nowrap;font-weight:650}
-.script{background:#fbfbff;border:1px solid #c7d2fe;border-radius:12px;padding:13px 16px;margin-bottom:10px}
-.script .sh{font-size:12px;color:#3730a3;background:#eef2ff;border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:7px;font-weight:650}
+.action{background:#fbfbff;border:1px solid #c7d2fe;border-radius:12px;padding:13px 16px;margin-bottom:10px}
+.action .ah{font-size:12px;color:#3730a3;background:#eef2ff;border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:7px;font-weight:650}
 .script .txt{font-size:13px;color:#334155;line-height:1.75}
 .notebar{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px 17px;font-size:13px;color:#166534;line-height:1.75}
 .notebar b{color:#14532d}
@@ -94,9 +94,9 @@ details.fold li{margin-bottom:6px}
   <p class="sechint">规则 = 本区 COD 主品类 × 全 SG 品类亲和 lift（同一收件人跨月买到两类商品）。换区即重算，结果可解释、可复算。</p>
   <div id="recs"></div>
 
-  <h2 class="sec">④ 话术卡 <span class="tag amber">模板话术 · 自动填数</span></h2>
-  <p class="sechint">固定话术模板，槽位代入本区 COD 件数、主品类与连带 lift；与货主屏同一套生成方式，换区自动换词。</p>
-  <div id="scripts"></div>
+  <h2 class="sec">④ 推荐动作 <span class="tag amber">规则生成 · 自动填数</span></h2>
+  <p class="sechint">按规则生成动作建议，槽位代入本区 COD 件数、主品类与连带 lift；与货主屏同一套生成方式，换区自动换词。</p>
+  <div id="actions"></div>
 
   <h2 class="sec">⑤ 佣金机制 <span class="tag">自愿 · 非 KPI</span></h2>
   <div class="notebar">在 COD 等真实接触场景产生的转化，<b>可按单结算佣金给配送员</b>：多一份收入机会，也是吸引更多人加入 NJV、补充运力的起点。具体比例与结算规则待 pilot，<b>本页不做收入测算、不展示任何金额</b>；归因与结算走 Ninja Van 闭环，情报不外泄。</div>
@@ -107,7 +107,7 @@ details.fold li{margin-bottom:6px}
       <li>全 SG COD <b id="fCod">—</b> 件，占全量 <b id="fRate">—</b>；有 <code>delivery_success_driver_id</code> 的行占 91.8%，其中 COD 有司机 ID 的占 58%。</li>
       <li>品类只取 <code>primary_category</code> 且剔除「其他/未细分」；未细分件数单独标注，不参与品类占比。</li>
       <li>妥投率 96.75% 由 <code>status_enriched = completed</code> 复算，非硬编码。</li>
-      <li>③ 的推荐与 ④ 的话术是同一套实现方式：规则计算 + 固定模板填数，<b>当前没有 LLM / AI 生成</b>。未来若接入公司平台模型端点与后端代理，可升级为模型生成，届时需重做口径标注与效果验证。</li>
+      <li>③ 的推荐与 ④ 的推荐动作是同一套实现方式：规则计算 + 固定模板填数，<b>当前没有 LLM / AI 生成</b>。未来若接入公司平台模型端点与后端代理，可升级为模型生成，届时需重做口径标注与效果验证。</li>
       <li>配送员主流纯履约；窄接触场景自愿参与、按转化提成、非固定 KPI；情报与归因不出 Ninja Van 闭环。</li>
       <li>佣金只作机制说明：本页不提供转化率、件单价、佣金率或任何收入测算；COD 代收货款不是 GMV，不得当收入基数。</li>
       <li>佣金带来的「吸引加入 / 补充运力」是飞轮侧环的机制推演，不是已验证的招募或运力增长数据。</li>
@@ -176,8 +176,8 @@ function render(){
       }).join('')
     : '<div class="empty">本区暂无可推荐品类。</div>';
 
-  // ④ 话术卡
-  document.getElementById('scripts').innerHTML = top.map((c,i)=>{
+  // ④ 推荐动作
+  document.getElementById('actions').innerHTML = top.map((c,i)=>{
     const p = best[c.cat];
     const txt = p
       ? '在「'+z.label+'」的 COD 交箱场景，'+c.cat+' 半年有 '+num(c.n)+' 件，占本区已分类 COD 的 '+c.pct+
@@ -185,8 +185,8 @@ function render(){
         '×——交箱时可递一张 '+p.b+' 选品卡，扫码归因与结算走 Ninja Van 闭环。'
       : '在「'+z.label+'」的 COD 交箱场景，'+c.cat+' 半年有 '+num(c.n)+
         ' 件，占本区已分类 COD 的 '+c.pct+'%。该品类暂无稳定连带信号，建议先用本区需求情报谈选品，不硬推。';
-    return '<div class="script"><span class="sh">话术 '+(i+1)+' · '+c.cat+'</span><div class="txt">'+txt+'</div></div>';
-  }).join('') || '<div class="empty">本区暂无话术槽位数据。</div>';
+    return '<div class="action"><span class="ah">动作 '+(i+1)+' · '+c.cat+'</span><div class="txt">'+txt+'</div></div>';
+  }).join('') || '<div class="empty">本区暂无推荐动作数据。</div>';
 }
 
 sel.addEventListener('change', render);
