@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-title-zh="Ninja Van (NJV) · 配送员屏 — COD 窄场景" data-title-en="Ninja Van (NJV) · Driver view — COD narrow scenario">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -62,56 +62,58 @@ details.fold li{margin-bottom:6px}
 @media (max-width:900px){.kpis,.zstats{grid-template-columns:1fr 1fr}.wrap{padding:18px 15px 44px}.hero{padding:24px 22px}}
 @media (max-width:560px){.kpis,.zstats{grid-template-columns:1fr}.hero h1{font-size:21px}.catrow .nm{width:78px;flex-basis:78px}.catrow .num{width:96px;flex-basis:96px}}
 </style>
+<script src="i18n_terms.js?v=20261106c"></script>
+<script src="lang.js?v=20261106c"></script>
 </head>
 <body>
 <div class="wrap">
 
   <div class="hero">
     <div class="kicker">NJV · SG · 2026 H1</div>
-    <h1>配送员屏 · COD 窄场景带货</h1>
-    <p class="sub">基于真实 COD 交箱接触点，给出本区推什么、怎么说；佣金仅作机制说明，不做收入测算。</p>
-    <div class="boundbar"><b>口径边界</b>：全 SG 仅 <b id="bRate">—</b> 的包裹有 COD 交箱接触点；主流放门口 / 柜为零接触、不参与带货。带货仅限 COD 等真实接触场景，<b>自愿参与、按转化提成、非 KPI</b>，归因与结算在 Ninja Van 闭环内，情报不外泄。</div>
+    <h1><span class="i18n" data-en="Driver View · COD Narrow-Scenario Selling">配送员屏 · COD 窄场景带货</span></h1>
+    <p class="sub"><span class="i18n" data-en="Built on real COD doorstep-handover contact points: what to push in this district and how to say it. Commission is explained as a mechanism only — no earnings estimate.">基于真实 COD 交箱接触点，给出本区推什么、怎么说；佣金仅作机制说明，不做收入测算。</span></p>
+    <div class="boundbar"><b><span class="i18n" data-en="Calibre boundary">口径边界</span></b><span class="i18n" data-en=": across all of SG only">：全 SG 仅 </span><b id="bRate">—</b><span class="i18n" data-en=" of parcels have a COD handover contact point; the mainstream — left at the door or in a locker — is zero-contact and takes no part in selling. Selling applies only to real contact scenarios such as COD,"> 的包裹有 COD 交箱接触点；主流放门口 / 柜为零接触、不参与带货。带货仅限 COD 等真实接触场景，</span><b><span class="i18n" data-en="voluntary, commission per conversion, not a KPI">自愿参与、按转化提成、非 KPI</span></b><span class="i18n" data-en=", and attribution and settlement stay inside the Ninja Van loop, so the intelligence never leaks.">，归因与结算在 Ninja Van 闭环内，情报不外泄。</span></div>
   </div>
 
   <div class="kpis" id="kpis"></div>
 
-  <h2 class="sec">① 选择配送区域 <span class="tag">76 邮区 · 按 COD 件数排序</span></h2>
-  <p class="sechint">选区后，②③④ 随该区真实数据重算；⑤ 为固定机制说明。</p>
+  <h2 class="sec"><span class="i18n" data-en="① Pick the delivery area">① 选择配送区域 </span><span class="tag"><span class="i18n" data-en="76 postal districts · sorted by COD parcel count">76 邮区 · 按 COD 件数排序</span></span></h2>
+  <p class="sechint"><span class="i18n" data-en="Once a district is picked, ②③④ recompute from that district’s real data; ⑤ is a fixed mechanism note.">选区后，②③④ 随该区真实数据重算；⑤ 为固定机制说明。</span></p>
   <div class="card">
     <div class="zonebar">
-      <label for="zoneSel">配送区域</label>
+      <label for="zoneSel"><span class="i18n" data-en="Delivery area">配送区域</span></label>
       <select id="zoneSel"></select>
       <span class="hint" id="zoneHint"></span>
     </div>
     <div class="zstats" id="zstats"></div>
   </div>
 
-  <h2 class="sec">② 本区 COD 品类结构 <span class="tag">实测 · 已剔除未细分</span></h2>
-  <p class="sechint">按该区 COD 包裹的 primary_category 计数；占比分母为已分类 COD 件数。</p>
+  <h2 class="sec"><span class="i18n" data-en="② COD category mix in this district">② 本区 COD 品类结构 </span><span class="tag"><span class="i18n" data-en="Measured · uncategorised excluded">实测 · 已剔除未细分</span></span></h2>
+  <p class="sechint"><span class="i18n" data-en="Counted by primary_category of the district’s COD parcels; the denominator for the shares is classified COD parcels.">按该区 COD 包裹的 primary_category 计数；占比分母为已分类 COD 件数。</span></p>
   <div class="card"><div id="cats"></div><div class="warnbox" id="catNote"></div></div>
 
-  <h2 class="sec">③ 推荐推什么 <span class="tag amber">规则计算 · 可复算</span></h2>
-  <p class="sechint">规则 = 本区 COD 主品类 × 全 SG 品类亲和 lift（同一收件人跨月买到两类商品）。换区即重算，结果可解释、可复算。</p>
+  <h2 class="sec"><span class="i18n" data-en="③ What to recommend pushing">③ 推荐推什么 </span><span class="tag amber"><span class="i18n" data-en="Rule-based · reproducible">规则计算 · 可复算</span></span></h2>
+  <p class="sechint"><span class="i18n" data-en="Rule = the district’s main COD category × category affinity lift across all of SG (the same recipient buying two categories across months). Change district and it recomputes; the result is explainable and reproducible.">规则 = 本区 COD 主品类 × 全 SG 品类亲和 lift（同一收件人跨月买到两类商品）。换区即重算，结果可解释、可复算。</span></p>
   <div id="recs"></div>
 
-  <h2 class="sec">④ 推荐动作 <span class="tag amber">规则生成 · 自动填数</span></h2>
-  <p class="sechint">按规则生成动作建议，槽位代入本区 COD 件数、主品类与连带 lift；与货主屏同一套生成方式，换区自动换词。</p>
+  <h2 class="sec"><span class="i18n" data-en="④ Recommended action">④ 推荐动作 </span><span class="tag amber"><span class="i18n" data-en="Rule-generated · auto-filled">规则生成 · 自动填数</span></span></h2>
+  <p class="sechint"><span class="i18n" data-en="Action suggestions are generated by rule, with slots filled from this district’s COD count, main category and cross-sell lift; the same generation approach as the shipper desk, so the wording changes with the district.">按规则生成动作建议，槽位代入本区 COD 件数、主品类与连带 lift；与货主屏同一套生成方式，换区自动换词。</span></p>
   <div id="actions"></div>
 
-  <h2 class="sec">⑤ 佣金机制 <span class="tag">自愿 · 非 KPI</span></h2>
-  <div class="notebar">在 COD 等真实接触场景产生的转化，<b>可按单结算佣金给配送员</b>：多一份收入机会，也是吸引更多人加入 NJV、补充运力的起点。具体比例与结算规则待 pilot，<b>本页不做收入测算、不展示任何金额</b>；归因与结算走 Ninja Van 闭环，情报不外泄。</div>
+  <h2 class="sec"><span class="i18n" data-en="⑤ Commission mechanism">⑤ 佣金机制 </span><span class="tag"><span class="i18n" data-en="Voluntary · not a KPI">自愿 · 非 KPI</span></span></h2>
+  <div class="notebar"><span class="i18n" data-en="For conversions in real contact scenarios such as COD,">在 COD 等真实接触场景产生的转化，</span><b><span class="i18n" data-en="commission can be settled per order to the driver">可按单结算佣金给配送员</span></b><span class="i18n" data-en=": one more income opportunity, and the starting point for attracting more people to NJV to replenish capacity. The exact rate and settlement rules await the pilot —">：多一份收入机会，也是吸引更多人加入 NJV、补充运力的起点。具体比例与结算规则待 pilot，</span><b><span class="i18n" data-en="this page does no earnings modelling and shows no money figures">本页不做收入测算、不展示任何金额</span></b><span class="i18n" data-en="; attribution and settlement run inside the Ninja Van loop, so the intelligence never leaks.">；归因与结算走 Ninja Van 闭环，情报不外泄。</span></div>
 
-  <details class="fold"><summary>口径说明与诚实边界</summary>
+  <details class="fold"><summary><span class="i18n" data-en="Calibre notes and honest boundaries">口径说明与诚实边界</span></summary>
     <ul>
-      <li>COD 判定 = <code>cod_value_sgd &gt; 0</code>；冷链 / 大件在源数据里没有独立标识，本页<b>只覆盖 COD</b> 这一种可实测的接触场景。</li>
-      <li>全 SG COD <b id="fCod">—</b> 件，占全量 <b id="fRate">—</b>；有 <code>delivery_success_driver_id</code> 的行占 91.8%，其中 COD 有司机 ID 的占 58%。</li>
-      <li>品类只取 <code>primary_category</code> 且剔除「其他/未细分」；未细分件数单独标注，不参与品类占比。</li>
-      <li>妥投率 96.75% 由 <code>status_enriched = completed</code> 复算，非硬编码。</li>
-      <li>③ 的推荐与 ④ 的推荐动作是同一套实现方式：规则计算 + 固定模板填数，<b>当前没有 LLM / AI 生成</b>。未来若接入公司平台模型端点与后端代理，可升级为模型生成，届时需重做口径标注与效果验证。</li>
-      <li>配送员主流纯履约；窄接触场景自愿参与、按转化提成、非固定 KPI；情报与归因不出 Ninja Van 闭环。</li>
-      <li>佣金只作机制说明：本页不提供转化率、件单价、佣金率或任何收入测算；COD 代收货款不是 GMV，不得当收入基数。</li>
-      <li>佣金带来的「吸引加入 / 补充运力」是飞轮侧环的机制推演，不是已验证的招募或运力增长数据。</li>
-      <li>本页为 2026 H1 历史数据回看，不是实时排班或实时推荐系统。</li>
+      <li><span class="i18n" data-en="COD is defined as">COD 判定 = </span><code>cod_value_sgd &gt; 0</code><span class="i18n" data-en="; cold chain and bulky items have no separate flag in the source data, so this page">；冷链 / 大件在源数据里没有独立标识，本页</span><b><span class="i18n" data-en="covers only COD">只覆盖 COD</span></b><span class="i18n" data-en=" — the one contact scenario that can be measured."> 这一种可实测的接触场景。</span></li>
+      <li><span class="i18n" data-en="COD across all of SG">全 SG COD </span><b id="fCod">—</b><span class="i18n" data-en=" parcels, of the full volume"> 件，占全量 </span><b id="fRate">—</b><span class="i18n" data-en="; of which">；有 </span><code>delivery_success_driver_id</code><span class="i18n" data-en=" of rows carry a driver ID, and 58% of COD parcels have a driver ID."> 的行占 91.8%，其中 COD 有司机 ID 的占 58%。</span></li>
+      <li><span class="i18n" data-en="Categories use only">品类只取 </span><code>primary_category</code><span class="i18n" data-en=" and exclude “other / uncategorised”; uncategorised parcels are labelled separately and take no part in the category shares."> 且剔除「其他/未细分」；未细分件数单独标注，不参与品类占比。</span></li>
+      <li><span class="i18n" data-en="The 96.75% delivery rate is">妥投率 96.75% 由 </span><code>status_enriched = completed</code><span class="i18n" data-en=" recomputed, not hard-coded."> 复算，非硬编码。</span></li>
+      <li><span class="i18n" data-en="③’s recommendations and ④’s recommended action share one implementation: rule calculation + fixed template slots,">③ 的推荐与 ④ 的推荐动作是同一套实现方式：规则计算 + 固定模板填数，</span><b><span class="i18n" data-en="no LLM / AI generation is used today">当前没有 LLM / AI 生成</span></b><span class="i18n" data-en=". If the company platform’s model endpoint and a backend proxy are connected in future, this can be upgraded to model generation — at which point the calibre labels and effect validation must be redone.">。未来若接入公司平台模型端点与后端代理，可升级为模型生成，届时需重做口径标注与效果验证。</span></li>
+      <li><span class="i18n" data-en="Drivers mostly just fulfil; in narrow-contact scenarios they take part voluntarily, earn commission per conversion, and it is not a fixed KPI; intelligence and attribution never leave the Ninja Van loop.">配送员主流纯履约；窄接触场景自愿参与、按转化提成、非固定 KPI；情报与归因不出 Ninja Van 闭环。</span></li>
+      <li><span class="i18n" data-en="Commission is a mechanism note only: this page gives no conversion rate, per-parcel price, commission rate or earnings modelling. COD cash collected on delivery is not GMV and must not be used as a revenue base.">佣金只作机制说明：本页不提供转化率、件单价、佣金率或任何收入测算；COD 代收货款不是 GMV，不得当收入基数。</span></li>
+      <li><span class="i18n" data-en="The “attracts more drivers / replenishes capacity” effect of commission is mechanism reasoning on the flywheel’s side loop, not validated recruitment or capacity growth data.">佣金带来的「吸引加入 / 补充运力」是飞轮侧环的机制推演，不是已验证的招募或运力增长数据。</span></li>
+      <li><span class="i18n" data-en="This page is a historical look-back at H1 2026 data, not a real-time scheduling or real-time recommendation system.">本页为 2026 H1 历史数据回看，不是实时排班或实时推荐系统。</span></li>
     </ul>
   </details>
 
@@ -132,26 +134,26 @@ DATA.pairs.forEach(p=>{
 
 const M = DATA.meta, Z = DATA.zones;
 document.getElementById('bRate').textContent = M.cod_rate.toFixed(2)+'%';
-document.getElementById('fCod').textContent = num(M.total_cod)+' 件';
+document.getElementById('fCod').textContent = num(M.total_cod)+L(" 件"," parcels");
 document.getElementById('fRate').textContent = M.cod_rate.toFixed(2)+'%';
 document.getElementById('kpis').innerHTML = [
-  [num(M.total_cod),'全 SG COD 件数'],
-  [M.cod_rate.toFixed(2)+'%','占全量 '+fmt(M.total_parcels)+' 件'],
-  [num(M.cod_drivers),'有 COD 的配送员'],
-  ['76','邮区（区组）'],
+  [num(M.total_cod),L("全 SG COD 件数","All-SG COD parcels")],
+  [M.cod_rate.toFixed(2)+'%',L("占全量 ","of all ")+fmt(M.total_parcels)+L(" 件"," parcels")],
+  [num(M.cod_drivers),L("有 COD 的配送员","Drivers handling COD")],
+  ['76',L("邮区（区组）","Postal districts (sectors)")],
 ].map(([v,l])=>'<div class="kpi"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>').join('');
 
 const sel = document.getElementById('zoneSel');
-sel.innerHTML = Z.map((z,i)=>'<option value="'+i+'">'+z.label+' · '+num(z.cod_parcels)+' 件 COD</option>').join('');
+sel.innerHTML = Z.map((z,i)=>'<option value="'+i+'">'+z.label+' · '+num(z.cod_parcels)+L(" 件 COD</option>"," parcels COD</option>")).join('');
 
 function render(){
   const z = Z[+sel.value];
-  document.getElementById('zoneHint').textContent = '邮区码 ' + z.codes.join(' / ');
+  document.getElementById('zoneHint').textContent = L("邮区码 ","District code: ") + z.codes.join(' / ');
   document.getElementById('zstats').innerHTML = [
-    [num(z.cod_parcels)+' 件','本区 H1 COD 包裹'],
-    [z.cod_rate.toFixed(1)+'%','占本区全部包裹'],
-    [num(z.cod_drivers)+' 人','本区有 COD 的配送员'],
-    [num(z.all_parcels)+' 件','本区全量包裹'],
+    [num(z.cod_parcels)+L(" 件"," parcels"),L("本区 H1 COD 包裹","COD parcels in this district (H1)")],
+    [z.cod_rate.toFixed(1)+'%',L("占本区全部包裹","of all parcels in this district")],
+    [num(z.cod_drivers)+L(" 人"," drivers"),L("本区有 COD 的配送员","Drivers handling COD in this district")],
+    [num(z.all_parcels)+L(" 件"," parcels"),L("本区全量包裹","All parcels in this district")],
   ].map(([v,l])=>'<div class="zstat"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>').join('');
 
   // ② 品类结构
@@ -159,10 +161,10 @@ function render(){
   const maxPct = cs.length ? cs[0].pct : 1;
   document.getElementById('cats').innerHTML = cs.length
     ? cs.map(c=>'<div class="catrow"><span class="nm">'+c.cat+'</span><span class="bar"><i style="width:'+
-        Math.max(3,Math.round(100*c.pct/maxPct))+'%"></i></span><span class="num">'+num(c.n)+' 件 · '+c.pct+'%</span></div>').join('')
-    : '<div class="empty">本区 COD 品类标签过稀，暂无稳定结构。</div>';
-  document.getElementById('catNote').innerHTML = '本区已分类 COD <b>'+num(z.classified_cod)+'</b> 件；另有 <b>'+num(z.unclassified_cod)+
-    '</b> 件为「其他/未细分」，已从品类占比中剔除，不参与推荐。';
+        Math.max(3,Math.round(100*c.pct/maxPct))+'%"></i></span><span class="num">'+num(c.n)+L(" 件 · "," parcels · ")+c.pct+'%</span></div>').join('')
+    : L('<div class="empty">本区 COD 品类标签过稀，暂无稳定结构。</div>','<div class="empty">COD category tags in this district are too sparse — no stable structure yet.</div>');
+  document.getElementById('catNote').innerHTML = L("本区已分类 COD <b>","Classified COD in this district <b>")+num(z.classified_cod)+L("</b> 件；另有 <b>","</b> parcels; a further <b>")+num(z.unclassified_cod)+
+    L("</b> 件为「其他/未细分」，已从品类占比中剔除，不参与推荐。",'</b> parcels are "Other / unclassified" and have been excluded from the category mix and from recommendations.');
 
   // ③ 规则推荐
   const top = z.cats.slice(0,3);
@@ -170,23 +172,23 @@ function render(){
     ? top.map((c,i)=>{
         const p = best[c.cat];
         return '<div class="rec"><span class="idx">'+(i+1)+'</span><div class="body"><div class="ttl">'+c.cat+
-          (p ? ' → 连带推「'+p.b+'」' : ' → 暂无稳定连带信号')+'</div><div class="why">本区 COD 中该品类 '+num(c.n)+
-          ' 件（占已分类 '+c.pct+'%）'+(p ? '；全 SG 买过该品类的收件人，同时买「'+p.b+'」的亲和强度最高。' : '；该品类在 60 组亲和信号里没有配对。')+
+          (p ? L(" → 连带推「",' → cross-sell "')+p.b+'」' : L(" → 暂无稳定连带信号"," → no stable cross-sell signal"))+L('</div><div class="why">本区 COD 中该品类 ',"</div><div class=\"why\">In this district's COD, this category ")+num(c.n)+
+          L(" 件（占已分类 "," parcels (of classified ")+c.pct+'%）'+(p ? L("；全 SG 买过该品类的收件人，同时买「",'; all-SG recipients who bought this category and also bought "')+p.b+L("」的亲和强度最高。",'" have the strongest affinity.') : L("；该品类在 60 组亲和信号里没有配对。","; this category has no pair in the 60 affinity signals."))+
           '</div></div>'+(p ? '<span class="lift">lift '+p.lift.toFixed(2)+'×</span>' : '')+'</div>';
       }).join('')
-    : '<div class="empty">本区暂无可推荐品类。</div>';
+    : L('<div class="empty">本区暂无可推荐品类。</div>','<div class="empty">No recommendable category for this district yet.</div>');
 
   // ④ 推荐动作
   document.getElementById('actions').innerHTML = top.map((c,i)=>{
     const p = best[c.cat];
     const txt = p
-      ? '在「'+z.label+'」的 COD 交箱场景，'+c.cat+' 半年有 '+num(c.n)+' 件，占本区已分类 COD 的 '+c.pct+
-        '%。全 SG 数据里，买 '+c.cat+' 的收件人连带买「'+p.b+'」的亲和 lift 是 '+p.lift.toFixed(2)+
-        '×——交箱时可递一张 '+p.b+' 选品卡，扫码归因与结算走 Ninja Van 闭环。'
-      : '在「'+z.label+'」的 COD 交箱场景，'+c.cat+' 半年有 '+num(c.n)+
-        ' 件，占本区已分类 COD 的 '+c.pct+'%。该品类暂无稳定连带信号，建议先用本区需求情报谈选品，不硬推。';
-    return '<div class="action"><span class="ah">动作 '+(i+1)+' · '+c.cat+'</span><div class="txt">'+txt+'</div></div>';
-  }).join('') || '<div class="empty">本区暂无推荐动作数据。</div>';
+      ? L("在「",'In the COD handover scenario at "')+z.label+L("」的 COD 交箱场景，",'", ')+c.cat+L(" 半年有 "," there were ")+num(c.n)+L(" 件，占本区已分类 COD 的 "," parcels in H1, i.e. ")+c.pct+
+        L("%。全 SG 数据里，买 ","% of classified COD in this district. In all-SG data, recipients who bought ")+c.cat+L(" 的收件人连带买「",' also bought "')+p.b+L("」的亲和 lift 是 ",'" show an affinity lift of ')+p.lift.toFixed(2)+
+        L("×——交箱时可递一张 ","× — at handover you can hand over a ")+p.b+L(" 选品卡，扫码归因与结算走 Ninja Van 闭环。"," cross-sell card; scan-based attribution and settlement stay inside the Ninja Van loop.")
+      : L("在「",'In the COD handover scenario at "')+z.label+L("」的 COD 交箱场景，",'", ')+c.cat+L(" 半年有 "," there were ")+num(c.n)+
+        L(" 件，占本区已分类 COD 的 "," parcels in H1, i.e. ")+c.pct+L("%。该品类暂无稳定连带信号，建议先用本区需求情报谈选品，不硬推。","%. No stable cross-sell signal for this category yet — lead with the district's demand intelligence on selection rather than pushing hard.");
+    return L('<div class="action"><span class="ah">动作 ','<div class="action"><span class="ah">Action ')+(i+1)+' · '+c.cat+'</span><div class="txt">'+txt+'</div></div>';
+  }).join('') || L('<div class="empty">本区暂无推荐动作数据。</div>','<div class="empty">No recommended-action data for this district yet.</div>');
 }
 
 sel.addEventListener('change', render);

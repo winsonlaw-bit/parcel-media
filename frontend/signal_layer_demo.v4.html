@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-title-zh="跨包裹市场篮 · 区域洞察看板（NJV · SG）" data-title-en="Cross-parcel Market Basket · Regional Insight Dashboard (NJV · SG)">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -74,60 +74,62 @@ footer{color:var(--sub);font-size:12.5px;text-align:center;padding:20px}
 <link rel="stylesheet" href="responsive.css?v=20261105i">
 <script src="responsive.js?v=20261105i" defer></script>
 <script>function fmtQ(n){ if(n>=1e6) return (n/1e6).toFixed(2).replace(/[.]?0+$/,'')+'M'; if(n>=1e3){const k=n/1e3; return (k>=100?Math.round(k):+k.toFixed(1))+'K';} return String(Math.round(n)); }</script>
+<script src="i18n_terms.js?v=20261106c"></script>
+<script src="lang.js?v=20261106c"></script>
 </head>
 <body>
 <div class="wrap">
 
 <header class="hero">
-  <h1>跨包裹市场篮 · 区域洞察看板</h1>
-  <p>基于 NJV 新加坡 2026 上半年真实包裹数据（3.27M 单），识别「同一收件人跨月购买不同品类」的复购信号，并落到邮编区域，为品类定向与区域下钻提供数据依据。</p>
+  <h1><span class="i18n" data-en="Cross-Parcel Market Basket · Area Insight Dashboard">跨包裹市场篮 · 区域洞察看板</span></h1>
+  <p><span class="i18n" data-en="Built on real NJV Singapore H1 2026 parcel data (3.27M parcels), it detects repeat-purchase signals where the same recipient buys different categories across months, resolves them to postal areas, and gives the data basis for category targeting and area drill-down.">基于 NJV 新加坡 2026 上半年真实包裹数据（3.27M 单），识别「同一收件人跨月购买不同品类」的复购信号，并落到邮编区域，为品类定向与区域下钻提供数据依据。</span></p>
 </header>
 
 <div class="kpis">
-  <div class="kpi"><div class="v">983,307</div><div class="l">收件人（有品类信号）</div></div>
-  <div class="kpi"><div class="v">261,131</div><div class="l">跨品类复购收件人</div></div>
-  <div class="kpi"><div class="v">26.56%</div><div class="l">跨品类复购率</div></div>
-  <div class="kpi"><div class="v">72.8%</div><div class="l">包裹级品类覆盖率（无描述/纯代码已隔离）</div></div>
+  <div class="kpi"><div class="v">983,307</div><div class="l"><span class="i18n" data-en="Recipients (with a category signal)">收件人（有品类信号）</span></div></div>
+  <div class="kpi"><div class="v">261,131</div><div class="l"><span class="i18n" data-en="Cross-category repeat buyers">跨品类复购收件人</span></div></div>
+  <div class="kpi"><div class="v">26.56%</div><div class="l"><span class="i18n" data-en="Cross-category repeat rate">跨品类复购率</span></div></div>
+  <div class="kpi"><div class="v">72.8%</div><div class="l"><span class="i18n" data-en="Parcel-level category coverage (no-description / code-only isolated)">包裹级品类覆盖率（无描述/纯代码已隔离）</span></div></div>
 </div>
-<div class="status" id="statusBar">数据加载中…（品类亲和信号 / 区域三级下钻为内联数据，首次展开需几秒）</div>
+<div class="status" id="statusBar"><span class="i18n" data-en="Loading data… (category affinity signals / the three-level area drill-down are inline data, so the first open takes a few seconds)">数据加载中…（品类亲和信号 / 区域三级下钻为内联数据，首次展开需几秒）</span></div>
 
 <!-- ============ A-1 品类亲和信号 ============ -->
 <section>
-  <h2>① 品类亲和信号 <span class="tag">核心产出</span></h2>
-  <p class="lead">哪些品类组合真实出现在一个收件人的不同月份里（信号 b）。<b>lift 越高代表共现远超随机</b>——这是市场篮引擎交付给商家的「硬洞察」。</p>
+  <h2><span class="i18n" data-en="① Category affinity signals">① 品类亲和信号 </span><span class="tag"><span class="i18n" data-en="Core output">核心产出</span></span></h2>
+  <p class="lead"><span class="i18n" data-en="Which category pairs genuinely appear for one recipient in different months (signal b).">哪些品类组合真实出现在一个收件人的不同月份里（信号 b）。</span><b><span class="i18n" data-en="the higher the lift, the further the co-occurrence exceeds chance">lift 越高代表共现远超随机</span></b><span class="i18n" data-en=" — this is the hard insight the market-basket engine delivers to merchants.">——这是市场篮引擎交付给商家的「硬洞察」。</span></p>
   <div class="tabs">
-    <button id="t_lift" class="on" onclick="switchPair('lift')">按亲和强度（lift）</button>
-    <button id="t_vol" onclick="switchPair('vol')">按体量（收件人数）</button>
-    <label class="flt">只看含品类 <select id="catFilter" onchange="renderPairs(curPairMode)"><option value="">全部品类</option></select></label>
+    <button id="t_lift" class="on" onclick="switchPair('lift')"><span class="i18n" data-en="By affinity strength (lift)">按亲和强度（lift）</span></button>
+    <button id="t_vol" onclick="switchPair('vol')"><span class="i18n" data-en="By volume (recipients)">按体量（收件人数）</span></button>
+    <label class="flt"><span class="i18n" data-en="Only pairs containing">只看含品类 </span><select id="catFilter" onchange="renderPairs(curPairMode)"><option value=""><span class="i18n" data-en="All categories">全部品类</span></option></select></label>
   </div>
   <table id="pairTable">
-    <thead><tr><th>品类组合</th><th class="num">收件人</th><th class="num">lift</th><th>强度</th></tr></thead>
-    <tbody><tr><td colspan="4" class="loading">正在加载品类亲和信号…</td></tr></tbody>
+    <thead><tr><th><span class="i18n" data-en="Category pair">品类组合</span></th><th class="num"><span class="i18n" data-en="Recipients">收件人</span></th><th class="num">lift</th><th><span class="i18n" data-en="Strength">强度</span></th></tr></thead>
+    <tbody><tr><td colspan="4" class="loading"><span class="i18n" data-en="Loading category affinity signals…">正在加载品类亲和信号…</span></td></tr></tbody>
   </table>
-  <div class="note">稳健性：Top 对的 lift 全部在 2.5–3.8，且体量巨大，不是噪声。注：当前约 27.2% 包裹因「无描述文本」（16.3%，回流源数据质量）或「纯 SKU 代码死块」（10.9%，需商品主数据）未细分——这不影响已分类包裹内的信号质量。</div>
+  <div class="note"><span class="i18n" data-en="Robustness: the lift of every top pair sits between 2.5 and 3.8 on very large volumes, so it is not noise. Note: about 27.2% of parcels are still uncategorised — 16.3% with no description text (needs source-data quality work) and 10.9% pure-SKU code blocks (needs product master data) — which does not affect signal quality within the classified parcels.">稳健性：Top 对的 lift 全部在 2.5–3.8，且体量巨大，不是噪声。注：当前约 27.2% 包裹因「无描述文本」（16.3%，回流源数据质量）或「纯 SKU 代码死块」（10.9%，需商品主数据）未细分——这不影响已分类包裹内的信号质量。</span></div>
 </section>
 
 <!-- ============ A-2 区域热图（可下钻） ============ -->
 <section>
-  <h2>② 区域热图（镇/大区 → 区内 → 楼栋） <span class="tag">三级下钻</span></h2>
-  <p class="lead">点击任意区域可逐级下钻：<b>镇/大区</b>（邮编前 2 位）→ <b>区内细分</b>（前 4 位）→ <b>单栋建筑</b>（前 6 位）。可从「哪片区域热」一路钻到「哪栋楼值得跑」。</p>
+  <h2><span class="i18n" data-en="② Area heatmap (town / major area → within area → building)">② 区域热图（镇/大区 → 区内 → 楼栋） </span><span class="tag"><span class="i18n" data-en="Three-level drill-down">三级下钻</span></span></h2>
+  <p class="lead"><span class="i18n" data-en="Click any area to drill down level by level:">点击任意区域可逐级下钻：</span><b><span class="i18n" data-en="Town / major area">镇/大区</span></b><span class="i18n" data-en=" (first 2 digits of the postcode) →">（邮编前 2 位）→ </span><b><span class="i18n" data-en="Sub-areas">区内细分</span></b><span class="i18n" data-en=" (first 4 digits) →">（前 4 位）→ </span><b><span class="i18n" data-en="Single building">单栋建筑</span></b><span class="i18n" data-en=" (first 6 digits). You can drill from “which area is hot” all the way down to “which building is worth a run”.">（前 6 位）。可从「哪片区域热」一路钻到「哪栋楼值得跑」。</span></p>
   <div class="tabs">
-    <button id="s_vol" class="on" onclick="switchSort('vol')">按体量排序</button>
-    <button id="s_den" onclick="switchSort('den')">按跨品类密度排序</button>
-    <label class="flt">主导品类 <select id="regionFilter" onchange="renderRegions()"><option value="">全部区域</option></select></label>
+    <button id="s_vol" class="on" onclick="switchSort('vol')"><span class="i18n" data-en="Sort by volume">按体量排序</span></button>
+    <button id="s_den" onclick="switchSort('den')"><span class="i18n" data-en="Sort by cross-category density">按跨品类密度排序</span></button>
+    <label class="flt"><span class="i18n" data-en="Dominant category">主导品类 </span><select id="regionFilter" onchange="renderRegions()"><option value=""><span class="i18n" data-en="All areas">全部区域</span></option></select></label>
   </div>
   <table id="regionTable">
-    <thead><tr><th>区域（镇/大区）</th><th class="num">包裹</th><th class="num">收件人</th><th class="num">跨品类复购</th><th class="num">密度</th><th>主导品类</th></tr></thead>
-    <tbody><tr><td colspan="6" class="loading">正在加载区域热图…</td></tr></tbody>
+    <thead><tr><th><span class="i18n" data-en="Area (town / major area)">区域（镇/大区）</span></th><th class="num"><span class="i18n" data-en="Parcels">包裹</span></th><th class="num"><span class="i18n" data-en="Recipients">收件人</span></th><th class="num"><span class="i18n" data-en="Cross-category repeat">跨品类复购</span></th><th class="num"><span class="i18n" data-en="Density">密度</span></th><th><span class="i18n" data-en="Dominant category">主导品类</span></th></tr></thead>
+    <tbody><tr><td colspan="6" class="loading"><span class="i18n" data-en="Loading the area heatmap…">正在加载区域热图…</span></td></tr></tbody>
   </table>
   <div class="note" id="anomNote"></div>
 </section>
 
-<details class="fold"><summary>口径说明</summary>
-<footer>
-  数据：NJV 新加坡 2026 H1 包裹（3.27M 单，已脱敏，to_name 哈希）。区域名按 SingPost 邮区→规划区近似映射，仅供展示。<br/>
+<details class="fold"><summary><span class="i18n" data-en="Calibre notes">口径说明</span></summary>
+<footer><span class="i18n" data-en="Data: NJV Singapore 2026 H1 parcels (3.27M, de-identified, to_name hashed). Area names are an approximate SingPost district → planning-area mapping, for display only.">
+  数据：NJV 新加坡 2026 H1 包裹（3.27M 单，已脱敏，to_name 哈希）。区域名按 SingPost 邮区→规划区近似映射，仅供展示。</span><br/><span class="i18n" data-en="Method: cross-category repeat purchase = the same recipient buying ≥2 real categories across months. Current category coverage is 72.8% (the rest is no-description / code-only, needing source-data backfill or product master data). Fully AI self-learning, no external ledger.">
   方法：跨品类复购 = 同一收件人跨月购买 ≥2 个真实品类。当前品类覆盖 72.8%（其余为无描述/纯代码，需源数据补全或商品主数据）。全 AI 自学习，无外部账本。
-</footer>
+</span></footer>
 </details>
 
 </div>
@@ -157,7 +159,7 @@ function renderPairs(mode){
   let arr = mode==='lift'
     ? src.slice().sort((a,b)=>b.lift-a.lift).slice(0,20)
     : src.slice().sort((a,b)=>b.recipients-a.recipients).slice(0,20);
-  if(!arr.length){ tbody.innerHTML='<tr><td colspan="4" class="loading">该品类暂无亲和信号</td></tr>'; return; }
+  if(!arr.length){ tbody.innerHTML=L('<tr><td colspan="4" class="loading">该品类暂无亲和信号</td></tr>','<tr><td colspan="4" class="loading">No affinity signal for this category</td></tr>'); return; }
   const maxL = Math.max(...arr.map(x=>x.lift));
   const maxR = Math.max(...arr.map(x=>x.recipients));
   tbody.innerHTML = arr.map(x=>{
@@ -188,7 +190,7 @@ function buildRow(it, lvl){
 function renderRegions(){
   const tbody=document.querySelector('#regionTable tbody');
   const rf=document.getElementById('regionFilter').value;
-  const arr=drill.slice().filter(x=>!x.label.includes('待核'));
+  const arr=drill.slice().filter(x=>!x.label.includes(L("待核","to be verified")));
   const shown=rf ? arr.filter(x=>(x.top_categories||[]).some(c=>c.cat===rf)) : arr;
   shown.sort((a,b)=> sortMode==='vol'? b.parcels-a.parcels : b.density-a.density);
   tbody.innerHTML='';
@@ -209,17 +211,19 @@ function renderRegions(){
     tbody.appendChild(tr); tbody.appendChild(child);
   });
   // 异常区提示
-  const anom=drill.filter(x=>x.label.includes('待核'));
-  document.getElementById('anomNote').innerHTML='<b>数据质量标注：</b>检出 '+anom.length+' 个非标准邮区（code '+anom.map(x=>x.code).join('、')+' 等），单区包裹量均 < 20，疑为源数据特殊值，已隔离并建议回流 AF Ops 核查，不计入区域排名。';
+  const anom=drill.filter(x=>x.label.includes(L("待核","to be verified")));
+  document.getElementById('anomNote').innerHTML=L("<b>数据质量标注：</b>检出 ","<b>Data-quality note:</b> detected ")+anom.length+L(" 个非标准邮区（code "," non-standard postal districts (code ")+anom.map(x=>x.code).join('、')+L(" 等），单区包裹量均 < 20，疑为源数据特殊值，已隔离并建议回流 AF Ops 核查，不计入区域排名。"," and others), each with fewer than 20 parcels — likely special source values, isolated and flagged for AF Ops review, excluded from area rankings.");
   const l4=drill.reduce((s,x)=>s+(x.L4||[]).length,0);
   const l6=drill.reduce((s,x)=>s+(x.L4||[]).reduce((n,y)=>n+(y.L6||[]).length,0),0);
-  document.getElementById('statusBar').textContent='已加载：'+pairs.length+' 组品类亲和信号 · '+shown.length+' 个区域'+(rf?'（已按「'+rf+'」筛选）':'')+' · '+l4.toLocaleString()+' 个细分区 · '+l6.toLocaleString()+' 栋楼可下钻';
+  document.getElementById('statusBar').textContent=L("已加载：","Loaded: ")+pairs.length+L(" 组品类亲和信号 · "," category affinity signals · ")+shown.length+L(" 个区域"," areas")+(rf?L("（已按「",' (filtered by "')+rf+L("」筛选）",'")'):'')+' · '+l4.toLocaleString()+L(" 个细分区 · "," sub-districts · ")+l6.toLocaleString()+L(" 栋楼可下钻"," buildings drillable");
 }
 function fillL4(box, it){
   box.innerHTML = it.L4.slice(0,40).map(l4=>{
-    return `<div class="l4row" onclick="toggleL6('${l4.code}',this)"><span><span class="caret">▶</span> ${l4.label}</span>
-      <span style="color:var(--sub)">跨品类 ${fmtQ(l4.cross_cat_recipients)} · ${l4.density}%</span></div>
-      <div class="l6" id="l6_${l4.code}"></div>`;
+    return `("<div class=\"l4row\" onclick=\"toggleL6('"++${l4.code}+"',this)\"><span><span class=\"caret\">▶</span> "++${l4.label}+'</span>
+      <span style="color:var(--sub)">跨品类 '+L('</span>
+      <span style="color:var(--sub)">跨品类 ','</span>
+      <span style="color:var(--sub)">cross-category ')++${fmtQ(l4.cross_cat_recipients)}+" · "++${l4.density}+'%</span></div>
+      <div class="l6" id="l6_'++${l4.code}+'"></div>'+)`;
   }).join('');
 }
 function toggleL6(code, el){
@@ -227,7 +231,7 @@ function toggleL6(code, el){
   const box=document.getElementById('l6_'+code); box.classList.toggle('open');
   if(box.dataset.filled!=='1'){
     const l4=findL4(code);
-    box.innerHTML=(l4?l4.L6:[]).map(b=>`<div>📍 ${b.label} — 收件人 ${fmtQ(b.recipients)} · 跨品类 ${b.cross_cat_recipients}</div>`).join('');
+    box.innerHTML=(l4?l4.L6:[]).map(b=>`("<div>📍 "++${b.label}+" — 收件人 "+L(" — 收件人 "," — recipients ")++${fmtQ(b.recipients)}+" · 跨品类 "+L(" · 跨品类 "," · cross-category ")++${b.cross_cat_recipients}+"</div>"+)`).join('');
     box.dataset.filled='1';
   }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-title-zh="谁看过这个工作台 · 访问记录" data-title-en="Who viewed this workbench · Visit log">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,16 +27,18 @@
   button{cursor:pointer;border:1px solid var(--brand);background:var(--brand);color:#fff;border-radius:10px;padding:8px 14px;font-size:13px;margin-bottom:16px}
   @media(max-width:640px){ .cards{grid-template-columns:1fr} }
 </style>
+<script src="i18n_terms.js?v=20261106c"></script>
+<script src="lang.js?v=20261106c"></script>
 </head>
 <body>
 <div class="wrap">
-  <h1>谁看过这个工作台</h1>
-  <p class="sub">访问记录来自 SSO 实名（登录邮箱），按「访客 × 看了哪个 tab」记录，仅团队内部可见。同一人同一 tab 10 分钟内只记一次（避免刷新刷屏）。</p>
-  <button onclick="load()">刷新</button>
+  <h1><span class="i18n" data-en="Who viewed this workbench">谁看过这个工作台</span></h1>
+  <p class="sub"><span class="i18n" data-en="Visit records use SSO identities (login email) and are logged per visitor x tab; visible to the team only. The same person viewing the same tab is counted once per 10 minutes (to avoid refresh noise).">访问记录来自 SSO 实名（登录邮箱），按「访客 × 看了哪个 tab」记录，仅团队内部可见。同一人同一 tab 10 分钟内只记一次（避免刷新刷屏）。</span></p>
+  <button onclick="load()"><span class="i18n" data-en="Refresh">刷新</span></button>
   <div id="out"></div>
 </div>
 <script>
-const TAB_LABEL = { guide:'总结', chassis:'数据底盘', geo:'流量地图', merchant:'货主屏', driver:'配送员屏', unknown:'未知' };
+const TAB_LABEL = { guide:L("总结","Summary"), chassis:L("数据底盘","Data foundation"), geo:L("流量地图","Traffic map"), merchant:L("货主屏","Shipper view"), driver:L("配送员屏","Driver view"), unknown:L("未知","Unknown") };
 function fmtTab(t){ return TAB_LABEL[t] || t; }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function render(d){
@@ -47,20 +49,20 @@ function render(d){
   }).join('');
   document.getElementById('out').innerHTML =
     '<div class="cards">'+
-      '<div class="card"><div class="v">'+esc(d.total)+'</div><div class="l">总访问次数</div></div>'+
-      '<div class="card"><div class="v">'+esc(d.uniqueActors)+'</div><div class="l">独立访客（实名）</div></div>'+
-      '<div class="card"><div class="v">'+Object.keys(byTab).length+'</div><div class="l">被查看的 tab 数</div></div>'+
+      '<div class="card"><div class="v">'+esc(d.total)+L('</div><div class="l">总访问次数</div></div>','</div><div class="l">Total visits</div></div>')+
+      '<div class="card"><div class="v">'+esc(d.uniqueActors)+L('</div><div class="l">独立访客（实名）</div></div>','</div><div class="l">Unique visitors (SSO)</div></div>')+
+      '<div class="card"><div class="v">'+Object.keys(byTab).length+L('</div><div class="l">被查看的 tab 数</div></div>','</div><div class="l">Tabs viewed</div></div>')+
     '</div>'+
     (tags?'<div class="bar">'+tags+'</div>':'')+
-    '<table><thead><tr><th>时间 (UTC)</th><th>访客（SSO 实名）</th><th>看了哪个 tab</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    L("<table><thead><tr><th>时间 (UTC)</th><th>访客（SSO 实名）</th><th>看了哪个 tab</th></tr></thead><tbody>","<table><thead><tr><th>Time (UTC)</th><th>Visitor (SSO identity)</th><th>Tab viewed</th></tr></thead><tbody>")+rows+'</tbody></table>';
 }
 function load(){
-  document.getElementById('out').innerHTML = '<p class="sub">加载中…</p>';
+  document.getElementById('out').innerHTML = L('<p class="sub">加载中…</p>','<p class="sub">Loading…</p>');
   fetch('/api/visits?limit=300').then(function(r){
-    if(!r.ok){ if(r.status===401) throw new Error('未登录（需要 SSO）'); if(r.status===403) throw new Error('仅管理员可查看'); throw new Error('接口返回 '+r.status); }
+    if(!r.ok){ if(r.status===401) throw new Error(L("未登录（需要 SSO）","Not signed in (SSO required)")); if(r.status===403) throw new Error(L("仅管理员可查看","Admin access only")); throw new Error(L("接口返回 ","API returned ")+r.status); }
     return r.json();
   }).then(render).catch(function(e){
-    document.getElementById('out').innerHTML = '<div class="err">无法加载访问记录：'+esc(e.message)+'。<br>请确认你已通过 SSO 登录；本地 file:// 打开时后端不可用，需在线上查看。</div>';
+    document.getElementById('out').innerHTML = L('<div class="err">无法加载访问记录：','<div class="err">Could not load visit records: ')+esc(e.message)+L("。<br>请确认你已通过 SSO 登录；本地 file:// 打开时后端不可用，需在线上查看。</div>",".<br>Make sure you are signed in via SSO; the backend is unavailable when opened locally via file:// — view this page online.</div>");
   });
 }
 load();

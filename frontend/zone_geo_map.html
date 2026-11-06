@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" data-title-zh="Ninja Van (NJV) · SG 流量地图" data-title-en="Ninja Van (NJV) · SG Traffic Map">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,49 +81,51 @@
 </style>
 <link rel="stylesheet" href="responsive.css?v=20261105i">
 <script src="responsive.js?v=20261105i" defer></script>
+<script src="i18n_terms.js?v=20261106c"></script>
+<script src="lang.js?v=20261106c"></script>
 </head>
 <body>
 
   <div class="hd">
-    <span class="kicker">NINJA VAN (NJV) · SG 需求情报引擎</span>
-    <h1>SG 流量地图 — 76 邮区 · 妥投曝光分布</h1>
-    <span class="sub">2026 上半年 · 真实包裹数据 · 气泡为邮区近似质心（非精确边界）</span>
+    <span class="kicker"><span class="i18n" data-en="NINJA VAN (NJV) · SG DEMAND INTELLIGENCE ENGINE">NINJA VAN (NJV) · SG 需求情报引擎</span></span>
+    <h1><span class="i18n" data-en="SG Traffic Map — 76 Postal Districts · Delivery Exposure Distribution">SG 流量地图 — 76 邮区 · 妥投曝光分布</span></h1>
+    <span class="sub"><span class="i18n" data-en="H1 2026 · real parcel data · bubbles sit at approximate district centroids (not exact boundaries)">2026 上半年 · 真实包裹数据 · 气泡为邮区近似质心（非精确边界）</span></span>
   </div>
   <div class="stats">
-    <div class="stat"><div class="v" id="stParcels">0</div><div class="k">半年包裹总量（件）· 妥投(completed)96.75%</div></div>
-    <div class="stat"><div class="v" id="stRec">0</div><div class="k">收件人池 = 收件人数</div></div>
-    <div class="stat"><div class="v">76</div><div class="k">个邮区（区组）</div></div>
-    <div class="stat"><div class="v" id="stMo">0</div><div class="k">月均妥投（completed 口径）</div></div>
+    <div class="stat"><div class="v" id="stParcels">0</div><div class="k"><span class="i18n" data-en="Total parcels in H1 · delivered (completed) 96.75%">半年包裹总量（件）· 妥投(completed)96.75%</span></div></div>
+    <div class="stat"><div class="v" id="stRec">0</div><div class="k"><span class="i18n" data-en="Recipient pool = recipients">收件人池 = 收件人数</span></div></div>
+    <div class="stat"><div class="v">76</div><div class="k"><span class="i18n" data-en="postal districts (groups)">个邮区（区组）</span></div></div>
+    <div class="stat"><div class="v" id="stMo">0</div><div class="k"><span class="i18n" data-en="Average delivered per month (completed basis)">月均妥投（completed 口径）</span></div></div>
   </div>
   <div class="analogy">
-    <b>流量类比：</b>线上投放买<b>屏幕曝光</b>（刷到才看见，要竞价）；这里卖<b>物理曝光</b>——
-    一个妥投包裹 = 一次 100% 到家曝光，76 个邮区，各有自己的品类画像与收件人数，广告位 = 包裹物料位 + 妥投通知。线上流量人人能买，<b>物理流量只有握着包裹的人能卖</b>。
+    <b><span class="i18n" data-en="Traffic analogy:">流量类比：</span></b><span class="i18n" data-en="Online advertising buys">线上投放买</span><b><span class="i18n" data-en="screen exposure">屏幕曝光</span></b><span class="i18n" data-en=" (you only see it when you scroll, and you bid for it); here we sell">（刷到才看见，要竞价）；这里卖</span><b><span class="i18n" data-en="physical exposure">物理曝光</span></b><span class="i18n" data-en="— one delivered parcel = one 100% in-home exposure; all 76 postal districts have their own category profile and recipient count; the ad slot = the parcel material slot + the delivery notification. Online traffic is for sale to anyone, ">——
+    一个妥投包裹 = 一次 100% 到家曝光，76 个邮区，各有自己的品类画像与收件人数，广告位 = 包裹物料位 + 妥投通知。线上流量人人能买，</span><b><span class="i18n" data-en="physical traffic can only be sold by whoever holds the parcels">物理流量只有握着包裹的人能卖</span></b>。
   </div>
   <div class="layout">
     <div class="listp">
-      <div class="lh"><b>76 个邮区</b><div class="s">按收件人数排序 · 点击飞至并展开</div>
+      <div class="lh"><b><span class="i18n" data-en="76 postal districts">76 个邮区</span></b><div class="s"><span class="i18n" data-en="Sorted by recipients · click to fly to and expand">按收件人数排序 · 点击飞至并展开</span></div>
         <input id="q" placeholder="搜索邮区 / 地名 / 6 位邮编…">
       </div>
       <div class="lbody" id="list"></div>
     </div>
     <div class="mapwrap">
       <div id="map"></div>
-      <div class="basetag">新加坡 · 76 邮区需求分布<span>2026 H1 · 妥投口径</span></div>
+      <div class="basetag"><span class="i18n" data-en="Singapore · demand across 76 postal districts">新加坡 · 76 邮区需求分布</span><span><span class="i18n" data-en="2026 H1 · delivered basis">2026 H1 · 妥投口径</span></span></div>
       <div class="compass"><i>N</i>↑</div>
       <div class="legend">
-        <span>收件人少</span><span class="lg"></span><span>收件人多</span><br>
-        <span style="margin-top:4px;display:inline-block">◎ 涟漪 = Top10 热区 · 中心点 = NJV 中枢</span><br>
-        <span style="display:inline-block;color:#93A1B8">淡色区块 = 邮区示意分区</span>
+        <span><span class="i18n" data-en="Fewer recipients">收件人少</span></span><span class="lg"></span><span><span class="i18n" data-en="More recipients">收件人多</span></span><br>
+        <span style="margin-top:4px;display:inline-block"><span class="i18n" data-en="◎ Ripple = top-10 hotspots · centre point = NJV hub">◎ 涟漪 = Top10 热区 · 中心点 = NJV 中枢</span></span><br>
+        <span style="display:inline-block;color:#93A1B8"><span class="i18n" data-en="Light blocks = indicative district zones">淡色区块 = 邮区示意分区</span></span>
       </div>
     </div>
   </div>
-  <details class="fold"><summary>口径说明</summary>
-    <div class="ft">
-      统计范围 2026-01 ~ 2026-06（6 个月全计入，含 6 月真实回落）；邮区取 dest_postcode 前 2 位，同名邮区合并为 76 个区组。<br>
-      包裹总量 <b>3.27M</b>（全量，含未妥投 3.25%）；妥投 <b>3.16M / 96.75%</b>（completed 终态）；<b>月均妥投 527K = 3.27M × 96.75% ÷ 6</b>。<br>
-      曝光库存按妥投件数计；品类画像只用已分类件量（72.8%）；收件人全 SG 去重 983K，区组之间可重叠、不可相加。<br>
+  <details class="fold"><summary><span class="i18n" data-en="Calibre notes">口径说明</span></summary>
+    <div class="ft"><span class="i18n" data-en="Period 2026-01 ~ 2026-06 (all 6 months counted, including the real June dip); postal district = the first 2 digits of dest_postcode, with districts sharing a name merged into 76 groups.">
+      统计范围 2026-01 ~ 2026-06（6 个月全计入，含 6 月真实回落）；邮区取 dest_postcode 前 2 位，同名邮区合并为 76 个区组。</span><br><span class="i18n" data-en="Total parcels">
+      包裹总量 </span><b>3.27M</b><span class="i18n" data-en=" (full volume, incl. 3.25% not delivered); delivered">（全量，含未妥投 3.25%）；妥投 </span><b>3.16M / 96.75%</b><span class="i18n" data-en=" (completed final state);">（completed 终态）；</span><b><span class="i18n" data-en="Average delivered per month 527K = 3.27M × 96.75% ÷ 6">月均妥投 527K = 3.27M × 96.75% ÷ 6</span></b>。<br><span class="i18n" data-en="Exposure inventory is counted on delivered parcels; category profiles use classified parcels only (72.8%); recipients are de-duplicated across SG at 983K — groups overlap and must not be summed.">
+      曝光库存按妥投件数计；品类画像只用已分类件量（72.8%）；收件人全 SG 去重 983K，区组之间可重叠、不可相加。</span><br><span class="i18n" data-en="Blocks are an indicative split around the centroids of the 76 postal districts, not precise administrative or district boundaries, and express no national boundary.">
       区块为 76 个邮区质心的示意划分，非精确行政/邮区边界，不构成任何国界表达。
-    </div>
+    </span></div>
   </details>
 
 <script src="leaflet/leaflet.js"></script>
@@ -178,8 +180,8 @@ L.geoJSON(SG_OUTLINE,{pane:'zones',style:{color:'#6E8DC0',weight:1.7,opacity:.9,
 function seaLabel(lat,lon,text){
   L.marker([lat,lon],{interactive:false,icon:L.divIcon({className:'seaname',html:text,iconSize:[190,16],iconAnchor:[95,8]})}).addTo(map);
 }
-seaLabel(1.462,103.80,'JOHOR STRAIT · 柔佛海峡');
-seaLabel(1.218,103.86,'SINGAPORE STRAIT · 新加坡海峡');
+seaLabel(1.462,103.80,L("JOHOR STRAIT · 柔佛海峡","JOHOR STRAIT"));
+seaLabel(1.218,103.86,L("SINGAPORE STRAIT · 新加坡海峡","SINGAPORE STRAIT"));
 seaLabel(1.335,104.085,'SOUTH CHINA SEA');
 
 // 3) Voronoi cells from the 76 centroids — half-plane clipping (Sutherland–Hodgman)
@@ -248,7 +250,7 @@ DATA.forEach(z=>{
   }
 });
 L.circleMarker(META.hub,{radius:7,color:'#4F46E5',weight:3,fillColor:'#4F46E5',fillOpacity:1,riseOnHover:true}).addTo(map)
-  .bindPopup('<b>NJV 中枢</b><br>76 区坐标重心');
+  .bindPopup(L("<b>NJV 中枢</b><br>76 区坐标重心","<b>NJV Hub</b><br>Centroid of the 76 districts"));
 META.top_codes.forEach(c=>{
   const z=DATA.find(d=>d.code===c); if(!z)return;
   L.polyline([META.hub,z.ll],{color:'#4F46E5',weight:1,opacity:.25,dashArray:'4 6',interactive:false}).addTo(map);
@@ -292,7 +294,7 @@ function renderList(raw){
   const rows=byRec.filter(z=>!q || zoneHay(z).includes(q));
   listEl.innerHTML='';
   if(!rows.length){
-    listEl.innerHTML='<div class="qhint">未找到匹配邮区。<br>可输入 2 位邮区码（如 53）、6 位邮编（如 530123）或地名（后港 / Hougang）。</div>';
+    listEl.innerHTML=L('<div class="qhint">未找到匹配邮区。<br>可输入 2 位邮区码（如 53）、6 位邮编（如 530123）或地名（后港 / Hougang）。</div>','<div class="qhint">No matching postal district found.<br>You can enter a 2-digit district code (e.g. 53), a 6-digit postcode (e.g. 530123), or a place name (Hougang).</div>');
     return;
   }
   rows.forEach(z=>{
@@ -316,14 +318,14 @@ qEl.onkeydown=e=>{ if(e.key==='Enter'){ const first=listEl.querySelector('.lrow'
 
 function popupHtml(z){
   let cats=z.cats.map(c=>'<div class="row"><span>'+c.cat+'</span><span>'+fmtQ(c.parcels)+'</span></div>').join('');
-  let ships=z.top_shippers.map(s=>'<div class="row"><span>'+s.name+'</span><span>'+fmtN(s.parcels)+' 件</span></div>').join('');
+  let ships=z.top_shippers.map(s=>'<div class="row"><span>'+s.name+'</span><span>'+fmtN(s.parcels)+L(" 件</span></div>"," parcels</span></div>")).join('');
   const mom=z.series.length>1?Math.round(100*(z.series[5]-z.series[4])/Math.max(z.series[4],1)):0;
-  return '<div class="pop"><b>'+z.code+' · '+z.label+'</b><div class="row"><span>收件人数</span><span>'+fmtQ(z.recipients)+'</span></div>'+
-    '<div class="row"><span>包裹量（全量）</span><span>'+fmtQ(z.parcels)+'</span></div>'+
-    '<div class="row"><span>本区发货账号</span><span>'+(z.shippers?fmtN(z.shippers):'—')+'</span></div>'+
-    (cats?'<div class="cat">品类画像 Top5：</div>'+cats:'')+
-    (ships?'<div class="cat">本区发货 Top 账号：</div>'+ships:'')+
-    '<div class="cat">6月环比 '+mom+'% · 流量视角：'+fmtQ(z.parcels)+' 次到家曝光</div></div>';
+  return '<div class="pop"><b>'+z.code+' · '+z.label+L('</b><div class="row"><span>收件人数</span><span>','</b><div class="row"><span>Recipients</span><span>')+fmtQ(z.recipients)+'</span></div>'+
+    L('<div class="row"><span>包裹量（全量）</span><span>','<div class="row"><span>Parcels (total)</span><span>')+fmtQ(z.parcels)+'</span></div>'+
+    L('<div class="row"><span>本区发货账号</span><span>','<div class="row"><span>Shipping accounts</span><span>')+(z.shippers?fmtN(z.shippers):'—')+'</span></div>'+
+    (cats?L('<div class="cat">品类画像 Top5：</div>','<div class="cat">Category mix Top 5:</div>')+cats:'')+
+    (ships?L('<div class="cat">本区发货 Top 账号：</div>','<div class="cat">Top shipping accounts here:</div>')+ships:'')+
+    L('<div class="cat">6月环比 ','<div class="cat">Jun MoM ')+mom+L("% · 流量视角：","% · Traffic view:")+fmtQ(z.parcels)+L(" 次到家曝光</div></div>"," doorstep exposures</div></div>");
 }
 
 // ── layout fix ────────────────────────────────────────────────────────────

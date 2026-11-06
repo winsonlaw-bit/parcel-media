@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-title-zh="总结这套工作台 · 提案要点 | NJV SG" data-title-en="What This Workbench Shows · Key Proposal Points | NJV SG">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>总结这套工作台 · 提案要点 | NJV SG</title>
 <link rel="stylesheet" href="responsive.css?v=20261105i">
 <script src="responsive.js?v=20261105i" defer></script>
+<script src="i18n_terms.js?v=20261106c"></script>
+<script src="lang.js?v=20261106c"></script>
 <style>
   :root{ --brand:#4F46E5; --brand2:#6366f1; --ink:#0f172a; --sub:#64748b; --line:#e2e8f0; --bg:#f8fafc; --warn:#b45309; }
   *{box-sizing:border-box}
@@ -102,12 +104,21 @@
   .exfoot b{color:var(--ink)}
   .flymobile{display:none}
 
+  /* 飞轮横幅：中英两条文本按语言切换（英文更长，需 textLength 压缩） */
+  .fw-banner-en{display:none}
+  html[data-lang="en"] .fw-banner-zh{display:none}
+  html[data-lang="en"] .fw-banner-en{display:block}
+
   /* AI 驱动分层：三块同色，状态只靠文字徽章区分 */
   .ailayers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
   .ailayer{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 16px}
   .ailayer .lv{font-size:12.5px;font-weight:750;color:var(--brand);display:flex;align-items:center;gap:8px}
   .ailayer .lv span{font-size:10.5px;font-weight:700;color:#3730a3;background:#eef2ff;border:1px solid #e0e7ff;border-radius:20px;padding:1px 8px;white-space:nowrap}
   .ailayer .lb{font-size:12.7px;color:#475569;margin-top:9px;line-height:1.72}
+
+  /* 中英切换按钮（独立打开本页时显示；嵌在 index.html 内时由外层顶栏提供） */
+  .langbtn{position:fixed;right:16px;top:14px;z-index:60;background:#0f172a;color:#fff;border:0;border-radius:20px;padding:7px 15px;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(15,23,42,.28);font-family:inherit}
+  .langbtn:hover{background:#1e293b}
 
   @media (max-width:900px){
     .pillars,.scenes{grid-template-columns:1fr 1fr}
@@ -144,28 +155,29 @@
 </style>
 </head>
 <body>
+<button type="button" class="langbtn" id="langBtn">EN</button>
 <div class="wrap">
 
   <div class="hero">
-    <div class="kicker">NINJA VAN (NJV) · SG 需求情报引擎 · 导览</div>
-    <h1>总结这套工作台</h1>
-    <p class="claim">把包裹变成货主的增量，而不是把运价压到更低。</p>
-    <p class="sub">一项新的增值服务 · 通过包裹媒体（广告）进行测品 + 渠道分销（不囤货，商家直销，NJV 只做流量扶持） → 货量回流 → 物理流量更大 → 运力更厚，多方正向循环</p>
-    <p class="scale">一旦在 SG 跑通，可复制到其他已有末端配送网络的市场（邮区、妥投方式与 COD 占比需逐市场本地化）。</p>
+    <div class="kicker" data-en="NINJA VAN (NJV) · SG DEMAND INTELLIGENCE ENGINE · GUIDE">NINJA VAN (NJV) · SG 需求情报引擎 · 导览</div>
+    <h1 data-en="What This Workbench Shows">总结这套工作台</h1>
+    <p class="claim" data-en="Turn parcels into incremental volume for shippers, instead of pushing rates lower.">把包裹变成货主的增量，而不是把运价压到更低。</p>
+    <p class="sub" data-en="A new value-added service · Product testing through parcel media (ads) + traffic-based channel distribution (no inventory, the merchant sells direct, NJV only provides traffic support) → volume flows back → more physical traffic → thicker delivery capacity — a positive loop for all sides">一项新的增值服务 · 通过包裹媒体（广告）进行测品 + 渠道分销（不囤货，商家直销，NJV 只做流量扶持） → 货量回流 → 物理流量更大 → 运力更厚，多方正向循环</p>
+    <p class="scale" data-en="Once it works in SG, it can be replicated in other markets that already have a last-mile delivery network (postal districts, delivery methods and COD share must be localised market by market).">一旦在 SG 跑通，可复制到其他已有末端配送网络的市场（邮区、妥投方式与 COD 占比需逐市场本地化）。</p>
     <div class="facts">
-      <div class="fact"><b>3.27M</b> 半年包裹</div>
-      <div class="fact"><b>983K</b> 收件人</div>
-      <div class="fact"><b>76</b> 邮区</div>
-      <div class="fact"><b>42K</b> 货主</div>
-      <div class="fact"><b>72.8%</b> 品类覆盖</div>
-      <div class="fact"><b>261K</b> 跨品类复购人</div>
+      <div class="fact" data-en="<b>3.27M</b> parcels in H1"><b>3.27M</b> 半年包裹</div>
+      <div class="fact" data-en="<b>983K</b> recipients"><b>983K</b> 收件人</div>
+      <div class="fact" data-en="<b>76</b> postal districts"><b>76</b> 邮区</div>
+      <div class="fact" data-en="<b>42K</b> shipping accounts"><b>42K</b> 发货账号</div>
+      <div class="fact" data-en="<b>72.8%</b> category coverage"><b>72.8%</b> 品类覆盖</div>
+      <div class="fact" data-en="<b>261K</b> cross-category repeat buyers"><b>261K</b> 跨品类复购人</div>
     </div>
   </div>
 
-  <h2 class="sec">这台飞轮怎么转</h2>
-  <p class="sechint">先看全局：一项增值服务，如何把货主、配送员与 NJV 拉进同一个正向循环。汇报时这一页讲完整个提案。</p>
+  <h2 class="sec" data-en="How This Flywheel Turns">这台飞轮怎么转</h2>
+  <p class="sechint" data-en="The big picture first: how one value-added service pulls shippers, drivers and NJV into the same positive loop. This page carries the whole proposal for your presentation.">先看全局：一项增值服务，如何把货主、配送员与 NJV 拉进同一个正向循环。汇报时这一页讲完整个提案。</p>
   <div class="fly">
-<svg viewBox="0 0 680 600" role="img" aria-label="NJV 增值服务正向循环飞轮" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+<svg viewBox="0 0 680 600" role="img" aria-label="NJV 增值服务正向循环飞轮" data-en-aria="The NJV value-added service positive-loop flywheel" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
   <defs>
     <marker id="fwA" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#4f46e5"/></marker>
     <marker id="fwG" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#16a34a"/></marker>
@@ -173,8 +185,8 @@
   </defs>
   <rect width="680" height="600" fill="#f8fafc"/>
   <rect width="680" height="44" fill="#0f172a"/>
-  <text x="24" y="29" font-size="16" font-weight="800" fill="#fff">NJV 增值服务 · 正向循环飞轮</text>
-  <text x="656" y="29" text-anchor="end" font-size="11" fill="#a5b4fc">每转一圈，底盘更大</text>
+  <text x="24" y="29" font-size="16" font-weight="800" fill="#fff" data-en="NJV Value-Added Service · The Positive Loop">NJV 增值服务 · 正向循环飞轮</text>
+  <text x="656" y="29" text-anchor="end" font-size="11" fill="#a5b4fc" data-en="Every turn widens the base">每转一圈，底盘更大</text>
 
   <!-- 顺时针闭环箭头 -->
   <g fill="none" stroke="#4f46e5" stroke-width="2.6" opacity=".9">
@@ -184,14 +196,14 @@
     <path d="M36,326 C12,296 12,238 36,208" marker-end="url(#fwA)"/>
   </g>
   <g font-size="10.5" font-weight="700" fill="#4338ca" text-anchor="middle">
-    <text x="340" y="80">导流 → 测品 / 分销</text>
-    <text x="340" y="470">货量回流 → 物理流量更大</text>
+    <text x="340" y="80" data-en="Traffic in → testing / distribution">导流 → 测品 / 分销</text>
+    <text x="340" y="470" data-en="Volume flows back → more physical traffic">货量回流 → 物理流量更大</text>
   </g>
   <g font-size="10.5" fill="#64748b" text-anchor="middle">
-    <text x="539" y="258" font-weight="700" fill="#15803d">货主选 NJV</text>
-    <text x="539" y="276">议价从运价切到增量</text>
-    <text x="141" y="258" font-weight="700" fill="#0369a1">更多妥投</text>
-    <text x="141" y="276">更大流量池</text>
+    <text x="539" y="258" font-weight="700" fill="#15803d" data-en="Shipper chooses NJV">货主选 NJV</text>
+    <text x="539" y="276" data-en="Negotiation shifts from rate to volume">议价从运价切到增量</text>
+    <text x="141" y="258" font-weight="700" fill="#0369a1" data-en="More deliveries">更多妥投</text>
+    <text x="141" y="276" data-en="Bigger traffic pool">更大流量池</text>
   </g>
 
   <!-- ① 左上 -->
@@ -200,9 +212,9 @@
     <rect x="36" y="112" width="4" height="96" fill="#4f46e5"/>
     <circle cx="60" cy="136" r="11" fill="#4f46e5"/>
     <text x="60" y="140" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
-    <text x="80" y="141" font-size="13.5" font-weight="750" fill="#0f172a">真实物理流量</text>
-    <text x="52" y="168" font-size="10.5" fill="#475569">3.27M 妥投 · 100% 到家曝光</text>
-    <text x="52" y="188" font-size="10.5" fill="#475569">包裹物料位 + 妥投消息</text>
+    <text x="80" y="141" font-size="13.5" font-weight="750" fill="#0f172a" data-en="Real physical traffic">真实物理流量</text>
+    <text x="52" y="168" font-size="10.5" fill="#475569" data-en="3.27M delivered · 100% home exposure">3.27M 妥投 · 100% 到家曝光</text>
+    <text x="52" y="188" font-size="10.5" fill="#475569" data-en="Parcel slot + delivery message">包裹物料位 + 妥投消息</text>
   </g>
   <!-- ② 右上 -->
   <g>
@@ -210,9 +222,9 @@
     <rect x="434" y="112" width="4" height="96" fill="#f59e0b"/>
     <circle cx="458" cy="136" r="11" fill="#f59e0b"/>
     <text x="458" y="140" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">2</text>
-    <text x="478" y="141" font-size="13.5" font-weight="750" fill="#0f172a">货主拿到增量</text>
-    <text x="452" y="168" font-size="10.5" fill="#475569">新商品测品 + 渠道分销</text>
-    <text x="452" y="188" font-size="10.5" fill="#475569">同一份流量，两种服务</text>
+    <text x="478" y="141" font-size="13.5" font-weight="750" fill="#0f172a" data-en="Shipper gains volume">货主拿到增量</text>
+    <text x="452" y="168" font-size="10.5" fill="#475569" data-en="New-product testing + channel distribution">新商品测品 + 渠道分销</text>
+    <text x="452" y="188" font-size="10.5" fill="#475569" data-en="One traffic source, two services">同一份流量，两种服务</text>
   </g>
   <!-- ③ 右下 -->
   <g>
@@ -220,9 +232,9 @@
     <rect x="434" y="326" width="4" height="96" fill="#16a34a"/>
     <circle cx="458" cy="350" r="11" fill="#16a34a"/>
     <text x="458" y="354" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">3</text>
-    <text x="478" y="355" font-size="13.5" font-weight="750" fill="#0f172a">货主选 NJV</text>
-    <text x="452" y="382" font-size="10.5" fill="#475569">不一味压价 · 货量回流</text>
-    <text x="452" y="402" font-size="10.5" fill="#475569">竞争维度不再是运价</text>
+    <text x="478" y="355" font-size="13.5" font-weight="750" fill="#0f172a" data-en="Shipper chooses NJV">货主选 NJV</text>
+    <text x="452" y="382" font-size="10.5" fill="#475569" data-en="No pure price-cutting · volume flows back">不一味压价 · 货量回流</text>
+    <text x="452" y="402" font-size="10.5" fill="#475569" data-en="Competition is no longer about rate">竞争维度不再是运价</text>
   </g>
   <!-- ④ 左下 -->
   <g>
@@ -230,32 +242,34 @@
     <rect x="36" y="326" width="4" height="96" fill="#0ea5e9"/>
     <circle cx="60" cy="350" r="11" fill="#0ea5e9"/>
     <text x="60" y="354" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">4</text>
-    <text x="80" y="355" font-size="13.5" font-weight="750" fill="#0f172a">物理流量更大</text>
-    <text x="52" y="382" font-size="10.5" fill="#475569">更多包裹 → 更多到家曝光</text>
-    <text x="52" y="402" font-size="10.5" fill="#475569">76 邮区画像更厚</text>
+    <text x="80" y="355" font-size="13.5" font-weight="750" fill="#0f172a" data-en="More physical traffic">物理流量更大</text>
+    <text x="52" y="382" font-size="10.5" fill="#475569" data-en="More parcels → more home exposure">更多包裹 → 更多到家曝光</text>
+    <text x="52" y="402" font-size="10.5" fill="#475569" data-en="Thicker profile across 76 districts">76 邮区画像更厚</text>
   </g>
 
   <!-- 轴心 -->
   <circle cx="340" cy="267" r="86" fill="url(#fwCore)"/>
   <circle cx="340" cy="267" r="80" fill="none" stroke="#a5b4fc" stroke-width="1" stroke-dasharray="3 5" opacity=".55"/>
   <text x="340" y="238" text-anchor="middle" font-size="10" font-weight="700" fill="#a5b4fc" letter-spacing="1.5">FLYWHEEL</text>
-  <text x="340" y="265" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">物理流量</text>
-  <text x="340" y="289" text-anchor="middle" font-size="14" font-weight="700" fill="#e0e7ff">→ 货主增量</text>
-  <text x="340" y="317" text-anchor="middle" font-size="10" fill="#a5b4fc">位子 · 通道 · 归因</text>
-  <text x="340" y="333" text-anchor="middle" font-size="10" fill="#a5b4fc">只有链主有</text>
+  <text x="340" y="265" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" data-en="Physical traffic">物理流量</text>
+  <text x="340" y="289" text-anchor="middle" font-size="14" font-weight="700" fill="#e0e7ff" data-en="→ shipper volume">→ 货主增量</text>
+  <text class="fw-banner-zh" x="340" y="317" text-anchor="middle" font-size="10" fill="#a5b4fc" data-lang-swap="1">位子 · 通道 · 归因</text>
+  <text class="fw-banner-en" x="340" y="317" text-anchor="middle" font-size="10" fill="#a5b4fc" textLength="112" lengthAdjust="spacingAndGlyphs" data-lang-swap="1">Slots · Channels · Attribution</text>
+  <text class="fw-banner-zh" x="340" y="333" text-anchor="middle" font-size="10" fill="#a5b4fc" data-lang-swap="1">只有链主有</text>
+  <text class="fw-banner-en" x="340" y="333" text-anchor="middle" font-size="10" fill="#a5b4fc" textLength="104" lengthAdjust="spacingAndGlyphs" data-lang-swap="1">Only the chain owner has these</text>
 
   <!-- 侧环：运力 -->
   <rect x="24" y="490" width="632" height="66" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
-  <text x="40" y="509" font-size="11.5" font-weight="750" fill="#15803d">侧环 · 运力也在被补齐（汇入 ④：承接更多包裹）</text>
+  <text x="40" y="509" font-size="11.5" font-weight="750" fill="#15803d" data-en="Side loop · capacity is being replenished too (feeds ④: handling more parcels)">侧环 · 运力也在被补齐（汇入 ④：承接更多包裹）</text>
   <g font-size="10.5" font-weight="650" fill="#166534" text-anchor="middle">
     <rect x="40" y="518" width="132" height="26" rx="13" fill="#fff" stroke="#bbf7d0"/>
-    <text x="106" y="535">带货转化有佣金</text>
+    <text x="106" y="535" data-en="Commission on sales">带货转化有佣金</text>
     <rect x="196" y="518" width="132" height="26" rx="13" fill="#fff" stroke="#bbf7d0"/>
-    <text x="262" y="535">配送员多赚一份</text>
+    <text x="262" y="535" data-en="Drivers earn more">配送员多赚一份</text>
     <rect x="352" y="518" width="132" height="26" rx="13" fill="#fff" stroke="#bbf7d0"/>
-    <text x="418" y="535">吸引更多人加入</text>
+    <text x="418" y="535" data-en="Attracts more drivers">吸引更多人加入</text>
     <rect x="508" y="518" width="132" height="26" rx="13" fill="#dcfce7" stroke="#86efac"/>
-    <text x="574" y="535">NJV 运力更厚</text>
+    <text x="574" y="535" data-en="NJV capacity grows">NJV 运力更厚</text>
   </g>
   <g fill="none" stroke="#16a34a" stroke-width="2" opacity=".85">
     <path d="M174,531 L193,531" marker-end="url(#fwG)"/>
@@ -264,116 +278,120 @@
   </g>
 
   <rect x="24" y="568" width="632" height="28" rx="7" fill="#0f172a"/>
-  <text x="40" y="587" font-size="12" font-weight="700" fill="#fff">别人能买运力，买不到位子、通道和归因——这台飞轮只有链主转得动。</text>
+  <!-- 横幅文案：英文比中文长约 4 倍，会溢出 632 宽的横幅。
+       做法 = 中英两条文本各占一行，按 html[data-lang] 切换显示；
+       英文那条用 textLength 压缩到横幅宽度（spacingAndGlyphs 一起缩字距与字形）。 -->
+  <text class="fw-banner-zh" data-lang-swap="1" x="40" y="587" font-size="12" font-weight="700" fill="#fff">别人能买运力，买不到位子、通道和归因——这台飞轮只有链主转得动。</text>
+  <text class="fw-banner-en" data-lang-swap="1" x="40" y="587" font-size="12" font-weight="700" fill="#fff" textLength="600" lengthAdjust="spacingAndGlyphs">Anyone can buy capacity; no one else can buy the slots, the channel and the attribution — only the chain owner can turn this flywheel.</text>
 </svg>
   </div>
   <div class="flymobile">
-    <div class="h">飞轮四步（文字版）</div>
+    <div class="h" data-en="The flywheel in four steps (text version)">飞轮四步（文字版）</div>
     <ol>
-      <li>每个妥投包裹 = 一次 100% 到家的曝光：包裹物料位（物理）+ 妥投消息（数字通道）。</li>
-      <li>货主用它做<b>新商品测品</b>，并通过<b>流量渠道分销</b>实现转化增收，拿到的是增量单，不是更低的运价。</li>
-      <li>货主因此把更多货交给 NJV，议价从运价切到增量；货量回流 → 物理流量更大，回到第 1 步。</li>
-      <li>侧环：带货转化有佣金 → 配送员增收 → 吸引更多人加入 → 运力更厚，承接更多包裹。</li>
+      <li data-en="Every delivered parcel = one 100% in-home exposure: the parcel material slot (physical) + the delivery notification (digital channel).">每个妥投包裹 = 一次 100% 到家的曝光：包裹物料位（物理）+ 妥投消息（数字通道）。</li>
+      <li data-en="Shippers use it for <b>new-product testing</b> and drive conversion through <b>traffic-based channel distribution</b> — what they gain is incremental orders, not a lower rate.">货主用它做<b>新商品测品</b>，并通过<b>流量渠道分销</b>实现转化增收，拿到的是增量单，不是更低的运价。</li>
+      <li data-en="Shippers therefore give NJV more volume, and negotiation shifts from rate to incremental volume; volume flows back → more physical traffic → back to step 1.">货主因此把更多货交给 NJV，议价从运价切到增量；货量回流 → 物理流量更大，回到第 1 步。</li>
+      <li data-en="Side loop: commission on sales → driver income → more drivers join → thicker capacity → more parcels handled.">侧环：带货转化有佣金 → 配送员增收 → 吸引更多人加入 → 运力更厚，承接更多包裹。</li>
     </ol>
-    <div class="axis">轴：位子、通道、归因都在 NJV，别人抄不走。</div>
+    <div class="axis" data-en="Axis: slots, channels and attribution all sit with NJV — they cannot be copied.">轴：位子、通道、归因都在 NJV，别人抄不走。</div>
   </div>
 
-  <h2 class="sec">货主买的是哪两种服务</h2>
-  <p class="sechint">同一份由妥投带出的物理流量，卖给货主两件事——先用真实到家的流量试出新品，再走一条流量渠道分销把货卖更多。</p>
+  <h2 class="sec" data-en="The Two Services Shippers Buy">货主买的是哪两种服务</h2>
+  <p class="sechint" data-en="One physical traffic source created by delivery, sold to shippers in two ways — first test new products on real in-home traffic, then scale sales through traffic-based channel distribution.">同一份由妥投带出的物理流量，卖给货主两件事——先用真实到家的流量试出新品，再走一条流量渠道分销把货卖更多。</p>
   <div class="services">
     <div class="svc">
-      <div class="n">服务 01</div>
-      <div class="t">新商品测品</div>
-      <p class="d">这是通过包裹媒体（广告位）进行的测品：把新品放进真实到家的流量里试——按 76 个邮区各自的品类画像挑样本区，往对应包裹贴选品卡 / 二维码，妥投消息挂商品网址，按邮区看反馈。</p>
-      <p class="why">凭什么值得做：曝光是 <b>100% 到家的确定性事件</b>，样本区可按邮区圈定；线上测品买的是竞价曝光，这里买的是确定性到家。扫码回流归因为方案态，待 pilot 验证。</p>
+      <div class="n" data-en="Service 01">服务 01</div>
+      <div class="t" data-en="New-product testing">新商品测品</div>
+      <p class="d" data-en="Testing done through parcel media (ad slots): put new products into real in-home traffic — pick sample districts from the category profile of each of the 76 postal districts, attach a product card / QR code to matching parcels, put the product URL in the delivery notification, and read the feedback by district.">这是通过包裹媒体（广告位）进行的测品：把新品放进真实到家的流量里试——按 76 个邮区各自的品类画像挑样本区，往对应包裹贴选品卡 / 二维码，妥投消息挂商品网址，按邮区看反馈。</p>
+      <p class="why" data-en="Why it is worth doing: exposure is a <b>100% certain in-home event</b>, and sample districts can be drawn by postal district. Online testing buys bid-based exposure; here you buy certainty of reaching the door. Scan-to-return attribution is still at design stage, pending pilot validation.">凭什么值得做：曝光是 <b>100% 到家的确定性事件</b>，样本区可按邮区圈定；线上测品买的是竞价曝光，这里买的是确定性到家。扫码回流归因为方案态，待 pilot 验证。</p>
     </div>
     <div class="svc b">
-      <div class="n">服务 02</div>
-      <div class="t">转化增收 · 卖更多货</div>
-      <p class="d">这同时是一条<b>流量渠道分销（不囤货，商家直销，NJV 只做流量扶持）</b>：货主租位进场、无需自建投放渠道，把「高需求邮区 × 品类亲和 lift」变成动作——往对的包裹贴对的选品卡、推对的链接，把收件人池转成连带与复购。NJV 只做渠道、归因与结算，<b>不经销、不碰货、不定价</b>。</p>
-      <p class="why">货主拿到的是<b>一条新增卖货渠道 + 增量单</b>，而不是更低运价，因此更倾向把货量交给 NJV；结算可按效果分润（设计态）。<b>议价基础从运价切到增量，这是不内卷的关键。</b></p>
+      <div class="n" data-en="Service 02">服务 02</div>
+      <div class="t" data-en="Conversion &amp; more sales">转化增收 · 卖更多货</div>
+      <p class="d" data-en="At the same time this is a <b>traffic-based channel distribution (no inventory, the merchant sells direct, NJV only provides traffic support)</b>: shippers take a slot without building their own channels, turning “high-demand district × category affinity lift” into action — the right product card on the right parcel, the right link pushed, converting the recipient pool into cross-sell and repeat purchase. NJV only provides the channel, attribution and settlement; it <b>does not distribute goods, does not touch the goods and does not set prices</b>.">这同时是一条<b>流量渠道分销（不囤货，商家直销，NJV 只做流量扶持）</b>：货主租位进场、无需自建投放渠道，把「高需求邮区 × 品类亲和 lift」变成动作——往对的包裹贴对的选品卡、推对的链接，把收件人池转成连带与复购。NJV 只做渠道、归因与结算，<b>不经销、不碰货、不定价</b>。</p>
+      <p class="why" data-en="What shippers get is <b>a new sales channel plus incremental orders</b>, not a lower rate — so they are more willing to give NJV their volume; settlement can be shared by performance (design stage). <b>The basis of negotiation shifts from rate to incremental volume — that is the key to not competing on price.</b>">货主拿到的是<b>一条新增卖货渠道 + 增量单</b>，而不是更低运价，因此更倾向把货量交给 NJV；结算可按效果分润（设计态）。<b>议价基础从运价切到增量，这是不内卷的关键。</b></p>
     </div>
   </div>
 
-  <h2 class="sec">三个入口，按可规模化程度分层</h2>
-  <p class="sechint">三种触达不是同一个量级：前两个覆盖全部妥投包裹，第三个只在有真实接触点时启用。</p>
+  <h2 class="sec" data-en="Three Entries, Tiered by Scalability">三个入口，按可规模化程度分层</h2>
+  <p class="sechint" data-en="The three touchpoints are not the same order of magnitude: the first two cover every delivered parcel, the third is only enabled when a real face-to-face contact exists.">三种触达不是同一个量级：前两个覆盖全部妥投包裹，第三个只在有真实接触点时启用。</p>
   <div class="entry">
     <div class="e core">
       <svg class="mini" viewBox="0 0 160 96" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
         <rect x="26" y="22" width="80" height="62" rx="8" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
         <rect x="64" y="22" width="9" height="62" fill="#fcd34d"/>
         <rect x="38" y="34" width="46" height="18" rx="4" fill="#4f46e5"/>
-        <text x="61" y="47" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">Ninja 精选</text>
+        <text x="61" y="47" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" data-en="Ninja Pick">Ninja 精选</text>
         <rect x="38" y="58" width="22" height="20" rx="2" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
         <rect x="42" y="62" width="4" height="4" fill="#0f172a"/>
         <rect x="50" y="62" width="4" height="4" fill="#0f172a"/>
         <rect x="42" y="70" width="4" height="4" fill="#0f172a"/>
         <rect x="50" y="68" width="4" height="4" fill="#0f172a"/>
         <rect x="120" y="46" width="20" height="26" rx="3" fill="#0f172a"/>
-        <text x="130" y="62" text-anchor="middle" font-size="9" fill="#fff">页</text>
+        <text x="130" y="62" text-anchor="middle" font-size="9" fill="#fff" data-en="page">页</text>
       </svg>
-      <b>入口 1 · 包裹物料位（物理）</b><br>包装上的选品卡 / 二维码。随每个妥投包裹到家，<b>100% 覆盖</b>，放门口 / 柜的零接触场景也成立。</div>
+      <b data-en="Entry 1 · Parcel material slot (physical)">入口 1 · 包裹物料位（物理）</b><br><span data-en="Product card / QR code on the packaging. It reaches the home with every delivered parcel — <b>100% coverage</b>, and it also works for zero-contact drop-offs at the door or in a locker.">包装上的选品卡 / 二维码。随每个妥投包裹到家，<b>100% 覆盖</b>，放门口 / 柜的零接触场景也成立。</span></div>
     <div class="e core">
       <svg class="mini" viewBox="0 0 160 96" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
         <rect x="54" y="12" width="52" height="78" rx="9" fill="#0f172a"/>
         <rect x="60" y="20" width="40" height="62" rx="4" fill="#fff"/>
         <rect x="60" y="20" width="40" height="13" rx="4" fill="#4f46e5"/>
-        <text x="80" y="30" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff">物流通知</text>
+        <text x="80" y="30" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff" data-en="Delivery notice">物流通知</text>
         <rect x="65" y="38" width="30" height="15" rx="3" fill="#fff7ed" stroke="#fb923c" stroke-width="1"/>
-        <text x="80" y="49" text-anchor="middle" font-size="7" fill="#ea580c">已送达 ✓</text>
+        <text x="80" y="49" text-anchor="middle" font-size="7" fill="#ea580c" data-en="Delivered ✓">已送达 ✓</text>
         <rect x="65" y="57" width="30" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1"/>
-        <text x="80" y="67" text-anchor="middle" font-size="7" fill="#4338ca">本区推荐</text>
+        <text x="80" y="67" text-anchor="middle" font-size="7" fill="#4338ca" data-en="Local picks">本区推荐</text>
         <rect x="65" y="74" width="30" height="12" rx="3" fill="#4f46e5"/>
-        <text x="80" y="83" text-anchor="middle" font-size="6.5" fill="#fff">查看优惠</text>
+        <text x="80" y="83" text-anchor="middle" font-size="6.5" fill="#fff" data-en="View offer">查看优惠</text>
       </svg>
-      <b>入口 2 · 妥投消息（数字通道）</b><br>妥投通知里放商品网址。由「妥投」这个物理事件触发，<b>100% 覆盖</b>、高打开率；它是数字消息，不是物理位。</div>
+      <b data-en="Entry 2 · Delivery notification (digital channel)">入口 2 · 妥投消息（数字通道）</b><br><span data-en="Product URL inside the delivery notice. It is triggered by a physical event — the delivery — with <b>100% coverage</b> and a high open rate; it is a digital message, not a physical slot.">妥投通知里放商品网址。由「妥投」这个物理事件触发，<b>100% 覆盖</b>、高打开率；它是数字消息，不是物理位。</span></div>
     <div class="e core">
       <svg class="mini" viewBox="0 0 160 96" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
         <circle cx="40" cy="38" r="15" fill="#16a34a"/>
         <rect x="33" y="54" width="14" height="28" rx="7" fill="#16a34a"/>
-        <text x="40" y="90" text-anchor="middle" font-size="8" fill="#15803d">配送员</text>
+        <text x="40" y="90" text-anchor="middle" font-size="8" fill="#15803d" data-en="Driver">配送员</text>
         <circle cx="120" cy="38" r="15" fill="#ea580c"/>
         <rect x="113" y="54" width="14" height="28" rx="7" fill="#ea580c"/>
-        <text x="120" y="90" text-anchor="middle" font-size="8" fill="#9a3412">收件人</text>
+        <text x="120" y="90" text-anchor="middle" font-size="8" fill="#9a3412" data-en="Recipient">收件人</text>
         <rect x="66" y="40" width="28" height="24" rx="3" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
         <text x="80" y="57" text-anchor="middle" font-size="11" font-weight="800" fill="#7c2d12">$</text>
       </svg>
-      <b>入口 3 · 面对面推销（窄场景增强）</b><br>仅 COD / 冷链 / 大件等真实接触点，全 SG 可实测 COD 占 <b>4.68%</b>。配送员自愿、按转化提成、非 KPI，<b>不是常态入口</b>。</div>
+      <b data-en="Entry 3 · Face-to-face selling (narrow-scenario enhancer)">入口 3 · 面对面推销（窄场景增强）</b><br><span data-en="Only at real contact points such as COD, cold chain or bulky items; COD is a measurable <b>4.68%</b> of all SG parcels. Drivers take part voluntarily, earn commission per conversion, it is not a KPI — <b>not a routine entry point</b>.">仅 COD / 冷链 / 大件等真实接触点，全 SG 可实测 COD 占 <b>4.68%</b>。配送员自愿、按转化提成、非 KPI，<b>不是常态入口</b>。</span></div>
   </div>
 
   <div class="example">
-    <div class="exhd"><b>落地形态示例</b> · 入口 1 的联名款包裹 <span>方案设计 · 非已合作</span></div>
-<svg viewBox="0 0 680 268" role="img" aria-label="联名款包裹按邮区投放的落地形态" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+    <div class="exhd" data-en="<b>How it lands in practice</b> · Co-branded parcels for Entry 1 <span>Design concept · Not a signed partner</span>"><b>落地形态示例</b> · 入口 1 的联名款包裹 <span>方案设计 · 非已合作</span></div>
+<svg viewBox="0 0 680 268" role="img" aria-label="联名款包裹按邮区投放的落地形态" data-en-aria="A concrete shape for deploying co-branded parcels by postal district" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
   <defs><marker id="exA" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 Z" fill="#4f46e5"/></marker></defs>
   <rect width="680" height="268" fill="#f8fafc"/>
   <rect width="680" height="38" fill="#0f172a"/>
-  <text x="20" y="25" font-size="14" font-weight="800" fill="#fff">联名款包裹 · 按邮区投放的一个具体形态</text>
-  <text x="660" y="25" text-anchor="end" font-size="10" fill="#a5b4fc">入口 1 的实物化</text>
+  <text x="20" y="25" font-size="14" font-weight="800" fill="#fff" data-en="Co-branded parcels · one concrete shape, deployed by postal district">联名款包裹 · 按邮区投放的一个具体形态</text>
+  <text x="660" y="25" text-anchor="end" font-size="10" fill="#a5b4fc" data-en="Entry 1 made physical">入口 1 的实物化</text>
 
   <!-- ① 货主下单 -->
   <rect x="20" y="56" width="140" height="152" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
   <circle cx="42" cy="80" r="11" fill="#4f46e5"/>
   <text x="42" y="84" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
-  <text x="60" y="84" font-size="12.5" font-weight="750" fill="#0f172a">货主下单</text>
-  <text x="34" y="112" font-size="10.5" fill="#475569">购买增值服务</text>
-  <text x="34" y="132" font-size="10.5" fill="#475569">指定投放邮区</text>
+  <text x="60" y="84" font-size="12.5" font-weight="750" fill="#0f172a" data-en="Shipper orders">货主下单</text>
+  <text x="34" y="112" font-size="10.5" fill="#475569" data-en="Buys the value-added service">购买增值服务</text>
+  <text x="34" y="132" font-size="10.5" fill="#475569" data-en="Sets target postal districts">指定投放邮区</text>
   <rect x="34" y="146" width="112" height="46" rx="8" fill="#eef2ff"/>
-  <text x="42" y="165" font-size="10" fill="#4338ca">例：泡泡玛特</text>
-  <text x="42" y="181" font-size="9" fill="#6366f1">（假设场景）</text>
+  <text x="42" y="165" font-size="10" fill="#4338ca" data-en="Example: POP MART">例：泡泡玛特</text>
+  <text x="42" y="181" font-size="9" fill="#6366f1" data-en="(hypothetical scenario)">（假设场景）</text>
   <path d="M160,132 L188,132" stroke="#4f46e5" stroke-width="2.4" marker-end="url(#exA)"/>
 
   <!-- ② 联名包裹 -->
   <rect x="192" y="56" width="196" height="152" rx="12" fill="#fff" stroke="#c7d2fe" stroke-width="1.5"/>
-  <text x="290" y="78" text-anchor="middle" font-size="11.5" font-weight="750" fill="#4338ca">② 该区包裹换联名包装</text>
+  <text x="290" y="78" text-anchor="middle" font-size="11.5" font-weight="750" fill="#4338ca" data-en="② Parcels in that district switch to co-branded packaging">② 该区包裹换联名包装</text>
   <rect x="232" y="92" width="116" height="92" rx="7" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
   <rect x="284" y="92" width="12" height="92" fill="#fcd34d"/>
   <rect x="232" y="130" width="116" height="10" fill="#fcd34d"/>
   <rect x="242" y="102" width="96" height="22" rx="5" fill="#fff"/>
-  <text x="290" y="117" text-anchor="middle" font-size="9.5" font-weight="800" fill="#4338ca">货主 × NJV 联名</text>
+  <text x="290" y="117" text-anchor="middle" font-size="9.5" font-weight="800" fill="#4338ca" data-en="Shipper × NJV co-brand">货主 × NJV 联名</text>
   <rect x="254" y="148" width="34" height="28" rx="3" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
   <g fill="#0f172a"><rect x="258" y="152" width="8" height="8"/><rect x="276" y="152" width="8" height="8"/><rect x="258" y="166" width="8" height="8"/><rect x="270" y="164" width="4" height="4"/><rect x="278" y="168" width="6" height="4"/></g>
-  <text x="322" y="166" font-size="9.5" fill="#78350f">扫码入口</text>
-  <text x="290" y="200" text-anchor="middle" font-size="9.5" fill="#64748b">仅指定邮区的派送包裹换装</text>
+  <text x="322" y="166" font-size="9.5" fill="#78350f" data-en="Scan entry">扫码入口</text>
+  <text x="290" y="200" text-anchor="middle" font-size="9.5" fill="#64748b" data-en="Only parcels delivered in the chosen district">仅指定邮区的派送包裹换装</text>
 
   <!-- 分叉 -->
   <path d="M388,132 L410,132" stroke="#4f46e5" stroke-width="2.4"/>
@@ -382,126 +400,127 @@
 
   <!-- A -->
   <rect x="436" y="56" width="224" height="72" rx="11" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="450" y="78" font-size="12" font-weight="750" fill="#0f172a">A · 单货主商品入口</text>
-  <text x="450" y="98" font-size="10" fill="#475569">二维码 → 该货主商品页</text>
-  <text x="450" y="116" font-size="9.5" fill="#4338ca">专属位 · 一家货主买断该邮区</text>
+  <text x="450" y="78" font-size="12" font-weight="750" fill="#0f172a" data-en="A · Single-shipper product entry">A · 单货主商品入口</text>
+  <text x="450" y="98" font-size="10" fill="#475569" data-en="QR code → that shipper's product page">二维码 → 该货主商品页</text>
+  <text x="450" y="116" font-size="9.5" fill="#4338ca" data-en="Dedicated slot · one shipper buys the whole district">专属位 · 一家货主买断该邮区</text>
   <rect x="608" y="70" width="36" height="36" rx="4" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
   <g fill="#0f172a"><rect x="612" y="74" width="9" height="9"/><rect x="631" y="74" width="9" height="9"/><rect x="612" y="93" width="9" height="9"/><rect x="625" y="87" width="5" height="5"/><rect x="633" y="94" width="7" height="6"/></g>
 
   <!-- B -->
   <rect x="436" y="136" width="224" height="72" rx="11" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="450" y="158" font-size="12" font-weight="750" fill="#0f172a">B · NJV 聚合入口</text>
-  <text x="450" y="178" font-size="10" fill="#475569">二维码 → NJV 站点，多货主商品</text>
-  <text x="450" y="196" font-size="9.5" fill="#4338ca">平台位 · 多货主共用一个入口</text>
+  <text x="450" y="158" font-size="12" font-weight="750" fill="#0f172a" data-en="B · NJV aggregated entry">B · NJV 聚合入口</text>
+  <text x="450" y="178" font-size="10" fill="#475569" data-en="QR code → NJV hub, products from many shippers">二维码 → NJV 站点，多货主商品</text>
+  <text x="450" y="196" font-size="9.5" fill="#4338ca" data-en="Platform slot · many shippers share one entry">平台位 · 多货主共用一个入口</text>
   <rect x="608" y="150" width="36" height="36" rx="4" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
   <g fill="#0f172a"><rect x="612" y="154" width="9" height="9"/><rect x="631" y="154" width="9" height="9"/><rect x="612" y="173" width="9" height="9"/><rect x="625" y="167" width="5" height="5"/><rect x="633" y="174" width="7" height="6"/></g>
 
   <rect x="20" y="222" width="640" height="34" rx="8" fill="#eef2ff"/>
-  <text x="34" y="244" font-size="11.5" font-weight="700" fill="#4338ca">两种落点只是扫码去哪：包装位子与扫码归因始终在 NJV 侧，别人拿不走。</text>
+  <text class="fw-banner-zh" data-lang-swap="1" x="34" y="244" font-size="11.5" font-weight="700" fill="#4338ca">两种落点只是扫码去哪：包装位子与扫码归因始终在 NJV 侧，别人拿不走。</text>
+  <text class="fw-banner-en" data-lang-swap="1" x="34" y="244" font-size="11.5" font-weight="700" fill="#4338ca" textLength="612" lengthAdjust="spacingAndGlyphs">The two landing points only differ in where the scan goes: the packaging slot and the scan attribution always stay on NJV's side and cannot be taken away.</text>
 </svg>
-    <p class="exfoot"><b>举例（假设场景，非已合作）：</b>若泡泡玛特购买增值服务，NJV 用流量地图选定投放邮区，该区派送包裹换成「货主 × NJV」联名包装，包装上放商品入口二维码。<b>两种落点 = 两种卖法</b>：A 是专属位（单一货主买下某邮区物料位），B 是平台位（多货主共用 NJV 聚合页、分摊投放）。无论哪种，<b>位子与扫码归因都在 NJV 侧</b>——这正是「按邮区定向 + 租位分润」落到实物上的形态。</p>
+    <p class="exfoot" data-en="<b>Example (hypothetical scenario, not a signed partner):</b> if POP MART bought the value-added service, NJV would use the traffic map to choose target districts, parcels delivered in those districts would switch to “Shipper × NJV” co-branded packaging, and a product-entry QR code would go on the packaging. <b>Two landing points = two ways to sell</b>: A is a dedicated slot (one shipper buys the material slot for a district), B is a platform slot (many shippers share the NJV hub page and split the spend). Either way, <b>the slot and the scan attribution stay on NJV's side</b> — this is how “district-level targeting + revenue share on slot rental” becomes physical."><b>举例（假设场景，非已合作）：</b>若泡泡玛特购买增值服务，NJV 用流量地图选定投放邮区，该区派送包裹换成「货主 × NJV」联名包装，包装上放商品入口二维码。<b>两种落点 = 两种卖法</b>：A 是专属位（单一货主买下某邮区物料位），B 是平台位（多货主共用 NJV 聚合页、分摊投放）。无论哪种，<b>位子与扫码归因都在 NJV 侧</b>——这正是「按邮区定向 + 租位分润」落到实物上的形态。</p>
   </div>
 
-  <p class="boundary">口径说明：规模化的投放测算与招商以前两个入口为基准；第三个作为高价值场景的补强，不按全量包裹外推。</p>
+  <p class="boundary" data-en="Calibre note: scaled placement forecasting and recruitment are based on the first two entries; the third is a booster for high-value scenarios and is not extrapolated to all parcels.">口径说明：规模化的投放测算与招商以前两个入口为基准；第三个作为高价值场景的补强，不按全量包裹外推。</p>
 
-  <details class="grp" id="grpDeep"><summary>深度理解这套服务<span class="ghint">为什么只有 NJV 能转 / 四方价值 / 五个 tab 怎么串起来用</span></summary><div class="gbody">
-  <h2 class="sec">为什么只有 NJV 转得动</h2>
-  <p class="sechint">飞轮的轴：三层互不重叠——广告打在哪 → 凭什么定向 → 为什么绕不开。</p>
+  <details class="grp" id="grpDeep"><summary data-en="Understanding the service in depth<span class='ghint'>Why only NJV can turn it / value for four sides / how the five tabs fit together</span>">深度理解这套服务<span class="ghint">为什么只有 NJV 能转 / 四方价值 / 五个 tab 怎么串起来用</span></summary><div class="gbody">
+  <h2 class="sec" data-en="Why Only NJV Can Make This Work">为什么只有 NJV 转得动</h2>
+  <p class="sechint" data-en="The axis of the flywheel: three layers that do not overlap — where the ad lands → how targeting works → why it cannot be bypassed.">飞轮的轴：三层互不重叠——广告打在哪 → 凭什么定向 → 为什么绕不开。</p>
   <div class="pillars">
     <div class="pillar">
-      <div class="t">① 能触达什么</div>
-      <p class="b">广告只打在由妥投带出的两类位子上——<b>物理位</b>（包裹物料位）与<b>数字通道</b>（妥投消息）。妥投消息由物理事件触发，但它是数字消息、不是物理位；两类都属于「握着包裹的人才有的物理流量」。</p>
+      <div class="t" data-en="① What it can reach">① 能触达什么</div>
+      <p class="b" data-en="Ads only run on the two slot types created by delivery — the <b>physical slot</b> (parcel material) and the <b>digital channel</b> (delivery notification). The delivery notification is triggered by a physical event, but it is a digital message, not a physical slot; both belong to the physical traffic that only the parcel holder can offer.">广告只打在由妥投带出的两类位子上——<b>物理位</b>（包裹物料位）与<b>数字通道</b>（妥投消息）。妥投消息由物理事件触发，但它是数字消息、不是物理位；两类都属于「握着包裹的人才有的物理流量」。</p>
     </div>
     <div class="pillar">
-      <div class="t">② 凭什么定向</div>
-      <p class="b">发货端货主关系 + 收货端真实需求，算出 76 个邮区各自的品类画像。它决定往哪个包裹贴什么、给哪些收件人推什么，也支撑测品与招商——<b>是情报底座，不是触点</b>。</p>
+      <div class="t" data-en="② How targeting works">② 凭什么定向</div>
+      <p class="b" data-en="Shipper relationships at origin plus real demand at destination produce a category profile for each of the 76 postal districts. It decides what goes on which parcel and what is pushed to which recipients, and it underpins testing and recruitment — <b>it is the intelligence base, not a touchpoint</b>.">发货端货主关系 + 收货端真实需求，算出 76 个邮区各自的品类画像。它决定往哪个包裹贴什么、给哪些收件人推什么，也支撑测品与招商——<b>是情报底座，不是触点</b>。</p>
     </div>
     <div class="pillar">
-      <div class="t">③ 为什么绕不开</div>
-      <p class="b">位子、通道、归因全在 Ninja Van 控制侧：货主租位分润，扫码回流在体系内结算，情报不外泄。别人能买运力，买不到这两类位子和这套画像。</p>
+      <div class="t" data-en="③ Why it cannot be bypassed">③ 为什么绕不开</div>
+      <p class="b" data-en="Slots, channels and attribution all sit on Ninja Van's side of control: shippers pay revenue share for slots, scan returns settle inside the system, and the intelligence never leaks. Anyone can buy capacity; no one else can buy these two slot types or this profile.">位子、通道、归因全在 Ninja Van 控制侧：货主租位分润，扫码回流在体系内结算，情报不外泄。别人能买运力，买不到这两类位子和这套画像。</p>
     </div>
   </div>
-  <div class="quote">线上流量人人能买（竞价），物理流量只有握着包裹的人能卖（链主）。<br><span style="font-size:12.5px;font-weight:500;opacity:.88">这里的「物理流量」= 由妥投带出的全部触达：包裹物料位（物理）＋ 妥投消息（数字通道）。</span></div>
-  <p class="boundary">落到飞轮上：① ② 是位子与通道，③ 是归因闭环——三者都在 NJV 控制侧，所以增量留在体系内，飞轮转起来也不会被白嫖。</p>
+  <div class="quote" data-en="Online traffic is for sale to anyone (bidding); physical traffic can only be sold by whoever holds the parcels (the chain owner).<br><span style='font-size:12.5px;font-weight:500;opacity:.88'>Here “physical traffic” = every touchpoint created by a delivery: the parcel material slot (physical) + the delivery notification (digital channel).</span>">线上流量人人能买（竞价），物理流量只有握着包裹的人能卖（链主）。<br><span style="font-size:12.5px;font-weight:500;opacity:.88">这里的「物理流量」= 由妥投带出的全部触达：包裹物料位（物理）＋ 妥投消息（数字通道）。</span></div>
+  <p class="boundary" data-en="On the flywheel: ① and ② are the slot and the channel, ③ is the attribution loop — all three sit on NJV's side of control, so the incremental volume stays inside the system and the flywheel cannot be ridden for free.">落到飞轮上：① ② 是位子与通道，③ 是归因闭环——三者都在 NJV 控制侧，所以增量留在体系内，飞轮转起来也不会被白嫖。</p>
 
 
-  <h2 class="sec">四方价值 · 同一台飞轮，四方都受益</h2>
-  <p class="sechint">不是零和分蛋糕：货主的增量、配送员的收入、NJV 的货量与运力，由同一个循环一起做大。</p>
+  <h2 class="sec" data-en="Value for Four Sides · One flywheel, four beneficiaries">四方价值 · 同一台飞轮，四方都受益</h2>
+  <p class="sechint" data-en="Not zero-sum: shipper volume, driver income, and NJV's parcel volume and capacity all grow from the same loop.">不是零和分蛋糕：货主的增量、配送员的收入、NJV 的货量与运力，由同一个循环一起做大。</p>
   <div class="four">
-    <div class="vcard"><div class="who">① 收件人 / 消费者</div><div class="body">按真实需求收到推荐，新品先在合适邮区小范围试，减少随机铺货的打扰。</div></div>
-    <div class="vcard"><div class="who">② Shipper 货主</div><div class="body">拿到两种服务：<b>新商品测品</b>与<b>转化增收</b>——后者也是一条可结算的<b>流量渠道分销</b>。得到的是新增卖货渠道与增量单，而非更低运价，谈判不再只围绕降价。</div></div>
-    <div class="vcard"><div class="who">③ NJV 配送员</div><div class="body">主流零接触包裹不参与带货；仅在真实接触场景自愿推销、按转化拿佣金增收。<b>多一份收入机会，也吸引更多人加入网络。</b></div></div>
-    <div class="vcard"><div class="who">④ NJV 网络</div><div class="body">位子 + 通道 + 数据三位一体，货主租位分润；货量回流做大物理流量，配送员加入<b>补充运力</b>，竞争维度从运价切到增量。</div></div>
+    <div class="vcard"><div class="who" data-en="① Recipients / consumers">① 收件人 / 消费者</div><div class="body" data-en="They receive recommendations matched to real demand, and new products are trialled small-scale in the right districts — less noise from random distribution.">按真实需求收到推荐，新品先在合适邮区小范围试，减少随机铺货的打扰。</div></div>
+    <div class="vcard"><div class="who" data-en="② Shippers">② Shipper 货主</div><div class="body" data-en="They buy two services: <b>new-product testing</b> and <b>conversion growth</b> — the latter is also a settleable <b>traffic-based channel distribution</b>. What they get is a new sales channel and incremental orders rather than a lower rate, so the negotiation no longer runs purely on price.">拿到两种服务：<b>新商品测品</b>与<b>转化增收</b>——后者也是一条可结算的<b>流量渠道分销</b>。得到的是新增卖货渠道与增量单，而非更低运价，谈判不再只围绕降价。</div></div>
+    <div class="vcard"><div class="who" data-en="③ NJV drivers">③ NJV 配送员</div><div class="body" data-en="Zero-contact parcels, which are the norm, are not part of selling; drivers only sell voluntarily at genuine contact points and earn commission per conversion. <b>An extra income opportunity that also attracts more people to the network.</b>">主流零接触包裹不参与带货；仅在真实接触场景自愿推销、按转化拿佣金增收。<b>多一份收入机会，也吸引更多人加入网络。</b></div></div>
+    <div class="vcard"><div class="who" data-en="④ The NJV network">④ NJV 网络</div><div class="body" data-en="Slots, channel and data as one unit, with shippers paying revenue share for slots; returning volume grows physical traffic, and joining drivers <b>replenish capacity</b> — the basis of competition shifts from rate to incremental volume.">位子 + 通道 + 数据三位一体，货主租位分润；货量回流做大物理流量，配送员加入<b>补充运力</b>，竞争维度从运价切到增量。</div></div>
   </div>
 
-  <h2 class="sec">按什么顺序用 · 每个 tab 的使用场景</h2>
-  <p class="sechint">从左到右对应五类真实场景：讲清这项服务 → 被问数据时核口径 → 要圈投放邮区 → 见货主出方案 → 手里这单确实有接触点。</p>
+  <h2 class="sec" data-en="How to Use It · When Each Tab Applies">按什么顺序用 · 每个 tab 的使用场景</h2>
+  <p class="sechint" data-en="Five real scenarios, in order: explain the service → check the numbers when asked → define target districts → prepare a shipper proposal → when that parcel really has a contact point.">从左到右对应五类真实场景：讲清这项服务 → 被问数据时核口径 → 要圈投放邮区 → 见货主出方案 → 手里这单确实有接触点。</p>
   <div class="route">
 
     <div class="stop self">
-      <div class="stophd"><span class="no">00</span><span class="nm">总结 · 提案要点（本页）</span><span class="when">汇报开场 / 有人第一次接手</span></div>
-      <p>主要是这项服务的卖点。要给管理层、货主或新同事讲清「这是一项什么服务」时从本页开始：先按飞轮 ①→④ 讲增量怎么滚起来，再讲货主买的两种服务（含流量渠道分销）与三个入口，用「为什么只有 NJV 转得动」收口。联名款包裹示例可直接投屏，底部诚实边界用来答问。</p>
+      <div class="stophd"><span class="no">00</span><span class="nm" data-en="Summary · Key proposal points (this page)">总结 · 提案要点（本页）</span><span class="when" data-en="Opening slide / when someone takes over">汇报开场 / 有人第一次接手</span></div>
+      <p data-en="This is the selling point of the service. Start here when you need to explain to management, to shippers or to a new colleague what this service actually is: walk the flywheel ①→④ to show how incremental volume compounds, then cover the two services shippers buy (including traffic-based channel distribution) and the three entries, and end with “why only NJV can make this work”.">主要是这项服务的卖点。要给管理层、货主或新同事讲清「这是一项什么服务」时从本页开始：先按飞轮 ①→④ 讲增量怎么滚起来，再讲货主买的两种服务（含流量渠道分销）与三个入口，用「为什么只有 NJV 转得动」结束介绍。</p>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">01</span><span class="nm">数据底盘</span><span class="when">被问「数据哪来的」/ 要核口径时</span></div>
-      <p>本页是其他 tab 的数据底座。打开先看 5 个 KPI（包裹总量 / 收件人 / 邮区数 / 发货账号数 / 分类覆盖率）与 Top10 实名货主的主力品类；展开表格下方的发货账号口径图，看清账号主要走 TikTok / Lazada / Shopee 三大平台的件量占比。更细的品类分布与需求 lift 收在两张折叠细分里。</p>
-      <div class="chips"><span class="chip">3.27M 件</span><span class="chip">主力品类已剔除未细分</span><span class="chip">2 个折叠细分</span><span class="chip">remote_id 实名口径</span></div>
+      <div class="stophd"><span class="no">01</span><span class="nm" data-en="Data foundation">数据底盘</span><span class="when" data-en="When asked where the data comes from / to check the numbers">被问「数据哪来的」/ 要核口径时</span></div>
+      <p data-en="This page is the data base for the other tabs. Start with the 5 KPIs (parcel volume / recipients / postal districts / shipping accounts / category coverage rate) and the leading categories of the Top 10 named shippers; open the shipping-account composition chart below the table to see that most accounts sit on TikTok / Lazada / Shopee. Finer category breakdowns and demand lift live in the two collapsible sections (they feed the cross-sell recommendations).">本页是其他 tab 的数据底座。打开先看 5 个 KPI（包裹总量 / 收件人 / 邮区数 / 发货账号数 / 分类覆盖率）与 Top10 实名货主的主力品类；展开表格下方的发货账号口径图，看清账号主要走 TikTok / Lazada / Shopee 三大平台的件量占比。更细的品类分布与需求 lift 收在两张折叠细分里（用于推荐 cross sell）。</p>
+      <div class="chips"><span class="chip" data-en="3.27M parcels">3.27M 件</span><span class="chip" data-en="Uncategorised excluded from leading categories">主力品类已剔除未细分</span><span class="chip" data-en="2 collapsible breakdowns">2 个折叠细分</span><span class="chip" data-en="Named-shipper basis: remote_id">remote_id 实名口径</span></div>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">02</span><span class="nm">流量地图</span><span class="when">要定投放邮区 / 谈某个区域时</span></div>
-      <p>谈某个区域、或要给联名款包裹设置投放范围时参考使用：点任意邮区看收件人数、品类画像、本区发货账号与月度走势，也可直接搜 2 位邮区码、6 位邮编或地名跳转。有完整图和简版图两种展示，都按真实数据动态渲染；完整图加载失败会自动切到简版，数据一致。</p>
-      <div class="chips"><span class="chip">76 邮区</span><span class="chip">地址搜索</span><span class="chip">完整 / 简版双入口</span></div>
+      <div class="stophd"><span class="no">02</span><span class="nm" data-en="Traffic map">流量地图</span><span class="when" data-en="To set target districts / to discuss an area">要定投放邮区 / 谈某个区域时</span></div>
+      <p data-en="Use it when discussing a particular area or setting the drop scope for co-branded parcels: click any postal district to see recipients, category profile, shipping accounts in that district and monthly trends, or jump straight to a district by 2-digit postal code, 6-digit postcode or place name. Two renderings are available — the full map and the simplified map.">谈某个区域、或要给联名款包裹设置投放范围时参考使用：点任意邮区看收件人数、品类画像、本区发货账号与月度走势，也可直接搜 2 位邮区码、6 位邮编或地名跳转。有完整图和简版图两种展示。</p>
+      <div class="chips"><span class="chip" data-en="76 postal districts">76 邮区</span><span class="chip" data-en="Address search">地址搜索</span><span class="chip" data-en="Full / simplified map">完整 / 简版双入口</span></div>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">03</span><span class="nm">货主屏</span><span class="when">见货主之前 / 要出投放方案时</span></div>
-      <p>准备一次货主沟通时用：货主只选主营品类，NJV 自动选流量池，页面给出连带选品（cross sell）、货主增值话术与投放位子方案。话术是 NJV 商务照着向货主讲的说辞，可照着讲；背后的品类需求地理与连带倍数都来自真实数据——用来把话题从「运价」拉到「增量」。</p>
-      <div class="chips"><span class="chip">货主选品类</span><span class="chip">NJV 自动选流量池</span><span class="chip">话术模板 + 数据槽位</span></div>
+      <div class="stophd"><span class="no">03</span><span class="nm" data-en="Shipper view">货主屏</span><span class="when" data-en="Before meeting a shipper / to prepare a placement plan">见货主之前 / 要出投放方案时</span></div>
+      <p data-en="Use it when preparing a shipper conversation: the shipper picks only their main category, NJV auto-selects the traffic pool, and the page returns cross-sell items, the shipper pitch script and an ad-slot placement plan. Move the conversation from “rate” to “incremental volume”.">准备一次货主沟通时用：货主只选主营品类，NJV 自动选流量池，页面给出连带选品（cross sell）、货主增值话术与投放位子方案。把话题从「运价」拉到「增量」。</p>
+      <div class="chips"><span class="chip" data-en="Shipper picks category">货主选品类</span><span class="chip" data-en="NJV auto-selects traffic pool">NJV 自动选流量池</span><span class="chip" data-en="Pitch template + data slots">话术模板 + 数据槽位</span></div>
     </div>
 
     <div class="stop">
-      <div class="stophd"><span class="no">04</span><span class="nm">配送员屏</span><span class="when">配送员与收件人面对面时</span></div>
-      <p>当配送员和收件人面对面、有真实接触点的机会时适用：选配送区域，页面按该区 COD 品类结构给出规则推荐的连带品类与模板话术，供交箱时参考。<b>佣金只做机制说明，不做收入测算</b>；放门口 / 柜的零接触包裹不参与带货。</p>
-      <div class="chips"><span class="chip">仅 COD 4.68%</span><span class="chip">规则推荐 · 模板话术</span><span class="chip">佣金仅机制说明</span><span class="chip">自愿 · 非 KPI</span></div>
+      <div class="stophd"><span class="no">04</span><span class="nm" data-en="Driver view">配送员屏</span><span class="when" data-en="When the driver meets the recipient">配送员与收件人面对面时</span></div>
+      <p data-en="Applies when a driver actually meets the recipient face to face: pick a delivery area, and the page gives the rule-based recommended cross-sell categories and the recommended action for that area's COD category mix, for reference at handover.">当配送员和收件人面对面、有真实接触点的机会时适用：选配送区域，页面按该区 COD 品类结构给出规则推荐的连带品类与推荐动作，供交箱时参考。</p>
+      <div class="chips"><span class="chip" data-en="COD only, 4.68%">仅 COD 4.68%</span><span class="chip" data-en="Rule-based · recommended action">规则推荐 · 推荐动作</span><span class="chip" data-en="Commission: mechanism only">佣金仅机制说明</span><span class="chip" data-en="Voluntary · not a KPI">自愿 · 非 KPI</span></div>
     </div>
 
   </div>
 </div>
 </details>
 
-<details class="grp" id="grpEdge"><summary>能力与边界<span class="ghint">AI 用在哪 / 诚实边界</span></summary><div class="gbody">
-  <h2 class="sec">AI 驱动体现在哪</h2>
-  <p class="sechint">按 AI driven 的架构讲清「AI 用在哪」，又不把设计态说成已上线：两块已经自动跑在真实数据上，一块是留好的模型接入位。</p>
+<details class="grp" id="grpEdge"><summary data-en="Capability and boundaries<span class='ghint'>Where AI is used / honest boundaries</span>">能力与边界<span class="ghint">AI 用在哪 / 诚实边界</span></summary><div class="gbody">
+  <h2 class="sec" data-en="Where the AI-Driven Architecture Shows Up">AI 驱动体现在哪</h2>
+  <p class="sechint" data-en="Explain “where AI is used” in AI-driven terms without passing design stage off as live: two layers already run automatically on real data, and one is a ready slot for a model.">按 AI driven 的架构讲清「AI 用在哪」，又不把设计态说成已上线：两块已经自动跑在真实数据上，一块是留好的模型接入位。</p>
   <div class="ailayers">
     <div class="ailayer">
-      <div class="lv">01 · 数据层 <span>已运行</span></div>
-      <div class="lb">3.27M 件包裹自动归类、76 个邮区需求画像、跨品类连带 lift、货主实名匹配。规则与统计算法，结果可复算。</div>
+      <div class="lv" data-en="01 · Data layer <span>Running</span>">01 · 数据层 <span>已运行</span></div>
+      <div class="lb" data-en="3.27M parcels auto-classified, demand profiles for 76 postal districts, cross-category affinity lift, shipper name matching. Rules and statistical algorithms — the results are reproducible.">3.27M 件包裹自动归类、76 个邮区需求画像、跨品类连带 lift、货主实名匹配。规则与统计算法，结果可复算。</div>
     </div>
     <div class="ailayer">
-      <div class="lv">02 · 决策层 <span>已运行</span></div>
-      <div class="lb">NJV 自动选流量池、自动推荐连带品类、话术按邮区自动填数。从数据到动作，不靠人工逐单判断。</div>
+      <div class="lv" data-en="02 · Decision layer <span>Running</span>">02 · 决策层 <span>已运行</span></div>
+      <div class="lb" data-en="NJV auto-selects the traffic pool, auto-recommends cross-sell categories, and fills pitch templates per postal district. From data to action, without judging every parcel by hand.">NJV 自动选流量池、自动推荐连带品类、话术按邮区自动填数。从数据到动作，不靠人工逐单判断。</div>
     </div>
     <div class="ailayer">
-      <div class="lv">03 · 生成层 <span>下一步</span></div>
-      <div class="lb">话术与推荐已做成可插拔槽位；接入公司平台大模型后可升级为生成式。当前版本未启用模型。</div>
+      <div class="lv" data-en="03 · Generation layer <span>Next</span>">03 · 生成层 <span>下一步</span></div>
+      <div class="lb" data-en="Pitch scripts and recommendations are already built as pluggable slots; once the company platform's LLM is connected they can be upgraded to generative. The current version enables no model.">话术与推荐已做成可插拔槽位；接入公司平台大模型后可升级为生成式。当前版本未启用模型。</div>
     </div>
   </div>
-  <div class="quote">AI driven 的落点：数据与决策已经全自动闭环，生成层留好接口、可插拔升级。<span>汇报口径：讲的是架构与演进路径，当前没有调用大模型；不把预留说成已上线。</span></div>
+  <div class="quote" data-en="Where AI driven lands: the data and decision layers are already a fully automated loop, and the generation layer has its interface ready for a pluggable upgrade.<span>Reporting line: this is about architecture and the evolution path — no LLM is called today; do not present a reserved slot as live.</span>">AI driven 的落点：数据与决策已经全自动闭环，生成层留好接口、可插拔升级。<span>汇报口径：讲的是架构与演进路径，当前没有调用大模型；不把预留说成已上线。</span></div>
 
-  <details class="fold"><summary>诚实边界</summary>
+  <details class="fold"><summary data-en="Honest boundaries">诚实边界</summary>
     <ul>
-      <li>金额 / GMV / 在营商铺数一律不编，只给包裹量、收件人、邮区、货主等可溯源物理量。</li>
-      <li>「联名款包裹 / 泡泡玛特」只是举例说明投放形态的<b>假设场景</b>，非已合作客户、非已上线物料；A / B 两种二维码落点均为方案设计。</li>
-      <li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li>
-      <li>「配送员面对面推销」只在 COD 等真实接触点成立，全 SG 可实测仅 4.68%；SG 主流放门口 / 柜为零接触，不得按全量包裹外推。</li>
-      <li>飞轮的增长箭头（货量回流、吸引加入、补充运力）是机制推演，不是已验证的增长数据；本页不提供任何金额或增幅预测。</li>
-      <li>「两种服务」均为提案设计，测品反馈、流量渠道分销与转化增收尚未跑过 pilot；NJV 定位为渠道方（不经销、不碰货、不定价），页面不含成交额、转化率或分润比例实测值。</li>
-      <li>6 月需求回落已确认，原因待业务侧确认。</li>
-      <li>框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li>
-      <li>邮区为 dest_postcode 前 2 位合并的 76 个真区，非精确行政边界；方位为示意排布。</li>
-      <li>「AI 驱动」指数据层与决策层已自动化、生成层留好可插拔槽位；<b>当前版本没有调用任何大模型</b>，归类、推荐与话术都是可复算的规则与模板，不得表述为「已用 AI 生成」。</li>
+      <li data-en="Revenue, GMV and the number of active storefronts are never invented — we only give traceable physical quantities such as parcel volume, recipients, postal districts and shipping accounts.">金额 / GMV / 在营商铺数一律不编，只给包裹量、收件人、邮区、货主等可溯源物理量。</li>
+      <li data-en="“Co-branded parcels / POP MART” is only a <b>hypothetical scenario</b> that illustrates the placement format — not a signed client and not live material. Both A / B QR landing points are design concepts.">「联名款包裹 / 泡泡玛特」只是举例说明投放形态的<b>假设场景</b>，非已合作客户、非已上线物料；A / B 两种二维码落点均为方案设计。</li>
+      <li data-en="The pilot has not run yet: slot revenue share and scan-return attribution are at design stage, with no real in-app action or return validation.">试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li>
+      <li data-en="Driver face-to-face selling only holds at genuine contact points such as COD — a measurable 4.68% across SG. The SG norm (left at the door or in a locker) is zero-contact, so it must not be extrapolated to all parcels.">「配送员面对面推销」只在 COD 等真实接触点成立，全 SG 可实测仅 4.68%；SG 主流放门口 / 柜为零接触，不得按全量包裹外推。</li>
+      <li data-en="The flywheel's growth arrows (volume returning, attracting drivers, replenishing capacity) are mechanism reasoning, not validated growth data; this page gives no revenue or uplift forecast.">飞轮的增长箭头（货量回流、吸引加入、补充运力）是机制推演，不是已验证的增长数据；本页不提供任何金额或增幅预测。</li>
+      <li data-en="Both services are proposal designs; testing feedback, traffic-based channel distribution and conversion growth have not run a pilot. NJV's role is the channel party (no distribution, no goods handling, no pricing), and the page contains no measured transaction value, conversion rate or revenue-share ratio.">「两种服务」均为提案设计，测品反馈、流量渠道分销与转化增收尚未跑过 pilot；NJV 定位为渠道方（不经销、不碰货、不定价），页面不含成交额、转化率或分润比例实测值。</li>
+      <li data-en="The June demand dip is confirmed; the cause is pending confirmation by the business side.">6 月需求回落已确认，原因待业务侧确认。</li>
+      <li data-en="The framework is replicable in principle and the shipper master data pool already covers six countries; but SG calibration parameters (76 districts, door/locker drop-off, low COD) must be localised market by market.">框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li>
+      <li data-en="Postal districts are the 76 real zones formed by the first 2 digits of dest_postcode, not precise administrative boundaries; positions are indicative.">邮区为 dest_postcode 前 2 位合并的 76 个真区，非精确行政边界；方位为示意排布。</li>
+      <li data-en="“AI-driven” means the data and decision layers are automated and the generation layer has pluggable slots ready; <b>the current version calls no large language model</b> — classification, recommendations and pitch scripts are all reproducible rules and templates, and must not be described as “AI-generated”.">「AI 驱动」指数据层与决策层已自动化、生成层留好可插拔槽位；<b>当前版本没有调用任何大模型</b>，归类、推荐与话术都是可复算的规则与模板，不得表述为「已用 AI 生成」。</li>
     </ul>
   </details>
 </div>
