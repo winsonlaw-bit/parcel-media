@@ -110,8 +110,8 @@
   .fold[open] summary::before{content:'▾ '}
   .fold>div,.fold>p,.fold>ul,.fold>footer{margin-top:8px;line-height:1.8}
 </style>
-<link rel="stylesheet" href="responsive.css?v=20261105i">
-<script src="responsive.js?v=20261105i" defer></script>
+<link rel="stylesheet" href="responsive.css?v=20261106g">
+<script src="responsive.js?v=20261106g" defer></script>
 </head>
 <body>
   <div id="ambient"></div>
@@ -135,7 +135,7 @@
       广告位 = 包裹物料位 + 妥投通知。线上流量人人能买，<b>物理流量只有握着包裹的人能卖</b>。
     </div>
 
-    <div class="main">
+    <div class="main njv-map-layout">
       <div class="mapcol">
         <div class="map">
           <div class="mapfit" id="mapfit">
@@ -342,6 +342,16 @@ function show(z){
     '</b> 个包裹（全量）≈ <b>'+fmtQ(z.parcels)+
     '</b> 次到家曝光，覆盖 <b>'+fmtQ(z.recipients)+
     '</b> 名收件人；且开箱场景 100% 必达，无需竞价。</div>';
+  // 901–1459px 为上下堆叠布局：点选后把详情滚进可视区，避免桌面 iframe 里像「点了没反应」。
+  // 宽屏并排、手机端（父框架撑高、只有一条滚动条）都不介入。
+  try{
+    if(window.matchMedia && window.matchMedia('(min-width: 901px) and (max-width: 1459px)').matches){
+      var p=document.getElementById('panel'), r=p.getBoundingClientRect();
+      if(r.top > window.innerHeight - 100 || r.bottom < 0){
+        p.scrollIntoView({block:'nearest'});
+      }
+    }
+  }catch(e){}
 }
 </script>
 </body>

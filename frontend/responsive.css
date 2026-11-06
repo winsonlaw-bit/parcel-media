@@ -1,9 +1,26 @@
 /* NJV · SG 需求情报工作台 —— 统一响应式层 (RWD)
  * 单一维护点：所有 iframe 子页面在 </head> 前引入本文件。
- * 断点 900px（平板/手机）/ 480px（小屏手机）。桌面端零改动。
+ * 断点 1460px（简版流量地图双栏→单栏）/ 900px（平板/手机）/ 480px（小屏手机）。
  * 主框架 index.html 的侧栏结构特殊，其断点规则内联在自身 <style> 中。
  */
 html { -webkit-text-size-adjust: 100%; }
+
+/* ---- 简版流量地图的双栏最小宽度：1030px 像素画布 + 348px 信息栏 + 20px 间距 + body padding。
+   低于约 1460px 时，.mapcol 的 flex min-width:auto 会被固定宽画布撑住不肯压缩，
+   .main 实际宽 1428px，右侧信息栏被 body 的 overflow-x:hidden 整块裁掉。
+   两级处理：① 所有宽度允许压缩，由 responsive.js 等比缩放画布兜底；
+             ② 901–1459px 直接改为上下堆叠，让地图保持接近 1:1 的可读尺寸。 ---- */
+.njv-map-layout > .mapcol { min-width: 0; }
+
+@media (min-width: 901px) and (max-width: 1459px) {
+  .njv-map-layout { flex-direction: column; align-items: stretch; }
+  .njv-map-layout > .mapcol,
+  .njv-map-layout > .panel { width: 100%; min-width: 0; }
+  .njv-map-layout > .panel { flex: 1 1 auto; position: static; top: auto; }
+  /* 上下堆叠后信息栏改为多列，避免纵向拉得过长 */
+  .njv-map-layout > .panel .pstats { max-width: 520px; }
+  .njv-map-layout > .panel .sec { max-width: 100%; }
+}
 
 @media (max-width: 900px) {
   /* ---- 通用排版 ---- */
