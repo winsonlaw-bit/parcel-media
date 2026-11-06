@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "NJV SG 需求情报工作台 (backend)",
-    "version": "0.1.0",
-    "description": "Minimal conforming backend for the NJV SG workbench (Substrait contract). The workbench is a static frontend; this backend only satisfies the platform's hard requirements (port 8000, GET /health, /api under ingress)."
+    "version": "0.2.0",
+    "description": "Minimal conforming backend for the NJV SG workbench (Substrait contract). The workbench is a static frontend; this backend satisfies the platform's hard requirements (port 8000, GET /health, /api under ingress) and records who reviewed the proposal to OceanBase (access_log) via the SSO-injected x-forwarded-email header."
   },
   "paths": {
     "/health": {
@@ -32,20 +32,111 @@
         "operationId": "info",
         "responses": {
           "200": {
-            "description": "Static app metadata",
+            "description": "Static app metadata + DB mode",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "app": { "type": "string" },
-                    "mode": { "type": "string" },
-                    "data": { "type": "string", "example": "H1 2026 · 3.27M parcels (≈96.75% completed)" }
+                    "mode": { "type": "string", "description": "db-backed or static-frontend" },
+                    "data": { "type": "string", "example": "H1 2026 · 3.27M parcels (≈96.75% completed)" },
+                    "db": { "type": "string", "description": "up (OceanBase) or down (file store fallback)" }
                   }
                 }
               }
             }
           }
+        }
+      }
+    },
+    "/api/visit": {
+      "post": {
+        "summary": "Record a tab view (visitor access log)",
+        "operationId": "visit",
+        "parameters": [
+          {
+            "name": "tab",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["guide", "chassis", "geo", "merchant", "driver", "unknown"] },
+            "description": "Which tab the visitor opened."
+          },
+          {
+            "name": "x-forwarded-email",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string" },
+            "description": "SSO-injected viewer email. Falls back to 'anonymous' if absent."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recorded (fire-and-forget from the frontend)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean", "example": true },
+                    "mode": { "type": "string", "example": "db-backed" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/visits": {
+      "get": {
+        "summary": "List recorded visits (internal view)",
+        "operationId": "visits",
+        "parameters": [
+          {
+            "name": "x-forwarded-email",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "SSO-injected viewer email; required. 401 if absent."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 200 },
+            "description": "Max rows of recent visits to return."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregated visit stats + recent rows",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "integer", "description": "Total visit records" },
+                    "uniqueActors": { "type": "integer", "description": "Distinct viewers (SSO email)" },
+                    "byTab": { "type": "object", "additionalProperties": { "type": "integer" }, "description": "Visit count per tab" },
+                    "recent": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "actor": { "type": "string" },
+                          "tab": { "type": "string" },
+                          "at": { "type": "string", "format": "date-time" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "SSO required (x-forwarded-email missing)" },
+          "403": { "description": "Admin only (ADMIN_EMAILS set and caller not whitelisted)" }
         }
       }
     }
