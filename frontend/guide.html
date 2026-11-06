@@ -56,6 +56,18 @@
   details.fold ul{margin:0 0 14px;padding-left:20px;font-size:12.8px;color:#475569}
   details.fold li{margin-bottom:5px}
 
+  /* 折叠组：把深度内容与边界声明收起来，让首屏只留故事主线；被问到才展开 */
+  details.grp{margin-top:30px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+  details.grp>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:15px 18px;margin:0;font-size:18px;font-weight:720;color:var(--ink)}
+  details.grp>summary::-webkit-details-marker{display:none}
+  details.grp>summary:before{content:"";width:4px;height:19px;background:var(--brand);border-radius:3px;display:inline-block;flex:0 0 auto}
+  details.grp>summary:after{content:"▸";margin-left:2px;color:var(--brand);font-size:15px}
+  details.grp[open]>summary:after{content:"▾"}
+  details.grp>summary:hover{background:#f8fafc}
+  details.grp .ghint{margin-left:auto;font-size:12px;font-weight:600;color:var(--sub)}
+  details.grp .gbody{padding:2px 20px 16px}
+  details.grp .gbody>h2.sec:first-child{margin-top:8px}
+
   .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
   .scene{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px;overflow:hidden;margin:0}
   .scene svg{width:100%;height:auto;display:block;border-radius:9px}
@@ -123,6 +135,10 @@
     .flymobile ol{margin:0;padding-left:20px;font-size:12.8px;color:#475569;line-height:1.75}
     .flymobile li{margin-bottom:7px}
     .flymobile .axis{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--brand);font-weight:650}
+  }
+  @media (max-width:560px){
+    details.grp>summary{flex-wrap:wrap;font-size:16px;gap:8px}
+    details.grp .ghint{margin-left:0;flex-basis:100%;font-size:11.5px}
   }
 </style>
 </head>
@@ -349,6 +365,7 @@
 
   <p class="boundary">口径说明：规模化的投放测算与招商以前两个入口为基准；第三个作为高价值场景的补强，不按全量包裹外推。</p>
 
+  <details class="grp" id="grpDeep"><summary>深度理解这套服务<span class="ghint">被问到才展开 · 为什么只有 NJV 能转 / 四个场景 / 四方价值 / 五个 tab 怎么用</span></summary><div class="gbody">
   <h2 class="sec">为什么只有 NJV 转得动</h2>
   <p class="sechint">飞轮的轴：三层互不重叠——广告打在哪 → 凭什么定向 → 为什么绕不开。</p>
   <div class="pillars">
@@ -574,7 +591,10 @@
     </div>
 
   </div>
+</div>
+</details>
 
+<details class="grp" id="grpEdge"><summary>能力与边界<span class="ghint">被问到才展开 · AI 用在哪 / 诚实边界</span></summary><div class="gbody">
   <h2 class="sec">AI 驱动体现在哪</h2>
   <p class="sechint">按 AI driven 的架构讲清「AI 用在哪」，又不把设计态说成已上线：两块已经自动跑在真实数据上，一块是留好的模型接入位。</p>
   <div class="ailayers">
@@ -607,7 +627,8 @@
       <li>「AI 驱动」指数据层与决策层已自动化、生成层留好可插拔槽位；<b>当前版本没有调用任何大模型</b>，归类、推荐与话术都是可复算的规则与模板，不得表述为「已用 AI 生成」。</li>
     </ul>
   </details>
-
+</div>
+</details>
 </div>
 </body>
 </html>
