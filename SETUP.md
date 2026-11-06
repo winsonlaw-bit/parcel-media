@@ -68,7 +68,7 @@ if($p -and $p.Source -like '*\WindowsApps\python*' -and (Get-Item $p.Source).Len
 elseif(Get-Command py -EA SilentlyContinue){$L+="python: "+(py -3 --version 2>&1)}
 else{$L+="python: MISSING"}
 $L+= if(Get-Command winget -EA SilentlyContinue){"winget: "+(winget --version)}else{"winget: MISSING"}
-$L+="net-github: $(git ls-remote https://github.com/gotchykid/substrait-claudecode-plugin.git HEAD 2>&1 | Select-Object -First 1)"
+$L+="net-github: $(git ls-remote https://github.com/substrait-build/substrait-claudecode-plugin.git HEAD 2>&1 | Select-Object -First 1)"
 $L+="net-substrait: $(try{"reachable (HTTP "+(Invoke-WebRequest https://api.substrait.build -UseBasicParsing -TimeoutSec 15).StatusCode+")"}catch{if($_.Exception.Response){"reachable (HTTP "+[int]$_.Exception.Response.StatusCode+")"}else{"FAIL: "+$_.Exception.Message}})"
 $L+="proxy: $env:HTTPS_PROXY | $((Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -EA SilentlyContinue).ProxyServer)"
 $L+="clock: $(Get-Date -Format o)"

@@ -5,8 +5,13 @@
 #   bash substrait.sh doctor    check this machine and this project, change nothing
 #   bash substrait.sh check     audit the project against Substrait's deploy contract
 #   bash substrait.sh link      authorise this machine (opens your browser)
-#   bash substrait.sh deploy    build and ship, streaming the log
+#   bash substrait.sh deploy    build and ship, streaming the log; returns once the app is live
+#   bash substrait.sh security  Dev security findings that block going live (status|findings|submit-fp)
 #   bash substrait.sh env ...   manage the app's env vars and secrets
+#   bash substrait.sh library   browse the internal API catalogue (needs the account link)
+#   bash substrait.sh logs      read the deployed app's runtime logs (needs the account link)
+#   bash substrait.sh logout    sign this machine out of Substrait (revokes the token)
+#   bash substrait.sh update    pull latest scaffolding (AGENTS.md, docs/, substrait.sh, SETUP.md)
 set -uo pipefail
 
 # ── Always run from the project root, whatever the caller's working directory ─────
@@ -18,6 +23,27 @@ if [ ! -f substrait.yaml ] || [ ! -d backend ]; then
   exit 1
 fi
 
+# ── Pipe-safe output ────────────────────────────────────────────────────────────
+# IDE runners (TraeWork, OpenCode) sometimes close stdout before the script
+# finishes, causing "echo: write error: Bad file descriptor". We capture all
+# output to a log file so nothing is lost even when the pipe breaks. The AI
+# reads the log file; the user sees live output in a real terminal.
+_SUBSTRAIT_LOG="$(pwd)/.substrait-last-run.log"
+if [ "${_SUBSTRAIT_INNER:-}" != "1" ]; then
+  export _SUBSTRAIT_INNER=1
+  if [ -t 1 ]; then
+    # Real terminal — stream live AND keep a log
+    "$0" "$@" 2>&1 | tee "$_SUBSTRAIT_LOG"
+    exit ${PIPESTATUS[0]}
+  else
+    # Piped (IDE runner) — capture to file, immune to broken pipes
+    "$0" "$@" > "$_SUBSTRAIT_LOG" 2>&1
+    _rc=$?
+    cat "$_SUBSTRAIT_LOG" 2>/dev/null
+    exit $_rc
+  fi
+fi
+
 # ── Where the tooling lives ──────────────────────────────────────────────────────
 # Prefer LOCALAPPDATA on Windows: $HOME can be a redirected or mapped network drive on
 # corporate images, which makes the clone fail or crawl.
@@ -27,7 +53,22 @@ if [ -z "$TOOLS" ] && [ -n "${LOCALAPPDATA:-}" ] && command -v cygpath >/dev/nul
 fi
 TOOLS="${TOOLS:-$HOME/.substrait-tools}"
 SCRIPTS="$TOOLS/substrait-plugin/scripts"
-REPO="https://github.com/gotchykid/substrait-claudecode-plugin.git"
+REPO="https://github.com/substrait-build/substrait-claudecode-plugin.git"
+
+# Some editor sandboxes (TraeWork) block writes to ~/.substrait, which silently breaks
+# saving the account link: the browser OAuth succeeds but the credential can't be stored,
+# and the link reports failure. Probe writability; if blocked, keep the credential in the
+# tooling directory instead — the same location the sandbox already allows us to clone into.
+# Machine-level either way, so one link covers every project. An existing ~/.substrait link
+# is left alone, and a pre-set SUBSTRAIT_GLOBAL_CONFIG always wins.
+if [ -z "${SUBSTRAIT_GLOBAL_CONFIG:-}" ] && [ ! -f "$HOME/.substrait/config.json" ]; then
+  if ! ( mkdir -p "$HOME/.substrait" && : > "$HOME/.substrait/.wtest" && rm -f "$HOME/.substrait/.wtest" ) 2>/dev/null; then
+    mkdir -p "$TOOLS" 2>/dev/null
+    export SUBSTRAIT_GLOBAL_CONFIG="$TOOLS/account-config.json"
+    echo "Note: this editor blocks ~/.substrait — keeping the Substrait account link in"
+    echo "      $SUBSTRAIT_GLOBAL_CONFIG instead. This is normal and machine-wide."
+  fi
+fi
 
 # Substrait ships no default portal URL; setting this means no subcommand needs --portal-url.
 export SUBSTRAIT_PORTAL_URL="${SUBSTRAIT_PORTAL_URL:-https://api.substrait.build}"
@@ -60,6 +101,12 @@ fetch_tools() {
     fi
     echo "Tooling ready."
   else
+    # The plugin moved from the developer's personal account to substrait-build.
+    # A clone made before the move still pulls from the old URL; re-point it so
+    # refreshes keep tracking the maintained repo.
+    if [ "$(git -C "$TOOLS" remote get-url origin 2>/dev/null)" != "$REPO" ]; then
+      git -C "$TOOLS" remote set-url origin "$REPO" 2>/dev/null || true
+    fi
     git -C "$TOOLS" pull --ff-only --quiet 2>/dev/null \
       || git -C "$TOOLS" fetch --depth 1 -q origin 2>/dev/null \
       && git -C "$TOOLS" reset --hard -q '@{u}' 2>/dev/null || true
@@ -179,14 +226,138 @@ doctor() {
   else echo "RESULT: READY"; return 0; fi
 }
 
+# ── update: pull the latest scaffolding files from the starter repo ─────────
+# Replaces ONLY the infrastructure files (AGENTS.md, substrait.sh, docs/, SETUP.md,
+# README.md). Never touches the app's own code or config: backend/, frontend/, cicd/,
+# substrait.yaml, openapi.json, .substrait/, .gitignore.
+STARTER_REPO="https://github.com/XB-AI-Champions/substrait-starter.git"
+_SCAFFOLD_FILES="AGENTS.md substrait.sh SETUP.md README.md docs"
+
+update_scaffold() {
+  echo "Updating scaffolding from the starter repo…"
+  local tmpdir
+  tmpdir="$(mktemp -d)" || { echo "Error: could not create temp directory." >&2; exit 1; }
+  # shellcheck disable=SC2064
+  trap "rm -rf '$tmpdir'" EXIT
+
+  if ! git clone --depth 1 --config core.autocrlf=false --config core.eol=lf \
+       "$STARTER_REPO" "$tmpdir/starter" 2>&1; then
+    echo "Error: could not fetch the starter repo." >&2
+    echo "       Check your network and try again." >&2
+    exit 1
+  fi
+
+  # Remove old docs/ so deleted files don't linger
+  rm -rf docs/
+
+  # Copy each scaffold file/directory
+  local item
+  for item in $_SCAFFOLD_FILES; do
+    if [ -e "$tmpdir/starter/$item" ]; then
+      if [ -d "$tmpdir/starter/$item" ]; then
+        cp -r "$tmpdir/starter/$item" "$item"
+      else
+        cp "$tmpdir/starter/$item" "$item"
+      fi
+      echo "  updated: $item"
+    fi
+  done
+
+  # Fix line endings on Windows — the clone should be LF but be safe
+  if command -v sed >/dev/null 2>&1; then
+    sed -i 's/\r$//' substrait.sh 2>/dev/null || true
+  fi
+
+  rm -rf "$tmpdir"
+  trap - EXIT
+
+  echo ""
+  echo "Scaffolding updated. Your app code is untouched."
+  echo "Run 'git diff' to review, then commit when ready."
+}
+
+# ── deploy: return as soon as the app is live ─────────────────────────────────
+# Since plugin v2026.10.25, a --watch deploy to a non-production environment (dev) keeps
+# running for up to 10 more minutes AFTER the app is live, waiting for the Dev security
+# scans to print a go-live verdict. That verdict is advisory, but editor runners time out
+# long before 10 minutes and report a failure for a deploy that succeeded. So stop at the
+# plugin's "✅ Live:" line (its own message says interrupting the wait is safe) and leave
+# the verdict to `bash substrait.sh security status`.
+# SUBSTRAIT_WAIT_FOR_SCANS=1 keeps the plugin's full behaviour.
+deploy_until_live() {
+  if [ "${SUBSTRAIT_WAIT_FOR_SCANS:-0}" = "1" ]; then
+    bash "$SCRIPTS/substrait-deploy.sh" --watch "$@"; return $?
+  fi
+  local out pid shown=0 total live=0 rc
+  out="$(mktemp)" || { bash "$SCRIPTS/substrait-deploy.sh" --watch "$@"; return $?; }
+  bash "$SCRIPTS/substrait-deploy.sh" --watch "$@" > "$out" 2>&1 &
+  pid=$!
+  while :; do
+    total="$(wc -l < "$out" | tr -d ' ')"
+    if [ "$total" -gt "$shown" ]; then
+      sed -n "$((shown + 1)),${total}p" "$out" | LC_ALL=C grep -vF "Dev security scans (up to 10 min"
+      shown=$total
+    fi
+    if LC_ALL=C grep -qF '✅ Live: https://' "$out"; then live=1; break; fi
+    kill -0 "$pid" 2>/dev/null || break
+    sleep 2
+  done
+  if [ "$live" -eq 1 ]; then
+    sleep 1   # let the Live line finish writing
+    kill "$pid" 2>/dev/null; wait "$pid" 2>/dev/null
+    sed -n "$((shown + 1)),\$p" "$out" | LC_ALL=C grep -vF "Dev security scans (up to 10 min"
+    rm -f "$out"
+    echo "Deploy finished — the app is live. Security scans continue on Substrait's side;"
+    echo "'bash substrait.sh security status' shows whether anything blocks going live."
+    return 0
+  fi
+  wait "$pid"; rc=$?
+  sed -n "$((shown + 1)),\$p" "$out"
+  rm -f "$out"
+  return $rc
+}
+
 cmd="${1:-}"; shift 2>/dev/null || true
+
+# ── Guard: refuse to deploy/check from the shared starter repo ──────────────
+# If the git remote still points at the starter, the AI skipped setup step 1.
+# Catch it here before code lands in the wrong repository.
+_guard_starter() {
+  local _origin
+  _origin="$(git remote get-url origin 2>/dev/null)" || return 0  # no remote is fine
+  case "$_origin" in
+    *XB-AI-Champions/substrait-starter*|*xb-ai-champions/substrait-starter*)
+      echo "" >&2
+      echo "═══════════════════════════════════════════════════════════════════" >&2
+      echo "  STOP — git remote still points at the shared STARTER repo:"     >&2
+      echo "         $_origin"                                                 >&2
+      echo ""                                                                  >&2
+      echo "  You must create your OWN repository first."                      >&2
+      echo "  See docs/new-app-setup.md for the full steps."                   >&2
+      echo ""                                                                  >&2
+      echo "  Quick fix:"                                                      >&2
+      echo "    rm -rf .git && git init -b main"                               >&2
+      echo "    git remote add origin https://USER@github.com/ACCOUNT/REPO.git" >&2
+      echo "    git add -A && git commit -m 'initial commit'"                  >&2
+      echo "    git push -u origin main"                                       >&2
+      echo "═══════════════════════════════════════════════════════════════════" >&2
+      echo "" >&2
+      exit 1 ;;
+  esac
+}
+
 case "$cmd" in
   doctor) doctor ;;
-  check)  fetch_tools; bash "$SCRIPTS/substrait-deploy.sh" check ;;
+  check)  _guard_starter; fetch_tools; bash "$SCRIPTS/substrait-deploy.sh" check ;;
   link)   fetch_tools
           if [ $# -eq 0 ]; then set -- account; fi
           bash "$SCRIPTS/substrait-link.sh" "$@" ;;
-  deploy) fetch_tools; bash "$SCRIPTS/substrait-deploy.sh" --watch "$@" ;;
+  deploy) _guard_starter; fetch_tools; deploy_until_live "$@" ;;
+  security) fetch_tools; bash "$SCRIPTS/substrait-security.sh" "$@" ;;
   env)    fetch_tools; bash "$SCRIPTS/substrait-env.sh" "$@" ;;
-  *) echo "usage: bash substrait.sh {doctor|check|link|deploy|env}" >&2; exit 2 ;;
+  library) fetch_tools; bash "$SCRIPTS/substrait-library.sh" "$@" ;;
+  logs)   fetch_tools; bash "$SCRIPTS/substrait-logs.sh" "$@" ;;
+  logout) fetch_tools; bash "$SCRIPTS/substrait-link.sh" logout "$@" ;;
+  update) update_scaffold ;;
+  *) echo "usage: bash substrait.sh {doctor|check|link|deploy|security|env|library|logs|logout|update}" >&2; exit 2 ;;
 esac
