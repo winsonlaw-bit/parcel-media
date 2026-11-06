@@ -115,6 +115,20 @@ bash ./substrait.sh deploy          # 必须等它跑到 ✅ Live 才结束（�
 > 不要尝试 `logout` + 重新 `link` 走交互 OAuth 来迁主机——本机 CLI 无法替你开浏览器过 SSO。
 > 直接改已保存的 `portal_url` + 复用现有 token 是最快且已验证可行的路径（同 org 令牌跨主机有效）。
 
+### 3.1 区分三个地址面（2026-11-06 平台夜间迁移实例）
+
+平台一次迁移往往同时动「三类地址」，但**只有 API 主机需要你改 config**，其余两个不用动你的项目：
+
+| 地址面 | 例子（旧 → 新） | 谁用 | 你要改吗 |
+|---|---|---|---|
+| **API 主机** | `api.substrait.build` → `api.ninjavan.substrait.build` | CLI deploy / readiness 探针 | ✅ 改 `~/.substrait` 的 `portal_url`（见上） |
+| **Web 控制台（Portal）** | `app.substrait.build` → `app.ninjavan.substrait.build` | 人工开浏览器管理部署 | ❌ 只是你打开网页的地址，项目/CLI 不用改 |
+| **Claude 登录入口** | `/substrait:login` 改走 `ninjavan.substrait.build` | 从 Claude 里重新 link | ❌ 自动生效，重新 login 即可 |
+
+> **最重要的 reassurance**：平台明确「已部署的应用不受影响，live app 继续在原链接工作」。
+> 所以**换了主机不必 redeploy 你的 app**——除非你主动改了 `portal_url` 想让 ingress 落到新主机（那才需要再 `deploy` 一次）。
+> 我们这次（2026-11-06）提前把 API 主机迁到了 `api.ninjavan.substrait.build`，与夜间迁移方向一致，app 一直正常。
+
 ---
 
 ## 4. 后端 + 数据库 + 实名（需要后端时才看）
