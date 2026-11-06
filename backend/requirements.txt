@@ -1,2 +1,6 @@
 fastapi>=0.115
 uvicorn[standard]>=0.32
+
+# OceanBase / MySQL-wire driver for production DB writes (sync, MySQL dialect;
+# the app runs on the file store when DATABASE_URL is unset). Imported lazily.
+pymysql>=1.1

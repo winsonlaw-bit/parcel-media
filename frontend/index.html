@@ -216,7 +216,7 @@
           <div class="kpis" id="kpis"></div>
           <div class="sec-title">Top 10 货主（真实实名口径 · remote_id）</div>
           <div class="tbl-scroll"><table>
-            <thead><tr><th>#</th><th>货主</th><th>注册国</th><th>包裹量</th><th>主力品类（占该货主 · 已剔除未细分）</th></tr></thead>
+            <thead><tr><th>#</th><th>货主</th><th>包裹量</th><th>主力品类</th></tr></thead>
             <tbody id="shipperRows"></tbody>
           </table></div>
           <details class="scope" id="scopeShipper">
@@ -294,15 +294,15 @@ const kpis = [
   { n: fmt(WB.recipients), l: '全 SG 收件人（983K）' },
   { n: WB.zones, l: 'SG 合并真区（邮区前 2 位）' },
   { n: fmt(WB.distinct_shippers), l: '发货账号（实名 100%）' },
-  { n: WB.classify_pct.toFixed(1) + '%', l: 'v7 规则分类覆盖（无描述 16.3%）' },
+  { n: WB.classify_pct.toFixed(1) + '%', l: 'v7 规则分类覆盖（未细分 27.2% = 无描述 16.3% + 纯代码 10.9%）' },
   { n: fmt(WB.cross_buy), l: '跨品类复购收件人（占 ' + WB.cross_buy_pct + '%）' },
 ];
 document.getElementById('kpis').innerHTML = kpis.map(k => '<div class="kpi"><div class="n">' + k.n + '</div><div class="l">' + k.l + '</div></div>').join('');
-document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><td>' + (i+1) + '</td><td>' + s.name + '</td><td>' + s.country + '</td><td class="num">' + fmt(s.parcels) + '</td><td>' + s.cats + '</td></tr>').join('');
+document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><td>' + (i+1) + '</td><td>' + s.name + '</td><td class="num">' + fmt(s.parcels) + '</td><td>' + s.cats + '</td></tr>').join('');
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261106l'; // iframe 缓存戳：子页面内容变更后升级
+const FRAME_VERSION = '20261106n'; // iframe 缓存戳：子页面内容变更后升级
 
 // ── 移动端 iframe 高度自适应 ──────────────────────────────────────────────
 // 桌面：iframe 铺满视口、内部滚动（保持原行为）。
@@ -421,6 +421,16 @@ document.getElementById('msRetry').addEventListener('click', () => {
   switchMap('full', false);
 });
 
+// 访问埋点：每次切 tab 都 fire-and-forget 记录「谁看了哪个 tab」。
+// 后端用平台 SSO 透传的 x-forwarded-email 取实名，前端绝不阻塞渲染。
+function trackVisit(tab) {
+  try {
+    var url = '/api/visit?tab=' + encodeURIComponent(tab || 'unknown');
+    if (navigator.sendBeacon) { navigator.sendBeacon(url); }
+    else { fetch(url, { method: 'POST', keepalive: true }).catch(function () {}); }
+  } catch (e) { /* 后端不可达也不影响看页面 */ }
+}
+
 function show(key, label) {
   document.getElementById('pageTitle').textContent = label || key;
   items.forEach(it => it.classList.toggle('active', it.dataset.key === key));
@@ -433,6 +443,7 @@ function show(key, label) {
   });
   // 切回数据底盘时，已展开的细分 iframe 重新量一次高度（移动端）
   if (key === 'chassis') document.querySelectorAll('details.drill[open] .frame').forEach(f => syncHeight(f));
+  trackVisit(key);
 }
 items.forEach(it => it.addEventListener('click', () => show(it.dataset.key, it.textContent)));
 

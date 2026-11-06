@@ -5,16 +5,16 @@
 # deploy records it onto the app, and it's what teammates see in the portal and
 # the platform's API Library, so keep it current as the app evolves.
 description: >
-  NJV · SG 跨境需求情报工作台：基于 H1 2026 真实妥投包裹（约 3.26M 件）的 SG 跨境
-  需求情报可视化工作台。纯静态前端（需求地图 / 动态需求 / 货主屏 / 配送员屏 / 品类全景 /
-  信号层）以 iframe 挂载离线底图与真实产物；后端仅提供健康探针与 /api 占位，无数据库。
+  NJV · SG 跨境需求情报工作台：基于 H1 2026 真实妥投包裹（约 3.27M 件）的 SG 跨境
+  需求情报可视化工作台。静态前端（总结 / 数据底盘 / 流量地图 / 货主屏 / 配送员屏 / 品类全景 /
+  信号层）以 iframe 挂载离线底图与真实产物；后端提供健康探针与 /api 占位，并把「谁看过
+  哪个 tab」写入 OceanBase（access_log）供团队查看提案触达。
 
-# Database — EXPLICIT: the platform provisions a database (and injects DATABASE_URL)
-# only when this key is present. This is a static, read-only workbench that needs no
-# datastore, so the key is intentionally omitted. Add it (oceanbase / postgres / mysql)
-# only when the backend grows a real API that needs persistence.
-#
-# database: oceanbase
+# Database — the platform provisions an OceanBase cluster (MySQL wire protocol, nightly
+# backups, portal Database tab) and injects DATABASE_URL. We use it for the access_log
+# table (who reviewed which tab). The engine cannot be changed after the first deploy,
+# so oceanbase is a deliberate, one-way choice (matches Shippers Volume Alert).
+database: oceanbase
 
 # Backing services — none needed for this static workbench.
 # services:

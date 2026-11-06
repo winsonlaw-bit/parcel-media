@@ -22,6 +22,7 @@ Zone.Identifier
 # Python pipeline source (NOT deployed) — but keep backend/ for the Substrait contract
 *.py
 !backend/main.py
+!backend/store.py
 # Raw data & intermediates
 数据/
 *.csv
@@ -33,6 +34,8 @@ Zone.Identifier
 *.log
 # Specs / SQL / reports (not part of the deployed app)
 *.sql
+!backend/resources/db/migration/**
+backend/data/
 data-pull-requirements-spec.md
 market-basket-insight-engine-spec.md
 # Local-only workbench copies (superseded by frontend/)
