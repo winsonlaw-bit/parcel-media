@@ -320,9 +320,9 @@ function popupHtml(z){
   const mom=z.series.length>1?Math.round(100*(z.series[5]-z.series[4])/Math.max(z.series[4],1)):0;
   return '<div class="pop"><b>'+z.code+' · '+z.label+'</b><div class="row"><span>收件人数</span><span>'+fmtQ(z.recipients)+'</span></div>'+
     '<div class="row"><span>包裹量（全量）</span><span>'+fmtQ(z.parcels)+'</span></div>'+
-    '<div class="row"><span>在铺货主</span><span>'+(z.shippers?fmtN(z.shippers):'—')+'</span></div>'+
+    '<div class="row"><span>本区发货账号</span><span>'+(z.shippers?fmtN(z.shippers):'—')+'</span></div>'+
     (cats?'<div class="cat">品类画像 Top5：</div>'+cats:'')+
-    (ships?'<div class="cat">在铺 Top 货主：</div>'+ships:'')+
+    (ships?'<div class="cat">本区发货 Top 账号：</div>'+ships:'')+
     '<div class="cat">6月环比 '+mom+'% · 流量视角：'+fmtQ(z.parcels)+' 次到家曝光</div></div>';
 }
 

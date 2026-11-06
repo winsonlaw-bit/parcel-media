@@ -100,6 +100,25 @@
   .tbl-scroll { display:block; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
   .tbl-scroll > table { width:100%; min-width:560px; margin:0; }
   .tbl-scroll > table th, .tbl-scroll > table td { white-space:nowrap; }
+  /* 货主口径折叠卡：默认收起，被问「42K 都是谁」时展开当答问区 */
+  .scope{margin-top:14px;border-top:1px solid var(--line);padding-top:10px;font-size:12.5px;color:var(--sub)}
+  .scope>summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--ink);list-style:none;outline:none;display:flex;align-items:center;gap:8px;line-height:1.5}
+  .scope>summary::-webkit-details-marker{display:none}
+  .scope>summary::before{content:'▸';color:var(--brand);font-size:14px;flex:0 0 auto}
+  .scope[open]>summary::before{content:'▾'}
+  .scope .shint{margin-left:auto;font-weight:500;font-size:11.5px;color:var(--sub)}
+  .scope .sbody{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;line-height:1.8}
+  .scope .slead{color:var(--ink);font-size:13px;margin-bottom:14px}
+  .scopetiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+  .tier{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:5px;min-width:0}
+  .tier .tn{font-weight:700;font-size:12.5px;color:var(--brand)}
+  .tier .tv{font-size:19px;font-weight:750;color:var(--ink);font-variant-numeric:tabular-nums}
+  .tier .td{font-size:12px;color:var(--sub);line-height:1.65}
+  .scope .sfacts{background:#f8fafc;border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:12px;font-size:12.5px;color:var(--ink)}
+  .scope .suse{font-size:12.5px;margin-bottom:10px}
+  .scope .smap{font-size:12.5px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:10px}
+  .scope .sfoot{font-size:11.5px;color:var(--sub);border-top:1px dashed var(--line);padding-top:9px}
+  .scope code{font-size:11.5px}
   /* ===== RWD：≤900px 侧栏收成顶部横向 tab，页面改为内容自适应高度 ===== */
   @media (max-width:900px){
     .app { flex-direction:column; height:100vh; height:100dvh; }
@@ -134,6 +153,9 @@
     .pitch-hero .one { font-size:13.5px; }
     .pitch-hero p { font-size:13px; }
     .hook, .imagine, .honesty, .files { padding:14px 16px; }
+    .scopetiers { grid-template-columns:minmax(0,1fr); }
+    .scope .sbody { padding:14px 14px; }
+    .scope .shint { display:none; }
     .step { padding:11px 12px; }
     .frame-err { padding:16px; }
     .frame-err .card { padding:18px; }
@@ -184,6 +206,21 @@
             <thead><tr><th>#</th><th>货主</th><th>注册国</th><th>包裹量</th><th>主力品类（占该货主 · 已剔除未细分）</th></tr></thead>
             <tbody id="shipperRows"></tbody>
           </table></div>
+          <details class="scope" id="scopeShipper">
+            <summary>货主口径说明 · 42K 是发货账号，不是可招商企业数<span class="shint">答问区 · 三层口径</span></summary>
+            <div class="sbody">
+              <p class="slead">工作台里所有与「货主数」有关的数字，按 <code>shipper_id</code>（发货账号）去重，不是企业、不是平台，也不是已购买增值服务的客户。三个层级要分开读：</p>
+              <div class="scopetiers">
+                <div class="tier"><span class="tn">① 发货账号</span><span class="tv">42,041</span><span class="td">现有字段；按 remote_id 实名 42,039 / 42,041。用于「某邮区有多少账号在发货」是准确的。</span></div>
+                <div class="tier"><span class="tn">② 商业主体（品牌 / 企业）</span><span class="tv">无现成字段</span><span class="td">需「账号 → 品牌 → 渠道」映射表。<code>Lazada (ASICS)</code> 与 <code>Lazada (Pokémon)</code> 是不同品牌、不同预算，不能按名称字符串自动归并。</span></div>
+                <div class="tier"><span class="tn">③ 渠道 / 平台</span><span class="tv">高度集中</span><span class="td">谈合作最可能的决策层；渠道数只做粗分参考，不是权威主体数。</span></div>
+              </div>
+              <p class="sfacts"><b>可复算事实</b>：90.9% 的实名名称带「平台（店铺）」括号；Top 500 账号贡献 62% 件量；全期件量 &lt;10 件的账号 25,429 个（60.5%）。<br><b>按名称前缀粗分（非权威口径）</b>：TikTok 系 25,756 个账号，TikTok / Lazada / Shopee 三家合计约 88% 的账号、却只占 42.3% 件量；粗分前缀 3,846 组，仅作结构参考。</p>
+              <p class="suse"><b>为什么按渠道做</b>：账号多而单量小、件量集中在少数大账号，所以投放位不逐个店铺去谈，而按渠道打包——单货主专属位面向大账号，NJV 聚合页面向平台渠道，正对应服务 02 的流量渠道分销。上方 <b>Top 10 表</b>按件量排序，天然由独立大账号与平台自营业务线占满；名称逐字取自实名索引，未做去前缀处理。</p>
+              <p class="smap"><b>口径覆盖流量地图</b>：区级面板的「本区发货账号」同样是往该区发过货的账号数，不是本区客户数；「投放货主 / 服务货主」指未来真正买了增值服务的客户，目前为零，pilot 后单独成一域。</p>
+              <p class="sfoot">数据质量：抽 2026-01 单月，85% 的 <code>seller_id</code> 为空，且单个 seller 最多对应 16,642 个 shipper，不能用作主体归并键。以上均为 2026 H1 历史数据回看，不是客户名单或招商名单。</p>
+            </div>
+          </details>
           <div class="drillbar">从总盘往下钻 · 两个细分视图（点开才加载）</div>
           <details class="drill" id="drillPanorama">
             <summary><span class="dnum">①</span>品类细分<span class="dhint">14 类分布 · 月度趋势</span></summary>
@@ -193,7 +230,7 @@
             <summary><span class="dnum">②</span>需求细分<span class="dhint">品类亲和 lift · 区域三级下钻</span></summary>
             <div class="frame-wrap" data-lazy="1"><iframe class="frame" data-file="signal_layer_demo.v4.html" title="需求细分"></iframe><div class="frame-err"></div></div>
           </details>
-          <details class="fold"><summary>诚实边界</summary><div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、货主等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div></details>
+          <details class="fold"><summary>诚实边界</summary><div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、发货账号等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div></details>
         </div>
       </div>
       <div class="page" id="page-guide" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="guide.html" title="怎么用"></iframe><div class="frame-err"></div></div></div>
@@ -214,7 +251,7 @@ const kpis = [
   { n: fmt(WB.parcels_total), l: '包裹总量（H1 2026 全量·含未妥投 3.25%；妥投≈3.16M·completed 终态）' },
   { n: fmt(WB.recipients), l: '全 SG 收件人（983K）' },
   { n: WB.zones, l: 'SG 合并真区（邮区前 2 位）' },
-  { n: fmt(WB.distinct_shippers), l: '货主 distinct（实名 100%）' },
+  { n: fmt(WB.distinct_shippers), l: '发货账号（实名 100%）' },
   { n: WB.classify_pct.toFixed(1) + '%', l: 'v7 规则分类覆盖（无描述 16.3%）' },
   { n: fmt(WB.cross_buy), l: '跨品类复购收件人（占 ' + WB.cross_buy_pct + '%）' },
 ];
@@ -223,7 +260,7 @@ document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><t
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261106g'; // iframe 缓存戳：子页面内容变更后升级
+const FRAME_VERSION = '20261106h'; // iframe 缓存戳：子页面内容变更后升级
 
 // ── 移动端 iframe 高度自适应 ──────────────────────────────────────────────
 // 桌面：iframe 铺满视口、内部滚动（保持原行为）。

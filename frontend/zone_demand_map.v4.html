@@ -157,7 +157,7 @@
         </details>
       </div>
       <div class="panel" id="panel">
-        <div class="empty">点击任意区查看：<br>收件人数 · 曝光库存 · 品类画像 · 在铺货主 · 月度趋势<br><br>
+        <div class="empty">点击任意区查看：<br>收件人数 · 曝光库存 · 品类画像 · 本区发货账号 · 月度趋势<br><br>
           <span style="color:var(--dim)">流动光点 = 从 NJV 中枢向高需求区的物理包裹流。</span></div>
       </div>
     </div>
@@ -333,10 +333,10 @@ function show(z){
     '<div class="pstats">'+
       '<div class="pstat"><div class="v">'+fmtQ(z.recipients)+'</div><div class="k">收件人数</div></div>'+
       '<div class="pstat"><div class="v">'+fmtQ(z.parcels)+'</div><div class="k">包裹量（全量）/半年</div></div>'+
-      '<div class="pstat"><div class="v">'+(z.shippers?fmtN(z.shippers):'—')+'</div><div class="k">在铺货主</div></div>'+
+      '<div class="pstat"><div class="v">'+(z.shippers?fmtN(z.shippers):'—')+'</div><div class="k">本区发货账号</div></div>'+
     '</div>'+
     (z.cats.length?'<div class="sec"><div class="t">品类画像（Top5 · 已分类件量）</div>'+cats+'</div>':'')+
-    (ships?'<div class="sec"><div class="t">本区在铺 Top 货主（实名 · remote_id 口径）</div>'+ships+'</div>':'')+
+    (ships?'<div class="sec"><div class="t">本区发货 Top 账号（实名 · remote_id 口径）</div>'+ships+'</div>':'')+
     '<div class="sec"><div class="t">月度趋势（6月环比 '+mom+'%）</div>'+spark(z.series)+'</div>'+
     '<div class="flow">流量视角：本区半年 <b>'+fmtQ(z.parcels)+
     '</b> 个包裹（全量）≈ <b>'+fmtQ(z.parcels)+
