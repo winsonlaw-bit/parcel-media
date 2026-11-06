@@ -193,7 +193,7 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand"><b>NJV · SG</b><small>需求情报工作台 Demo</small></div>
-    <nav class="nav"><a class="nav-item" data-key="guide">怎么用</a>
+    <nav class="nav"><a class="nav-item" data-key="guide">总结</a>
 <a class="nav-item" data-key="chassis">数据底盘</a>
 <a class="nav-item" data-key="geo">流量地图</a>
 <a class="nav-item" data-key="merchant">货主屏</a>
@@ -202,7 +202,7 @@
     <div class="side-foot">Substrait-ready：静态前端 + iframe 挂载真实产物；后端 /api 可后续挂载于 app.substrait.build。</div>
   </aside>
   <main class="main">
-    <div class="topbar"><h1 id="pageTitle">怎么用 · 提案要点</h1><span class="badge">DEMO</span>
+    <div class="topbar"><h1 id="pageTitle">总结 · 提案要点</h1><span class="badge">DEMO</span>
       <span class="mapswitch" id="mapSwitch" style="display:none">
         <button type="button" id="msFull" class="on">完整地图</button>
         <button type="button" id="msSimple">简版地图</button>
@@ -275,7 +275,7 @@
           <details class="fold"><summary>诚实边界</summary><div class="honesty"><ul><li>金额/GMV/铺数本提案一律不编——只给包裹量、收件人、区组、发货账号等可溯源物理量。</li><li>试点尚未跑通：租位分润、扫码回流归因是设计态，未做真用屏动作与回流验证。</li><li>6 月回落已确认（原因待业务侧确认），非待定。</li><li>可复制性：框架原理性可复制、货主主数据池已跨六国；但 SG 校准参数（76 区、放门口/柜、低 COD）需逐市场本地化。</li></ul></div></details>
         </div>
       </div>
-      <div class="page" id="page-guide" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="guide.html" title="怎么用"></iframe><div class="frame-err"></div></div></div>
+      <div class="page" id="page-guide" style="display:none"><div class="frame-wrap"><iframe class="frame" data-file="guide.html" title="总结"></iframe><div class="frame-err"></div></div></div>
 <div class="page" id="page-geo" style="display:none">
         <div class="frame-wrap" id="wrapGeoFull"><iframe class="frame" data-file="zone_geo_map.html" title="流量地图"></iframe><div class="frame-err"></div></div>
         <div class="frame-wrap" id="wrapGeoSimple" style="display:none"><iframe class="frame" data-file="zone_demand_map.v4.html" title="简版流量地图"></iframe><div class="frame-err"></div></div>
@@ -302,7 +302,7 @@ document.getElementById('shipperRows').innerHTML = WB.top10.map((s,i) => '<tr><t
 const items = document.querySelectorAll('.nav-item');
 
 // 统一解析 iframe 目标 URL：无论从 http(s) 还是 file:// 打开，都能正确定位项目根下的兄弟文件
-const FRAME_VERSION = '20261106j'; // iframe 缓存戳：子页面内容变更后升级
+const FRAME_VERSION = '20261106k'; // iframe 缓存戳：子页面内容变更后升级
 
 // ── 移动端 iframe 高度自适应 ──────────────────────────────────────────────
 // 桌面：iframe 铺满视口、内部滚动（保持原行为）。
@@ -449,7 +449,7 @@ document.querySelectorAll('details.drill').forEach(d => {
 // 本地文件方式打开时提示改用本地服务器
 if (location.protocol === 'file:') document.getElementById('filebar').style.display = 'block';
 
-show('guide', '怎么用 · 提案要点');
+show('guide', '总结 · 提案要点');
 </script>
 </body>
 </html>
