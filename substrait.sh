@@ -11,7 +11,7 @@
 #   bash substrait.sh library   browse the internal API catalogue (needs the account link)
 #   bash substrait.sh logs      read the deployed app's runtime logs (needs the account link)
 #   bash substrait.sh logout    sign this machine out of Substrait (revokes the token)
-#   bash substrait.sh update    pull latest scaffolding (AGENTS.md, docs/, substrait.sh, SETUP.md)
+#   bash substrait.sh update    pull the latest starter files now (deploy also does this daily)
 set -uo pipefail
 
 # ── Always run from the project root, whatever the caller's working directory ─────
@@ -28,16 +28,19 @@ fi
 # finishes, causing "echo: write error: Bad file descriptor". We capture all
 # output to a log file so nothing is lost even when the pipe breaks. The AI
 # reads the log file; the user sees live output in a real terminal.
+# The re-run is `bash "$0"`, not `"$0"`: when called as `bash substrait.sh` (as AGENTS.md
+# says), $0 has no folder part, and running it directly fails with "substrait.sh: command
+# not found" because the current folder is not on PATH (seen on Windows/Git Bash).
 _SUBSTRAIT_LOG="$(pwd)/.substrait-last-run.log"
 if [ "${_SUBSTRAIT_INNER:-}" != "1" ]; then
   export _SUBSTRAIT_INNER=1
   if [ -t 1 ]; then
     # Real terminal — stream live AND keep a log
-    "$0" "$@" 2>&1 | tee "$_SUBSTRAIT_LOG"
+    bash "$0" "$@" 2>&1 | tee "$_SUBSTRAIT_LOG"
     exit ${PIPESTATUS[0]}
   else
     # Piped (IDE runner) — capture to file, immune to broken pipes
-    "$0" "$@" > "$_SUBSTRAIT_LOG" 2>&1
+    bash "$0" "$@" > "$_SUBSTRAIT_LOG" 2>&1
     _rc=$?
     cat "$_SUBSTRAIT_LOG" 2>/dev/null
     exit $_rc
@@ -75,7 +78,25 @@ fi
 # never from $SUBSTRAIT_PORTAL_URL. So read the saved address first and export the hosted
 # default ONLY when nothing is saved yet (a machine that has never linked). Logins get the
 # address passed explicitly (see `link` below).
-_SUBSTRAIT_DEFAULT_PORTAL="https://api.substrait.build"
+# Ninja Van's workspace lives on its own Substrait installation (portal
+# app.ninjavan.substrait.build). The old shared address api.substrait.build stopped answering
+# in Nov 2026, so the plugin's own "follow the new address" step can never run for logins
+# saved against it (it needs a successful call to the old host first).
+_SUBSTRAIT_DEFAULT_PORTAL="https://api.ninjavan.substrait.build"
+_SUBSTRAIT_RETIRED_PORTAL="https://api.substrait.build"
+# Move saved logins and links off the retired address, in place: same files, same profile
+# names, folder pins untouched. Only an exact match of the old value is rewritten.
+_heal_retired_portal() {
+  local f gc="${SUBSTRAIT_GLOBAL_CONFIG:-$HOME/.substrait/config.json}" moved=0
+  for f in .substrait/config.json "$gc" "$(dirname "$gc")"/profiles/*.json; do
+    [ -f "$f" ] || continue
+    grep -qE "\"portal_url\"[[:space:]]*:[[:space:]]*\"${_SUBSTRAIT_RETIRED_PORTAL//./\\.}/?\"" "$f" 2>/dev/null || continue
+    sed -i -E "s#(\"portal_url\"[[:space:]]*:[[:space:]]*\")${_SUBSTRAIT_RETIRED_PORTAL//./\\.}/?\"#\1${_SUBSTRAIT_DEFAULT_PORTAL}\"#" "$f" 2>/dev/null && moved=1
+  done
+  [ "$moved" -eq 1 ] && echo "Note: moved your saved Substrait login from $_SUBSTRAIT_RETIRED_PORTAL to $_SUBSTRAIT_DEFAULT_PORTAL (the old address no longer answers)."
+  return 0
+}
+_heal_retired_portal
 _saved_portal() {
   local f gc="${SUBSTRAIT_GLOBAL_CONFIG:-$HOME/.substrait/config.json}" v
   for f in .substrait/config.json "$gc" "$(dirname "$gc")"/profiles/*.json; do
@@ -221,54 +242,154 @@ doctor() {
   else echo "RESULT: READY"; return 0; fi
 }
 
-# ── update: pull the latest scaffolding files from the starter repo ─────────
-# Replaces ONLY the infrastructure files (AGENTS.md, substrait.sh, docs/, SETUP.md,
-# README.md). Never touches the app's own code or config: backend/, frontend/, cicd/,
-# substrait.yaml, openapi.json, .substrait/, .gitignore.
-STARTER_REPO="https://github.com/XB-AI-Champions/substrait-starter.git"
-_SCAFFOLD_FILES="AGENTS.md substrait.sh SETUP.md README.md docs"
+# ── Starter files: manual `update` and the automatic daily check ──────────────
+# Replaces ONLY the starter's own instruction/helper files. Never touches the app's code or
+# config (backend/, frontend/, cicd/, substrait.yaml, openapi.json, README.md, .gitignore,
+# .substrait/), and never deletes anything.
+STARTER_REPO="${SUBSTRAIT_STARTER_REPO:-https://github.com/XB-AI-Champions/substrait-starter.git}"
+_SCAFFOLD_FILES="AGENTS.md CLAUDE.md SETUP.md AI_CONNECTION.md GOOGLE_CONNECTION.md substrait.sh docs"
+_SYNC_CHANGED=""   # files sync_scaffold replaced (space-separated, set by sync_scaffold)
+_SYNC_KEPT=""      # files it left alone because they were edited locally
+
+_with_timeout() {  # run "$@" with a time limit when `timeout` exists (Git Bash ships it)
+  local secs="$1"; shift
+  if command -v timeout >/dev/null 2>&1; then timeout "$secs" "$@"; else "$@"; fi
+}
+
+# sync_scaffold MODE [--force] — copy the starter's current files into this folder.
+# A file is replaced only if this folder's copy is byte-identical to SOME past version of
+# that file in the starter repo (i.e. nobody edited it here); an edited file is kept, and
+# the new starter copy is saved under .substrait/starter-latest/ for a hand merge.
+# --force replaces edited files too. Returns 0 when it ran (see _SYNC_CHANGED), 1 on error.
+sync_scaffold() {
+  local mode="$1" force="${2:-}" tmp src rel blob item known
+  _SYNC_CHANGED=""; _SYNC_KEPT=""
+  tmp="$(mktemp -d)" || return 1
+  if ! _with_timeout 120 git clone -q --config core.autocrlf=false --config core.eol=lf \
+       "$STARTER_REPO" "$tmp/s" >/dev/null 2>&1; then
+    rm -rf "$tmp"; return 1
+  fi
+  # Central pause switch for maintainers: commit a file named .auto-update-paused to the
+  # starter repo and every automatic update stops (manual `update` still works).
+  if [ "$mode" = auto ] && [ -e "$tmp/s/.auto-update-paused" ]; then rm -rf "$tmp"; return 0; fi
+  # Never install a substrait.sh that bash cannot even parse.
+  if ! bash -n "$tmp/s/substrait.sh" 2>/dev/null; then
+    echo "Note: the starter's new substrait.sh failed a syntax check — not updating." >&2
+    rm -rf "$tmp"; return 1
+  fi
+  for item in $_SCAFFOLD_FILES; do
+    if [ -d "$tmp/s/$item" ]; then
+      ( cd "$tmp/s" && find "$item" -type f ) > "$tmp/list.$$" 2>/dev/null
+    elif [ -f "$tmp/s/$item" ]; then
+      printf '%s\n' "$item" > "$tmp/list.$$"
+    else
+      continue
+    fi
+    while IFS= read -r rel; do
+      [ -n "$rel" ] || continue
+      src="$tmp/s/$rel"
+      if [ -f "$rel" ]; then
+        cmp -s "$src" "$rel" && continue
+        if [ "$force" != "--force" ]; then
+          # The blob git would store for this file (line endings normalised by .gitattributes).
+          blob="$(git hash-object --path="$rel" "$rel" 2>/dev/null || git hash-object "$rel" 2>/dev/null)"
+          # (Collected into a variable first: with pipefail, `grep -q` closing the pipe early
+          # would make a real match look like a failure.)
+          known="$(git -C "$tmp/s" log --format= --raw --no-abbrev -- "$rel" 2>/dev/null | awk '{print $4}')"
+          if [ -z "$blob" ] || ! grep -qx "$blob" <<<"$known"; then
+            mkdir -p ".substrait/starter-latest/$(dirname "$rel")"
+            cp "$src" ".substrait/starter-latest/$rel"
+            _SYNC_KEPT="$_SYNC_KEPT $rel"
+            continue
+          fi
+        fi
+      fi
+      mkdir -p "$(dirname "$rel")"
+      # Write in place (same file, same permissions) — safe even for substrait.sh itself,
+      # because the caller re-runs the new copy straight after and reads nothing further.
+      cat "$src" > "$rel" || { rm -rf "$tmp"; return 1; }
+      _SYNC_CHANGED="$_SYNC_CHANGED $rel"
+    done < "$tmp/list.$$"
+  done
+  rm -rf "$tmp"
+  return 0
+}
+
+_report_kept() {
+  [ -n "$_SYNC_KEPT" ] || return 0
+  echo "Kept these files because they were edited in this folder:$_SYNC_KEPT"
+  echo "The starter's newest copies are in .substrait/starter-latest/ — merge the changes in by hand."
+}
 
 update_scaffold() {
-  echo "Updating scaffolding from the starter repo…"
-  local tmpdir
-  tmpdir="$(mktemp -d)" || { echo "Error: could not create temp directory." >&2; exit 1; }
-  # shellcheck disable=SC2064
-  trap "rm -rf '$tmpdir'" EXIT
+  echo "Updating starter files from $STARTER_REPO …"
+  sync_scaffold manual "${1:-}" || { echo "Error: could not fetch the starter repo — check the network and try again." >&2; exit 1; }
+  if [ -z "$_SYNC_CHANGED" ]; then echo "Starter files are already up to date."
+  else echo "Updated:$_SYNC_CHANGED"; echo "Your app code is untouched. Commit and push these files."; fi
+  _report_kept
+  mkdir -p .substrait 2>/dev/null && git ls-remote "$STARTER_REPO" refs/heads/main 2>/dev/null | cut -f1 > .substrait/starter-check 2>/dev/null
+  return 0
+}
 
-  if ! git clone --depth 1 --config core.autocrlf=false --config core.eol=lf \
-       "$STARTER_REPO" "$tmpdir/starter" 2>&1; then
-    echo "Error: could not fetch the starter repo." >&2
-    echo "       Check your network and try again." >&2
+# auto_update "$@" — before a deploy, at most once a day: if the starter repo has moved on,
+# install its new files, commit them (only them), push, and re-run this deploy with the new
+# substrait.sh. Any network problem is silent and simply retried at the next deploy.
+# Off switches: SUBSTRAIT_AUTO_UPDATE=0, a file .substrait-no-auto-update in this folder, or
+# .auto-update-paused in the starter repo.
+auto_update() {
+  [ "${_SUBSTRAIT_AUTO_UPDATED:-}" = "1" ] && return 0
+  [ "${SUBSTRAIT_AUTO_UPDATE:-1}" = "0" ] && return 0
+  [ -f .substrait-no-auto-update ] && return 0
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
+  case "$(git remote get-url origin 2>/dev/null)" in
+    *[Xx][Bb]-[Aa][Ii]-[Cc]hampions/substrait-starter*) return 0 ;;   # the starter itself
+  esac
+  local stamp=".substrait/starter-check" remote last f
+  mkdir -p .substrait 2>/dev/null || return 0
+  if [ -f "$stamp" ] && [ -n "$(find "$stamp" -mmin -1440 2>/dev/null)" ]; then return 0; fi
+  remote="$(_with_timeout 20 git ls-remote "$STARTER_REPO" refs/heads/main 2>/dev/null | cut -f1)"
+  [ -n "$remote" ] || return 0
+  last="$(cat "$stamp" 2>/dev/null)"
+  if [ "$remote" = "$last" ]; then touch "$stamp"; return 0; fi
+  echo "Checking for starter updates…"
+  sync_scaffold auto || return 0
+  _report_kept
+  if [ -z "$_SYNC_CHANGED" ]; then printf '%s\n' "$remote" > "$stamp"; return 0; fi
+  echo "Starter files updated:$_SYNC_CHANGED"
+  # Commit as the user when git knows who they are (SETUP.md configures it); otherwise as a
+  # neutral identity, so a missing user.email never blocks the update.
+  local who=()
+  git config user.email >/dev/null 2>&1 || who=(-c user.name="Substrait starter" -c user.email="starter@users.noreply.github.com")
+  # shellcheck disable=SC2086
+  if ! git add -- $_SYNC_CHANGED >/dev/null 2>&1 \
+     || ! git ${who[@]+"${who[@]}"} commit -q -m "Update starter files from XB-AI-Champions/substrait-starter" -- $_SYNC_CHANGED >/dev/null 2>&1; then
+    echo "WHAT TO DO: the starter files above were updated but could not be committed. Commit and push them, then deploy again."
     exit 1
   fi
-
-  # Remove old docs/ so deleted files don't linger
-  rm -rf docs/
-
-  # Copy each scaffold file/directory
-  local item
-  for item in $_SCAFFOLD_FILES; do
-    if [ -e "$tmpdir/starter/$item" ]; then
-      if [ -d "$tmpdir/starter/$item" ]; then
-        cp -r "$tmpdir/starter/$item" "$item"
-      else
-        cp "$tmpdir/starter/$item" "$item"
-      fi
-      echo "  updated: $item"
+  local done_msg="Committed the starter update"
+  if git rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+    if ! git push -q 2>&1; then
+      echo "WHAT TO DO: the starter update was committed but the push failed. Push, then deploy again."
+      exit 1
     fi
-  done
-
-  # Fix line endings on Windows — the clone should be LF but be safe
-  if command -v sed >/dev/null 2>&1; then
-    sed -i 's/\r$//' substrait.sh 2>/dev/null || true
+    done_msg="Committed and pushed the starter update"
   fi
+  printf '%s\n' "$remote" > "$stamp"
+  echo "$done_msg. Continuing the deploy with the new version…"
+  export _SUBSTRAIT_AUTO_UPDATED=1
+  exec bash "$0" deploy "$@"
+}
 
-  rm -rf "$tmpdir"
-  trap - EXIT
-
-  echo ""
-  echo "Scaffolding updated. Your app code is untouched."
-  echo "Run 'git diff' to review, then commit when ready."
+# explain_deploy_failure OUTPUT_FILE RC — one plain next step for the failures champions hit.
+explain_deploy_failure() {
+  local out="$1" rc="$2"
+  if LC_ALL=C grep -qE 'HTTP 401|invalid or revoked token|token was rejected|is not on this machine' "$out"; then
+    echo "WHAT TO DO: this computer's Substrait sign-in no longer works. Run 'bash substrait.sh link account', ask the user to approve the sign-in in their browser, then deploy again."
+  elif LC_ALL=C grep -qF 'not linked — run /substrait:link' "$out"; then
+    echo "WHAT TO DO: this folder isn't linked to a Substrait app yet — run the linking steps in AGENTS.md (link status, link apps, link use), then deploy again."
+  elif ! LC_ALL=C grep -q '^Error:' "$out"; then
+    echo "WHAT TO DO: the deploy stopped without an error message (exit code $rc) — usually Substrait could not be reached at $SUBSTRAIT_LOGIN_PORTAL. Run 'bash substrait.sh link ping'. If it still can't reach Substrait, run 'bash substrait.sh update' and try again; if that doesn't help, check the VPN or network. Don't retry the deploy in a loop."
+  fi
 }
 
 # ── deploy: return as soon as the app is live ─────────────────────────────────
@@ -308,6 +429,7 @@ deploy_until_live() {
   fi
   wait "$pid"; rc=$?
   sed -n "$((shown + 1)),\$p" "$out"
+  [ "$rc" -ne 0 ] && explain_deploy_failure "$out" "$rc"
   rm -f "$out"
   return $rc
 }
@@ -349,15 +471,22 @@ case "$cmd" in
           # A login needs the portal address; pass the saved one (else the hosted default)
           # unless the caller gave --portal-url.
           case "$1" in account|save-account)
-            case " $* " in *" --portal-url"*) ;; *) set -- "$@" --portal-url "$SUBSTRAIT_LOGIN_PORTAL" ;; esac ;;
+            case " $* " in *" --portal-url"*) ;; *) set -- "$@" --portal-url "$SUBSTRAIT_LOGIN_PORTAL" ;; esac
+            # Champions have one login. Signing in again must REPLACE it under the same
+            # profile name, or folders pinned to the old name keep using the old token.
+            case " $* " in *" --profile"*) ;; *)
+              _prof="$(sed -n 's/.*"profile"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' .substrait/config.json 2>/dev/null | head -1)"
+              [ -n "$_prof" ] || _prof="$(sed -n 's/.*"profile"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "${SUBSTRAIT_GLOBAL_CONFIG:-$HOME/.substrait/config.json}" 2>/dev/null | head -1)"
+              [ -n "$_prof" ] && set -- "$@" --profile "$_prof" ;;
+            esac ;;
           esac
           bash "$SCRIPTS/substrait-link.sh" "$@" ;;
-  deploy) _guard_starter; fetch_tools; deploy_until_live "$@" ;;
+  deploy) _guard_starter; auto_update "$@"; fetch_tools; deploy_until_live "$@" ;;
   security) fetch_tools; bash "$SCRIPTS/substrait-security.sh" "$@" ;;
   env)    fetch_tools; bash "$SCRIPTS/substrait-env.sh" "$@" ;;
   library) fetch_tools; bash "$SCRIPTS/substrait-library.sh" "$@" ;;
   logs)   fetch_tools; bash "$SCRIPTS/substrait-logs.sh" "$@" ;;
   logout) fetch_tools; bash "$SCRIPTS/substrait-link.sh" logout "$@" ;;
-  update) update_scaffold ;;
+  update) update_scaffold "$@" ;;
   *) echo "usage: bash substrait.sh {doctor|check|link|deploy|security|env|library|logs|logout|update}" >&2; exit 2 ;;
 esac

@@ -119,7 +119,7 @@ separate instance with its own database, bucket, URL, variables and secrets.
 | | `dev` | `production` |
 |---|---|---|
 | URL | `https://<slug>--dev.ninjavan.apps.substrait.build` | `https://<slug>.ninjavan.apps.substrait.build` |
-| Access | Always behind Ninja Van sign-in — can never be made public | Set on the app's Access tab |
+| Access | Behind Ninja Van sign-in by default; if the organisation allows it, the app's Sharing tab can turn that off — check there before putting anything sensitive on `dev` | Set on the app's Access tab |
 | Created | When the app is created (new apps) | When the app **goes live** |
 | Data | Can be seeded from `backend/db/seed.sql` | Starts EMPTY; never seeded |
 
@@ -180,6 +180,25 @@ changes, and again after a database reset. **Production is never seeded**, so th
 work with no rows. Write it to be re-runnable (`INSERT IGNORE` or
 `ON DUPLICATE KEY UPDATE` on OceanBase), keep schema changes in `V__` migrations, never in
 the seed, and never put real data in it — the file is committed.
+
+## Automatic starter updates
+
+At most once a day, before deploying, `substrait.sh` checks the starter repo
+(`XB-AI-Champions/substrait-starter`). When it has changed:
+
+- It replaces only the starter's own files: `AGENTS.md`, `CLAUDE.md`, `SETUP.md`,
+  `AI_CONNECTION.md`, `GOOGLE_CONNECTION.md`, `substrait.sh` and `docs/`. App code,
+  `README.md`, `substrait.yaml`, `openapi.json`, `cicd/` and `.gitignore` are never touched,
+  and nothing is deleted.
+- A file edited in this folder is kept; the starter's new copy goes to
+  `.substrait/starter-latest/` for a hand merge.
+- It commits just those files, pushes, and re-runs the deploy with the new `substrait.sh`.
+- If the network is down it skips silently and tries again at the next deploy.
+
+To switch it off for one folder, create an empty file `.substrait-no-auto-update` (or set
+`SUBSTRAIT_AUTO_UPDATE=0`). Maintainers can pause it for everyone by committing a file named
+`.auto-update-paused` to the starter repo. `bash substrait.sh update` fetches the newest files
+on demand (it does not commit; `--force` also replaces edited files).
 
 ## `bash substrait.sh check`
 

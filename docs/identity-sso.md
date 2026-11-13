@@ -1,7 +1,9 @@
 # Knowing who the user is
 
-The `dev` environment is always behind Ninja Van sign-in, so these headers are always present
-there. In `production`, they are present only when Google SSO is on (the Access tab).
+The `dev` environment is behind Ninja Van sign-in by default, so these headers are normally
+present there — but the organisation can let an app turn sign-in off (the app's Sharing tab
+shows it), so never assume them. In `production`, they are present only when Google SSO is on
+(the Access tab).
 
 With sign-in on, the platform injects `X-Forwarded-Email` and `X-Forwarded-User` headers
 into every backend request. **Never build a login page, OAuth flow or session handling** —

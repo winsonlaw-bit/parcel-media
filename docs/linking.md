@@ -46,7 +46,7 @@ accounts, never loop asking which account is right, and never propose recreating
 repo under a different account. Go straight to rung 2 and ship.
 
 **Rung 3 — only if rung 2 is ALSO refused** (a workspace with zip uploads disabled):
-tell the user to open app.substrait.build → **Build** → **Connect GitHub** → pick the
+tell the user to open app.ninjavan.substrait.build → **Build** → **Connect GitHub** → pick the
 repo (goes straight to the picker after the first time, ~45 seconds), then bind with
 step 2 and deploy.
 
@@ -90,7 +90,7 @@ Only if the browser flow above was killed or keeps reporting expiry.
 
 **Ask the user to mint the right kind of token.** There are two kinds and only one works:
 
-> In app.substrait.build, open your **account menu → Personal tokens** (older versions of
+> In app.ninjavan.substrait.build, open your **account menu → Personal tokens** (older versions of
 > the portal call it **Access tokens** in the left sidebar) — *not* the token section inside
 > an app. Click **Create token**, give it any name, and copy what it shows you. It's only
 > shown once.
@@ -112,7 +112,7 @@ This keeps the secret out of the chat transcript, which the editor's vendor may 
 `token.txt` is already in `.gitignore`.
 
 ```bash
-bash substrait.sh link save-account --token "$(cat token.txt)" --portal-url https://api.substrait.build
+bash substrait.sh link save-account --token "$(cat token.txt)" --portal-url https://api.ninjavan.substrait.build
 rm token.txt
 ```
 

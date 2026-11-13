@@ -1,6 +1,6 @@
 # AGENTS.md — how to work in this project
 
-## READ THIS FIRST — the five rules that matter most
+## READ THIS FIRST — the six rules that matter most
 
 ## Adding AI or Google features — read the connection file first
 
@@ -43,13 +43,24 @@
    pushing, the user's app will not change and you will have told them it did.
    This means **linking is required, not optional** — read `docs/linking.md` before the
    first deploy.
+6. **Every Substrait action in this folder goes through `bash substrait.sh`.** If
+   Substrait's own Claude plugin is installed, do **not** use its `/substrait:*` commands
+   or skills here, even when they are offered automatically: they save logins under
+   different names and can sign in to the wrong Substrait installation. When Substrait's
+   messages name a slash command, use the *Command translation* table below. When a
+   substrait.sh run prints a line starting `WHAT TO DO:`, that is your next step.
 
 Everything below is detail. The user is not a developer — do the work, then explain it in
 plain language, and never ask them to open a terminal and type.
 
-**If you hit an error or behaviour these docs don't cover**, the starter files may be stale.
-Run `bash substrait.sh update` to pull the latest scaffolding (AGENTS.md, docs/, substrait.sh)
-from the starter repo — it never touches the app's code or config.
+**Deploys keep the starter files current.** At most once a day, `bash substrait.sh deploy`
+checks the starter repo. If it has changed, the deploy replaces the starter's own files
+(this file, the docs, `substrait.sh` and similar — never the app's code, README or config),
+commits and pushes them as "Update starter files from XB-AI-Champions/substrait-starter",
+then carries on with the deploy. That is expected; never revert it. A starter file that was
+edited in this folder is kept, and the new version is saved in `.substrait/starter-latest/`
+for you to merge by hand. **If you hit an error these docs don't cover**, run
+`bash substrait.sh update` to fetch the newest starter files immediately.
 
 ---
 
@@ -143,7 +154,7 @@ undo a deploy. Only if the user asks whether the app can go live, or a promotion
 for blocking findings, run `bash substrait.sh security status` and follow `docs/security.md`.
 
 **Environments — `dev` and `production` only.** A NEW app starts in `dev`
-(`https://<slug>--dev.ninjavan.apps.substrait.build`, always behind Ninja Van sign-in) and
+(`https://<slug>--dev.ninjavan.apps.substrait.build`, behind Ninja Van sign-in unless the app's Sharing tab turned it off) and
 has no production until it goes live. A bare `bash substrait.sh deploy` goes to the app's
 default environment — read the `Target environment:` line it prints and tell the user which
 one it was, and give them THAT environment's URL. Older apps default to production.
@@ -214,6 +225,8 @@ do not exist here. Translate them:
 | `/substrait:init` | not applicable — this project is already set up |
 | `/substrait:logs` | `bash substrait.sh logs` |
 | `/substrait:library` | `bash substrait.sh library` (read `docs/api-library.md`) |
+| `/substrait:ping` | `bash substrait.sh link ping` (checks every saved login; moves one whose address changed) |
+| `/substrait:slate` | not used in this programme |
 | `/substrait:switch` | not needed — one Substrait login per machine. To check it: `bash substrait.sh link profiles` |
 | `/substrait:logout` | `bash substrait.sh logout` |
 | `/substrait:fix` | follow `docs/security.md` (uses `bash substrait.sh security`) |
